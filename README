@@ -1,1 +1,4 @@
-авпвапапвап ап This file was created by IntelliJ IDEA 12.1.4 for binding GitHub repository
+В RUN configurations в графе "VM options" нужно прописать полный путь к нативной библиотеке lwjgl, которая лежит по
+следующему пути: "jpct\lib\lwjgl-2.8.0\native"
+В итоге, в данной графе должна быть прописана примерно такая строчка:
+-Djava.library.path="D:\Documents and Settings\Студент\cosmoPlay\jpct\lib\lwjgl-2.8.0\native\windows"
