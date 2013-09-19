@@ -81,10 +81,13 @@ public class Main implements IPaintListener{
 		buffer.setPaintListener(this);
 
         TextureManager.getInstance().addTexture("Earth", new Texture("texture/Earth.jpg"));
+        TextureManager.getInstance().addTexture("Sun", new Texture("texture/Sun.gif"));
 
         //создаем мир
 		world = new World();
-		world.setAmbientLight(0, 255, 0);
+        world.setAmbientLight(100, 100, 100);
+
+        world.getLights().setRGBScale(Lights.RGB_SCALE_2X);
 
         //создаем обработчики
 		keyMapper = new KeyMapper();
@@ -96,11 +99,16 @@ public class Main implements IPaintListener{
 		earth = new MassAttractObject3D(Primitives.getSphere(100, 10), new SimpleVector(19.4,0,0),10);
         earth.setTexture("Earth");
         earth.setEnvmapped (Object3D.ENVMAP_ENABLED);
-		sun = new MassAttractObject3D(Primitives.getSphere(100, 10), new SimpleVector(), 2e+15);
+
+		sun = new MassAttractObject3D(Primitives.getSphere(100, 40), new SimpleVector(), 2e+15);
+        sun.setTexture("Sun");
+        sun.setEnvmapped (Object3D.ENVMAP_ENABLED);
 
         //передвигаем объекты
 		sun.translate(0, 0, 0);
 		earth.translate(0, -334.7f, 0);
+        //earth.translateMesh();
+       // earth.setTranslationMatrix(new Matrix());
 
         //добавляем к миру строим и компилируем
 		world.addObject(sun);
@@ -136,7 +144,7 @@ public class Main implements IPaintListener{
 				System.out.println("ticks=" + ticks);
 			}
             //очищаем буфер и рисуем заново
-			buffer.clear(java.awt.Color.BLUE);
+			buffer.clear();
 			buffer.setPaintListenerState(false);
 			world.renderScene(buffer);
 			world.draw(buffer);
