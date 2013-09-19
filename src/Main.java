@@ -11,32 +11,35 @@ import ru.cfif11.cosmo.physobject.MassObject3D;
 import java.awt.event.KeyEvent;
 
 /**
- * A simple HelloWorld using the AWTGL-Renderer and rendering into a frame.
- * @author EgonOlsen
+ * A simple example of a planet orbiting a star. This example demonstrates the use of physics and libraries jpct
+ * @author Galkin Aleksandr
  * 
  */
 public class Main implements IPaintListener{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -3626482109116766979L;
 
+    //буфер для экрана
 	private FrameBuffer buffer = null;
-	
+
+    //для отлавливания событий с клавиатурой и мышкой
 	private KeyMapper keyMapper = null;
 	private MouseMapper mouseMapper = null;
-	
+
+    //мир и объекты
 	private World world = null;
 	private MassAttractObject3D sun = null;
 	private MassObject3D earth = null;
-	
+
+    //переменный для определения направления движения камеры
 	private boolean forward = false;
 	private boolean backward = false;
 	private boolean up = false;
 	private boolean down = false;
 	private boolean left = false;
 	private boolean right = false;
-	
+
+    //переменная для работы с основным циклом
 	private boolean doLoop = true;
 
 	private int fps = 0;
@@ -46,6 +49,7 @@ public class Main implements IPaintListener{
 	private float xAngle = 0;
 	
 
+    //счетчик времени
 	private Ticker ticker = new Ticker(15);
 
 	public static void main(String[] args) throws Exception {
@@ -55,8 +59,8 @@ public class Main implements IPaintListener{
 		cd.loop();
 	}
 
+    //инициализация
 	public Main() throws Exception {
-		
 		Config.glAvoidTextureCopies = true;
 		Config.maxPolysVisible = 1000;
 		Config.glColorDepth = 24;
@@ -69,82 +73,87 @@ public class Main implements IPaintListener{
 	}
 
 	private void init() throws Exception {
-		
+
+        //содаем буффер
 		buffer = new FrameBuffer(800, 600, FrameBuffer.SAMPLINGMODE_NORMAL);
 		buffer.disableRenderer(IRenderer.RENDERER_SOFTWARE);
+        //используем openGL, а не всякие swingи или awt
 		buffer.enableRenderer(IRenderer.RENDERER_OPENGL);
 		buffer.setPaintListener(this);
-		//buffer = new FrameBuffer(800, 600, FrameBuffer.SAMPLINGMODE_NORMAL);
-		//canvas=buffer.enableGLCanvasRenderer();
-		//buffer.disableRenderer(IRenderer.RENDERER_SOFTWARE);
-		//frame.add(canvas);
-		
+
+        //создаем мир
 		world = new World();
 		world.setAmbientLight(0, 255, 0);
-		
+
+        //создаем обработчики
 		keyMapper = new KeyMapper();
 		mouseMapper = new MouseMapper(buffer);
 		mouseMapper.hide();
 
-		//TextureManager.getInstance().addTexture("box", new Texture("box.jpg"));
 
+        //создаем объекты на основе примитивов
 		earth = new MassObject3D(Primitives.getSphere(100, 10), new SimpleVector(19.4,0,0),10);
 		sun = new MassAttractObject3D(Primitives.getSphere(100, 10), new SimpleVector(), 2e+15);
+
+        //передвигаем объекты
 		sun.translate(0, 0, 0);
 		earth.translate(0, -334.7f, 0);
-		//box.setTexture("box");
-		//sun.setEnvmapped(Object3D.ENVMAP_ENABLED);
-		//sun.build();
-		//earth.setEnvmapped(Object3D.ENVMAP_ENABLED);
-		//earth.build();
+
+        //добавляем к миру строим и компилируем
 		world.addObject(sun);
 		world.addObject(earth);
-		
 		world.buildAllObjects();
-		
 		sun.compileAndStrip();
 		earth.compileAndStrip();
 
+        //создаем камеру, перемещаем в заданную точку и направляем ее взор на центр Солнца
 		Camera cam = world.getCamera();
 		cam.setPosition(600, 0,60);
 		cam.lookAt(sun.getTransformedCenter());
 		//cam.setFOV(1.5f);
 	}
 
+    //основной цикл программы
 	private void loop() throws Exception {
-		
+
+        //создаем адаптер
 		AdapterPhysics adapter = new AdapterPhysics(world);
 		long ticks = 0;
 
 		while (doLoop) {
 			ticks = ticker.getTicks();
 			if (ticks > 0) {
+                //рассчитываем все силы и считаем новые местоположения объектов
 				adapter.calcForce();
 				earth.calcLocation(0.1f);	
 				sun.calcLocation(0.1f);
+                //используем обработчик событий для движения камеры
 				pollControls();
 				move(ticks);
 				System.out.println("ticks=" + ticks);
 			}
+            //очищаем буфер и рисуем заново
 			buffer.clear(java.awt.Color.BLUE);
 			buffer.setPaintListenerState(false);
 			world.renderScene(buffer);
 			world.draw(buffer);
 			buffer.update();
 			buffer.displayGLOnly();
+            //не используется, а вообще для подсчета fps
 			if (System.currentTimeMillis() - time >= 1000) {
 				System.out.println(fps);
 				fps = 0;
 				time = System.currentTimeMillis();
 			}
 		}
+        //очищаем и вырубаем
 		buffer.disableRenderer(IRenderer.RENDERER_OPENGL);
 		buffer.dispose();
 		System.exit(0);
 	}
-	
-	private void pollControls() {
 
+    //определяем что мы нажали на клаве
+	private void pollControls() {
 		KeyState ks = null;
 		while ((ks = keyMapper.poll()) != KeyState.NONE) {
 			if (ks.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -180,7 +189,8 @@ public class Main implements IPaintListener{
 			doLoop = false;
 		}
 	}
-	
+
+    //двигаем камеру в зависимости от того, куда нажали
 	private void move(long ticks) {
 
 		if (ticks == 0) {
@@ -247,10 +257,9 @@ public class Main implements IPaintListener{
 			xAngle += tsy;
 		}
 
-		// Update the skydome
-
 	}
-	
+
+    //слушатель мышки
 	private static class MouseMapper {
 
 		private boolean hidden = false;
@@ -326,7 +335,8 @@ public class Main implements IPaintListener{
 			}
 		}
 	}
-	
+
+    //счетчик времени
 	private static class Ticker {
 
 		private int rate;
