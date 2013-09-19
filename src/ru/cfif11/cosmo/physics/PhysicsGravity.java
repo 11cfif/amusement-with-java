@@ -21,21 +21,6 @@ public class PhysicsGravity extends Physics {
 		setMass(s);
 		setLocation(loc);
 		setDistances(v);
-		loc = null;
-	}
-	
-	private void setWeight(double m) {
-		this.weight = m;
-	}
-	
-	private void setMass(double[] m) {
-		this.mass = m.clone();
-	}
-	
-	private void setDistances(SimpleVector[] dist) {
-		for(int i = 0; i < dist.length; i++) {
-			distances[i] = dist[i].calcSub(getLoacation());
-		}
 	}
 	
 	@Override
@@ -66,5 +51,18 @@ public class PhysicsGravity extends Physics {
 		}
 	}
 
+    private void setWeight(double m) {
+        this.weight = m;
+    }
+
+    private void setMass(double[] m) {
+        this.mass = m.clone();
+    }
+
+    private void setDistances(SimpleVector[] dist) {
+        for(int i = 0; i < dist.length; i++) {
+            distances[i] = dist[i].calcSub(getLoacation());
+        }
+    }
 
 }

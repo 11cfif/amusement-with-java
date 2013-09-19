@@ -1,21 +1,17 @@
 package ru.cfif11.cosmo.adapterphysics;
 
+import com.threed.jpct.SimpleVector;
+import com.threed.jpct.World;
+import ru.cfif11.cosmo.physics.Physics;
+import ru.cfif11.cosmo.physics.PhysicsGravity;
+import ru.cfif11.cosmo.physobject.*;
+
 import java.util.ArrayList;
 import java.util.Enumeration;
 
-import ru.cfif11.cosmo.physics.Physics;
-import ru.cfif11.cosmo.physics.PhysicsGravity;
-import ru.cfif11.cosmo.physobject.CanAttractInterface;
-import ru.cfif11.cosmo.physobject.HasChargeInterface;
-import ru.cfif11.cosmo.physobject.HasMassInterface;
-import ru.cfif11.cosmo.physobject.MassObject3D;
-import ru.cfif11.cosmo.physobject.PhysObject3D;
-
-import com.threed.jpct.SimpleVector;
-import com.threed.jpct.World;
-
 public class AdapterPhysics {
-	
+
+
 	private World world;
 	private int numObjs;
 	private int[] gravityInteraction;
@@ -25,8 +21,8 @@ public class AdapterPhysics {
 	private ArrayList<PhysObject3D> objects;
 	private double[] arguments;
 	private SimpleVector[] dist;
-	private double ownParam;	
-	
+	private double ownParam;
+
 	public AdapterPhysics(World world) {
 		this.world = world;
 		this.numObjs = world.getSize();

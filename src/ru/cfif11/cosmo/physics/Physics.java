@@ -11,14 +11,10 @@ public abstract class Physics {
 		this.totalForce = new SimpleVector();
 		this.location = new SimpleVector();
 	}
-	
-	protected void setLocation(SimpleVector location) {
-		this.location = location;
-	}
-	
-	public SimpleVector getTotalForce() {
-		return totalForce;
-	}
+
+    public SimpleVector getTotalForce() {
+        return totalForce;
+    }
 	
 	public abstract void calcTotalForce();
 	
@@ -28,6 +24,10 @@ public abstract class Physics {
 		totalForce.set(0, 0, 0);
 		location.set(0, 0, 0);
 	}
+
+    protected void setLocation(SimpleVector location) {
+        this.location = location;
+    }
 	
 	protected void setTotalForce(SimpleVector totalForce) {
 		this.totalForce = totalForce;

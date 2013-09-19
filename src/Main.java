@@ -16,7 +16,6 @@ import java.awt.event.KeyEvent;
  * 
  */
 public class Main implements IPaintListener{
-	
 	/**
 	 * 
 	 */
