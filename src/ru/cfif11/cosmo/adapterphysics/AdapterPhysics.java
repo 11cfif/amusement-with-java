@@ -9,6 +9,9 @@ import ru.cfif11.cosmo.physobject.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
+/**
+ * Class linking interfaces of PhysObject3D and simulators
+ */
 public class AdapterPhysics {
 
 
@@ -23,6 +26,10 @@ public class AdapterPhysics {
 	private SimpleVector[] dist;
 	private double ownParam;
 
+    /**
+     *  Creates a new AdapterPhysics.
+     * @param world the World
+     */
 	public AdapterPhysics(World world) {
 		this.world = world;
 		this.numObjs = world.getSize();
@@ -35,6 +42,9 @@ public class AdapterPhysics {
 		createSimulator();
 	}
 
+    /**
+     * calculates the force acting on the PhysObject3D
+     */
 	public void calcForce() {
 		Physics p;
 		for(int i = 0; i < simulators.size(); i++) {
@@ -60,16 +70,20 @@ public class AdapterPhysics {
 		}
 		
 	}
-	
+
+    /**
+     * Creates create an initialized AdapterPhysics.
+     */
 	private void createSimulator() {
 		if(gravityInteraction[numObjs] != 0) {
 			PhysicsGravity pGravity = new PhysicsGravity(sourceGravity[numObjs]);
 			simulators.add(pGravity);
 		}
-		return;
-		
 	}
-	
+
+    /**
+     * The analysis of all interactions in the World
+     */
 	private void analysisInteraction() {
 		Enumeration<PhysObject3D> e = world.getObjects();
 		int i = 0;
