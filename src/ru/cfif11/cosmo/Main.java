@@ -80,6 +80,8 @@ public class Main implements IPaintListener{
 		buffer.enableRenderer(IRenderer.RENDERER_OPENGL);
 		buffer.setPaintListener(this);
 
+        TextureManager.getInstance().addTexture("Earth", new Texture("texture/Earth.jpg"));
+
         //создаем мир
 		world = new World();
 		world.setAmbientLight(0, 255, 0);
@@ -92,6 +94,8 @@ public class Main implements IPaintListener{
 
         //создаем объекты на основе примитивов
 		earth = new MassAttractObject3D(Primitives.getSphere(100, 10), new SimpleVector(19.4,0,0),10);
+        earth.setTexture("Earth");
+        earth.setEnvmapped (Object3D.ENVMAP_ENABLED);
 		sun = new MassAttractObject3D(Primitives.getSphere(100, 10), new SimpleVector(), 2e+15);
 
         //передвигаем объекты
