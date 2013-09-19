@@ -1,12 +1,11 @@
+package ru.cfif11.cosmo;
+
 import com.threed.jpct.*;
 import com.threed.jpct.util.KeyMapper;
 import com.threed.jpct.util.KeyState;
-
 import org.lwjgl.input.Mouse;
-
 import ru.cfif11.cosmo.adapterphysics.AdapterPhysics;
 import ru.cfif11.cosmo.physobject.MassAttractObject3D;
-import ru.cfif11.cosmo.physobject.MassObject3D;
 
 import java.awt.event.KeyEvent;
 
@@ -29,7 +28,7 @@ public class Main implements IPaintListener{
     //мир и объекты
 	private World world = null;
 	private MassAttractObject3D sun = null;
-	private MassObject3D earth = null;
+	private MassAttractObject3D earth = null;
 
     //переменный для определения направления движения камеры
 	private boolean forward = false;
@@ -92,7 +91,7 @@ public class Main implements IPaintListener{
 
 
         //создаем объекты на основе примитивов
-		earth = new MassObject3D(Primitives.getSphere(100, 10), new SimpleVector(19.4,0,0),10);
+		earth = new MassAttractObject3D(Primitives.getSphere(100, 10), new SimpleVector(19.4,0,0),10);
 		sun = new MassAttractObject3D(Primitives.getSphere(100, 10), new SimpleVector(), 2e+15);
 
         //передвигаем объекты

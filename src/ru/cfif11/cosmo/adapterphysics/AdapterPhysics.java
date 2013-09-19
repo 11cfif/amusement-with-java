@@ -64,6 +64,7 @@ public class AdapterPhysics {
 					p.setParam(ownParam, arguments, dist, mo.getTransformedCenter());
 					p.calcTotalForce();
 					mo.calcAcceleration(p.getTotalForce());
+                    p.reset();
 				}
 			}
 			p.reset();
