@@ -39,6 +39,8 @@ public class Main implements IPaintListener{
 	private boolean down = false;
 	private boolean left = false;
 	private boolean right = false;
+    private boolean fast = false;
+    private boolean slow = false;
 
     //переменная для работы с основным циклом
 	private boolean doLoop = true;
@@ -51,7 +53,8 @@ public class Main implements IPaintListener{
 	
 
     //счетчик времени
-	private Ticker ticker = new Ticker(15);
+    private int rate = 15;
+	private Ticker ticker = new Ticker(rate);
 
 	public static void main(String[] args) throws Exception {
 		Config.glVerbose = true;
@@ -99,7 +102,7 @@ public class Main implements IPaintListener{
 
 
         //создаем объекты на основе примитивов
-        earth = new MassAttractObject3D(Primitives.getSphere(100, 20), new SimpleVector(0,3.5,0),9.44e+11);
+        earth = new MassAttractObject3D(Primitives.getSphere(100, 15), new SimpleVector(0,3.5,0),9.44e+11);
         earth.setTexture("Earth");
         earth.setEnvmapped (Object3D.ENVMAP_ENABLED);
 
@@ -107,7 +110,7 @@ public class Main implements IPaintListener{
         sun.setTexture("Sun");
         sun.setEnvmapped (Object3D.ENVMAP_ENABLED);
 
-        moon = new MassAttractObject3D(Primitives.getSphere(100, 10), new SimpleVector(0,4.32,0),9.44e+10);
+        moon = new MassAttractObject3D(Primitives.getSphere(100, 5), new SimpleVector(0,4.32,0),9.44e+10);
         moon.setTexture("Moon");
         moon.setEnvmapped (Object3D.ENVMAP_ENABLED);
 
@@ -115,7 +118,7 @@ public class Main implements IPaintListener{
         //передвигаем объекты
 		sun.translate(0, 0, 0);
 		earth.translate(2000, 0, 0);
-        moon.translate(2100, 0, 0);
+        moon.translate(2050, 0, 0);
         //earth.translateMesh();
        // earth.setTranslationMatrix(new Matrix());
 
@@ -154,10 +157,6 @@ public class Main implements IPaintListener{
                 //используем обработчик событий для движения камеры
 				pollControls();
 				move(ticks);
-                if (earth.getTransformedCenter().x < 0) {
-                    tim = System.currentTimeMillis() - tim;
-                    System.out.println("time =" + tim);
-                }
 			}
             //очищаем буфер и рисуем заново
 			buffer.clear();
@@ -168,7 +167,7 @@ public class Main implements IPaintListener{
 			buffer.displayGLOnly();
             //не используется, а вообще для подсчета fps
 			if (System.currentTimeMillis() - time >= 1000) {
-				//System.out.println(fps);
+				System.out.println("distanse="+earth.getTransformedCenter().distance(moon.getTransformedCenter()));
 				fps = 0;
 				time = System.currentTimeMillis();
 			}
@@ -210,6 +209,14 @@ public class Main implements IPaintListener{
 			if (ks.getKeyCode() == KeyEvent.VK_PAGE_DOWN) {
 				down = ks.getState();
 			}
+
+            if (ks.getKeyCode() == KeyEvent.VK_W) {
+                fast = ks.getState();
+            }
+
+            if (ks.getKeyCode() == KeyEvent.VK_Q) {
+                slow = ks.getState();
+            }
 		}
 
 		if (org.lwjgl.opengl.Display.isCloseRequested()) {
@@ -257,6 +264,20 @@ public class Main implements IPaintListener{
 			world.checkCameraCollisionEllipsoid(Camera.CAMERA_MOVEDOWN,
 					ellipsoid, ticks, 5);
 		}
+
+        if (fast) {
+            if(rate > 2) {
+                rate--;
+                ticker.setRate(rate);
+            }
+        }
+
+        if (slow) {
+            if(rate < 30) {
+                rate++;
+                ticker.setRate(rate);
+            }
+        }
 
 		// mouse rotation
 
@@ -372,6 +393,10 @@ public class Main implements IPaintListener{
 		public static long getTime() {
 			return System.currentTimeMillis();
 		}
+
+        public void setRate(int rate) {
+            this.rate = rate;
+        }
 
 		public Ticker(int tickrateMS) {
 			rate = tickrateMS;
