@@ -102,7 +102,7 @@ public class Main implements IPaintListener{
 
 
         //создаем объекты на основе примитивов
-        earth = new MassAttractObject3D(Primitives.getSphere(100, 15), new SimpleVector(0,3.5,0),9.44e+11);
+        earth = new MassAttractObject3D(Primitives.getSphere(100, 15), new SimpleVector(0,0,-3.5),9.44e+11);
         earth.setTexture("Earth");
         earth.setEnvmapped (Object3D.ENVMAP_ENABLED);
 
@@ -110,7 +110,7 @@ public class Main implements IPaintListener{
         sun.setTexture("Sun");
         sun.setEnvmapped (Object3D.ENVMAP_ENABLED);
 
-        moon = new MassAttractObject3D(Primitives.getSphere(100, 5), new SimpleVector(0,4.32,0),9.44e+10);
+        moon = new MassAttractObject3D(Primitives.getSphere(100, 5), new SimpleVector(0,0,-4.62 ),9.44e+10);
         moon.setTexture("Moon");
         moon.setEnvmapped (Object3D.ENVMAP_ENABLED);
 
@@ -133,7 +133,7 @@ public class Main implements IPaintListener{
 
         //создаем камеру, перемещаем в заданную точку и направляем ее взор на центр Солнца
 		Camera cam = world.getCamera();
-		cam.setPosition(0, 0,3500);
+		cam.setPosition(2200, 0,0);
 		cam.lookAt(new SimpleVector());
 		//cam.setFOV(1.5f);
 	}

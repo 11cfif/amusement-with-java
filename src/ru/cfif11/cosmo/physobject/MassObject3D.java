@@ -53,7 +53,7 @@ public class MassObject3D extends PhysObject3D implements HasMassInterface {
 
 	@Override
 	public boolean isGravity(SimpleVector GravityField) {
-		if(GravityField.length() < 0.005) {
+		if(GravityField.length() < 0.0005) {
 			return false;
 		}
 		return true;
