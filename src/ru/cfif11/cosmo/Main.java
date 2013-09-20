@@ -6,6 +6,7 @@ import com.threed.jpct.util.KeyState;
 import org.lwjgl.input.Mouse;
 import ru.cfif11.cosmo.adapterphysics.AdapterPhysics;
 import ru.cfif11.cosmo.physobject.MassAttractObject3D;
+import ru.cfif11.cosmo.physobject.MassObject3D;
 
 import java.awt.event.KeyEvent;
 
@@ -29,6 +30,7 @@ public class Main implements IPaintListener{
 	private World world = null;
 	private MassAttractObject3D sun = null;
 	private MassAttractObject3D earth = null;
+    private MassObject3D moon = null;
 
     //переменный для определения направления движения камеры
 	private boolean forward = false;
@@ -82,6 +84,7 @@ public class Main implements IPaintListener{
 
         TextureManager.getInstance().addTexture("Earth", new Texture("texture/Earth.jpg"));
         TextureManager.getInstance().addTexture("Sun", new Texture("texture/Sun.gif"));
+        TextureManager.getInstance().addTexture("Moon", new Texture("texture/Moon.jpg"));
 
         //создаем мир
 		world = new World();
@@ -96,31 +99,39 @@ public class Main implements IPaintListener{
 
 
         //создаем объекты на основе примитивов
-		earth = new MassAttractObject3D(Primitives.getSphere(100, 10), new SimpleVector(19.4,0,0),10);
+        earth = new MassAttractObject3D(Primitives.getSphere(100, 20), new SimpleVector(0,3.5,0),9.44e+11);
         earth.setTexture("Earth");
         earth.setEnvmapped (Object3D.ENVMAP_ENABLED);
 
-		sun = new MassAttractObject3D(Primitives.getSphere(100, 40), new SimpleVector(), 2e+15);
+        sun = new MassAttractObject3D(Primitives.getSphere(100, 100), new SimpleVector(), 3.65e+14);
         sun.setTexture("Sun");
         sun.setEnvmapped (Object3D.ENVMAP_ENABLED);
 
+        moon = new MassAttractObject3D(Primitives.getSphere(100, 10), new SimpleVector(0,4.32,0),9.44e+10);
+        moon.setTexture("Moon");
+        moon.setEnvmapped (Object3D.ENVMAP_ENABLED);
+
+
         //передвигаем объекты
 		sun.translate(0, 0, 0);
-		earth.translate(0, -334.7f, 0);
+		earth.translate(2000, 0, 0);
+        moon.translate(2100, 0, 0);
         //earth.translateMesh();
        // earth.setTranslationMatrix(new Matrix());
 
         //добавляем к миру строим и компилируем
 		world.addObject(sun);
 		world.addObject(earth);
+        world.addObject(moon);
 		world.buildAllObjects();
 		sun.compileAndStrip();
 		earth.compileAndStrip();
+        moon.compileAndStrip();
 
         //создаем камеру, перемещаем в заданную точку и направляем ее взор на центр Солнца
 		Camera cam = world.getCamera();
-		cam.setPosition(600, 0,60);
-		cam.lookAt(sun.getTransformedCenter());
+		cam.setPosition(0, 0,3500);
+		cam.lookAt(new SimpleVector());
 		//cam.setFOV(1.5f);
 	}
 
@@ -130,18 +141,23 @@ public class Main implements IPaintListener{
         //создаем адаптер
 		AdapterPhysics adapter = new AdapterPhysics(world);
 		long ticks = 0;
+        long tim = System.currentTimeMillis();
 
 		while (doLoop) {
 			ticks = ticker.getTicks();
 			if (ticks > 0) {
                 //рассчитываем все силы и считаем новые местоположения объектов
 				adapter.calcForce();
-				earth.calcLocation(0.1f);	
+				earth.calcLocation(0.1f);
 				sun.calcLocation(0.1f);
+                moon.calcLocation(0.1f);
                 //используем обработчик событий для движения камеры
 				pollControls();
 				move(ticks);
-				System.out.println("ticks=" + ticks);
+                if (earth.getTransformedCenter().x < 0) {
+                    tim = System.currentTimeMillis() - tim;
+                    System.out.println("time =" + tim);
+                }
 			}
             //очищаем буфер и рисуем заново
 			buffer.clear();
@@ -152,7 +168,7 @@ public class Main implements IPaintListener{
 			buffer.displayGLOnly();
             //не используется, а вообще для подсчета fps
 			if (System.currentTimeMillis() - time >= 1000) {
-				System.out.println(fps);
+				//System.out.println(fps);
 				fps = 0;
 				time = System.currentTimeMillis();
 			}

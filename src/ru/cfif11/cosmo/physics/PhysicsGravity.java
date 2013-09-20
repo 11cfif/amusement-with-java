@@ -50,7 +50,7 @@ public class PhysicsGravity extends Physics {
 		super.reset();
 		weight = 0;
 		gravityForce.set(0, 0, 0);
-		//setTotalForce(gravityForce);
+		setTotalForce(gravityForce);
 	}
 
     /**
