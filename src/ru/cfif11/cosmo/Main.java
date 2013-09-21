@@ -6,9 +6,10 @@ import com.threed.jpct.util.KeyState;
 import org.lwjgl.input.Mouse;
 import ru.cfif11.cosmo.adapterphysics.AdapterPhysics;
 import ru.cfif11.cosmo.physobject.MassAttractObject3D;
-import ru.cfif11.cosmo.physobject.MassObject3D;
+import ru.cfif11.cosmo.physobject.StarSystemEnum;
 
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 /**
  * A simple example of a planet orbiting a star. This example demonstrates the use of physics and libraries jpct
@@ -20,41 +21,39 @@ public class Main implements IPaintListener{
 	private static final long serialVersionUID = -3626482109116766979L;
 
     //буфер для экрана
-	private FrameBuffer buffer = null;
+	private FrameBuffer buffer      = null;
 
     //для отлавливания событий с клавиатурой и мышкой
-	private KeyMapper keyMapper = null;
+	private KeyMapper keyMapper     = null;
 	private MouseMapper mouseMapper = null;
 
-    //мир и объекты
-	private World world = null;
-	private MassAttractObject3D sun = null;
-	private MassAttractObject3D earth = null;
-    private MassObject3D moon = null;
+    private TextureManager texMan = null;
 
+
+    //мир и объекты
+	private World world                 = null;
+    private ArrayList<MassAttractObject3D> starSystem = null;
+    private float scalingFactor = 1e-4f;
     //переменный для определения направления движения камеры
-	private boolean forward = false;
-	private boolean backward = false;
-	private boolean up = false;
-	private boolean down = false;
-	private boolean left = false;
-	private boolean right = false;
-    private boolean fast = false;
-    private boolean slow = false;
+	private boolean forward     = false;
+	private boolean backward    = false;
+	private boolean up          = false;
+	private boolean down        = false;
+	private boolean left        = false;
+	private boolean right       = false;
+    private boolean fast        = false;
+    private boolean slow        = false;
 
     //переменная для работы с основным циклом
-	private boolean doLoop = true;
+	private boolean doLoop      = true;
 
-	private int fps = 0;
-	private long time = System.currentTimeMillis();
-	
-
-	private float xAngle = 0;
-	
+	private float xAngle    = 0;
 
     //счетчик времени
-    private int rate = 15;
-	private Ticker ticker = new Ticker(rate);
+    private int rate        = 15;
+	private Ticker ticker   = new Ticker(rate);
+    private int fps         = 0;
+    private long time       = System.currentTimeMillis();
 
 	public static void main(String[] args) throws Exception {
 		Config.glVerbose = true;
@@ -66,14 +65,14 @@ public class Main implements IPaintListener{
     //инициализация
 	public Main() throws Exception {
 		Config.glAvoidTextureCopies = true;
-		Config.maxPolysVisible = 1000;
-		Config.glColorDepth = 24;
-		Config.glFullscreen = false;
-		Config.farPlane = 4000;
-		Config.glShadowZBias = 0.8f;
-		Config.lightMul = 1;
-		Config.collideOffset = 500;
-		Config.glTrilinear = true;
+		Config.maxPolysVisible      = 1000;
+		Config.glColorDepth         = 24;
+		Config.glFullscreen         = false;
+		Config.farPlane             = 4000;
+		Config.glShadowZBias        = 0.8f;
+		Config.lightMul             = 1;
+		Config.collideOffset        = 500;
+		Config.glTrilinear          = true;
 	}
 
 	private void init() throws Exception {
@@ -85,9 +84,10 @@ public class Main implements IPaintListener{
 		buffer.enableRenderer(IRenderer.RENDERER_OPENGL);
 		buffer.setPaintListener(this);
 
-        TextureManager.getInstance().addTexture("Earth", new Texture("texture/Earth.jpg"));
-        TextureManager.getInstance().addTexture("Sun", new Texture("texture/Sun.gif"));
-        TextureManager.getInstance().addTexture("Moon", new Texture("texture/Moon.jpg"));
+        texMan = TextureManager.getInstance();
+        texMan.addTexture("Earth", new Texture("texture/Earth.jpg"));
+        texMan.addTexture("Sun", new Texture("texture/Sun.gif"));
+        texMan.addTexture("Moon", new Texture("texture/Moon.jpg"));
 
         //создаем мир
 		world = new World();
@@ -96,64 +96,59 @@ public class Main implements IPaintListener{
         world.getLights().setRGBScale(Lights.RGB_SCALE_2X);
 
         //создаем обработчики
-		keyMapper = new KeyMapper();
+		keyMapper   = new KeyMapper();
 		mouseMapper = new MouseMapper(buffer);
 		mouseMapper.hide();
 
-
-        //создаем объекты на основе примитивов
-        earth = new MassAttractObject3D(Primitives.getSphere(100, 15), new SimpleVector(0,0,-3.5),9.44e+11);
-        earth.setTexture("Earth");
-        earth.setEnvmapped (Object3D.ENVMAP_ENABLED);
-
-        sun = new MassAttractObject3D(Primitives.getSphere(100, 100), new SimpleVector(), 3.65e+14);
-        sun.setTexture("Sun");
-        sun.setEnvmapped (Object3D.ENVMAP_ENABLED);
-
-        moon = new MassAttractObject3D(Primitives.getSphere(100, 5), new SimpleVector(0,0,-4.62 ),9.44e+10);
-        moon.setTexture("Moon");
-        moon.setEnvmapped (Object3D.ENVMAP_ENABLED);
-
-
-        //передвигаем объекты
-		sun.translate(0, 0, 0);
-		earth.translate(2000, 0, 0);
-        moon.translate(2050, 0, 0);
-        //earth.translateMesh();
-       // earth.setTranslationMatrix(new Matrix());
-
-        //добавляем к миру строим и компилируем
-		world.addObject(sun);
-		world.addObject(earth);
-        world.addObject(moon);
-		world.buildAllObjects();
-		sun.compileAndStrip();
-		earth.compileAndStrip();
-        moon.compileAndStrip();
+        initializationStarSystem();
 
         //создаем камеру, перемещаем в заданную точку и направляем ее взор на центр Солнца
 		Camera cam = world.getCamera();
-		cam.setPosition(2200, 0,0);
+		cam.setPosition(0, 3500,0);
 		cam.lookAt(new SimpleVector());
 		//cam.setFOV(1.5f);
 	}
+
+    //данный метод создает объекты из перечисления StarSystemEnum и инициализирует их начальными значениями
+    //все объекты записываются в список starSystem
+    private void initializationStarSystem() {
+        MassAttractObject3D tempObj = null;
+        SimpleVector tempVec = null;
+        starSystem = new ArrayList<MassAttractObject3D>();
+        for (StarSystemEnum p : StarSystemEnum.values()) {
+            tempVec  = p.getVelocity();
+            tempVec.scalarMul(scalingFactor);
+            System.out.println("before =" + p.getVelocity());
+            tempObj = new MassAttractObject3D(Primitives.getSphere(100, p.getRadius() * scalingFactor), p.getNameObject(),
+                    tempVec, p.getMass());
+            tempObj.setTexture(tempObj.getName());
+            tempObj.setEnvmapped(Object3D.ENVMAP_ENABLED);
+            tempVec  = p.getInitialPosition();
+            tempVec.scalarMul(scalingFactor);
+            tempObj.translate(tempVec);
+            starSystem.add(tempObj);
+            world.addObject(tempObj);
+            tempObj.build();
+            tempObj.compileAndStrip();
+        }
+    }
 
     //основной цикл программы
 	private void loop() throws Exception {
 
         //создаем адаптер
 		AdapterPhysics adapter = new AdapterPhysics(world);
-		long ticks = 0;
-        long tim = System.currentTimeMillis();
+		long ticks  = 0;
+        long tim    = System.currentTimeMillis();
 
 		while (doLoop) {
 			ticks = ticker.getTicks();
 			if (ticks > 0) {
                 //рассчитываем все силы и считаем новые местоположения объектов
 				adapter.calcForce();
-				earth.calcLocation(0.1f);
-				sun.calcLocation(0.1f);
-                moon.calcLocation(0.1f);
+                for(int i = 0; i < starSystem.size(); i++) {
+                    starSystem.get(i).calcLocation(0.1f);
+                }
                 //используем обработчик событий для движения камеры
 				pollControls();
 				move(ticks);
@@ -167,7 +162,7 @@ public class Main implements IPaintListener{
 			buffer.displayGLOnly();
             //не используется, а вообще для подсчета fps
 			if (System.currentTimeMillis() - time >= 1000) {
-				System.out.println("distanse="+earth.getTransformedCenter().distance(moon.getTransformedCenter()));
+				//System.out.println();
 				fps = 0;
 				time = System.currentTimeMillis();
 			}
@@ -236,57 +231,44 @@ public class Main implements IPaintListener{
 		SimpleVector ellipsoid = new SimpleVector(5, 5, 5);
 
 		if (forward) {
-			world.checkCameraCollisionEllipsoid(Camera.CAMERA_MOVEIN,
-					ellipsoid, ticks, 5);
+			world.checkCameraCollisionEllipsoid(Camera.CAMERA_MOVEIN, ellipsoid, ticks, 5);
 		}
 
 		if (backward) {
-			world.checkCameraCollisionEllipsoid(Camera.CAMERA_MOVEOUT,
-					ellipsoid, ticks, 5);
+			world.checkCameraCollisionEllipsoid(Camera.CAMERA_MOVEOUT, ellipsoid, ticks, 5);
 		}
 
 		if (left) {
-			world.checkCameraCollisionEllipsoid(Camera.CAMERA_MOVELEFT,
-					ellipsoid, ticks, 5);
+			world.checkCameraCollisionEllipsoid(Camera.CAMERA_MOVELEFT, ellipsoid, ticks, 5);
 		}
 
 		if (right) {
-			world.checkCameraCollisionEllipsoid(Camera.CAMERA_MOVERIGHT,
-					ellipsoid, ticks, 5);
+			world.checkCameraCollisionEllipsoid(Camera.CAMERA_MOVERIGHT, ellipsoid, ticks, 5);
 		}
 
 		if (up) {
-			world.checkCameraCollisionEllipsoid(Camera.CAMERA_MOVEUP,
-					ellipsoid, ticks, 5);
+			world.checkCameraCollisionEllipsoid(Camera.CAMERA_MOVEUP, ellipsoid, ticks, 5);
 		}
 
 		if (down) {
-			world.checkCameraCollisionEllipsoid(Camera.CAMERA_MOVEDOWN,
-					ellipsoid, ticks, 5);
+			world.checkCameraCollisionEllipsoid(Camera.CAMERA_MOVEDOWN, ellipsoid, ticks, 5);
 		}
 
         if (fast) {
-            if(rate > 2) {
-                rate--;
-                ticker.setRate(rate);
-            }
+            if(rate > 2) {rate--; ticker.setRate(rate); }
         }
 
         if (slow) {
-            if(rate < 30) {
-                rate++;
-                ticker.setRate(rate);
-            }
+            if(rate < 30) {rate++; ticker.setRate(rate); }
         }
 
 		// mouse rotation
+		Matrix rot  = world.getCamera().getBack();
+		int dx      = mouseMapper.getDeltaX();
+		int dy      = mouseMapper.getDeltaY();
 
-		Matrix rot = world.getCamera().getBack();
-		int dx = mouseMapper.getDeltaX();
-		int dy = mouseMapper.getDeltaY();
-
-		float ts = 0.2f * ticks;
-		float tsy = ts;
+		float ts    = 0.2f * ticks;
+		float tsy   = ts;
 
 		if (dx != 0) {
 			ts = dx / 500f;
@@ -310,9 +292,8 @@ public class Main implements IPaintListener{
     //слушатель мышки
 	private static class MouseMapper {
 
-		private boolean hidden = false;
-
-		private int height = 0;
+		private boolean hidden  = false;
+		private int height      = 0;
 
 		public MouseMapper(FrameBuffer buffer) {
 			height = buffer.getOutputHeight();
@@ -384,36 +365,6 @@ public class Main implements IPaintListener{
 		}
 	}
 
-    //счетчик времени
-	private static class Ticker {
-
-		private int rate;
-		private long s2;
-
-		public static long getTime() {
-			return System.currentTimeMillis();
-		}
-
-        public void setRate(int rate) {
-            this.rate = rate;
-        }
-
-		public Ticker(int tickrateMS) {
-			rate = tickrateMS;
-			s2 = Ticker.getTime();
-		}
-
-		public int getTicks() {
-			long i = Ticker.getTime();
-			if (i - s2 > rate) {
-				int ticks = (int) ((i - s2) / (long) rate);
-				s2 += (long) rate * ticks;
-				return ticks;
-			}
-			return 0;
-		}
-	}
-
 	@Override
 	public void finishedPainting() {
 		// TODO Auto-generated method stub
@@ -425,7 +376,6 @@ public class Main implements IPaintListener{
 		// TODO Auto-generated method stub
 		
 	}
-	
 }
 
 	

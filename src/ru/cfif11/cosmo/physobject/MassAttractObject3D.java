@@ -16,8 +16,8 @@ public class MassAttractObject3D extends MassObject3D implements CanAttractInter
      * @param velocity the velocity
      * @param mass the mass
      */
-	public MassAttractObject3D(Object3D obj, SimpleVector velocity, double mass) {
-		super(obj, velocity, mass);
+	public MassAttractObject3D(Object3D obj, String name, SimpleVector velocity, double mass) {
+		super(obj, name, velocity, mass);
 	}
 
 }

@@ -19,8 +19,9 @@ public abstract class PhysObject3D extends Object3D{
      * @param obj the Object3D
      * @param velocity the initial velocity
      */
-	public PhysObject3D(Object3D obj, SimpleVector velocity) {
+	public PhysObject3D(Object3D obj, String name, SimpleVector velocity) {
 		super(obj);
+        setName(name);
 		this.velocity = velocity;
 		this.acceleration = new SimpleVector();
 	}
