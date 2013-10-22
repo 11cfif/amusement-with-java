@@ -7,6 +7,7 @@ import org.lwjgl.input.Mouse;
 import ru.cfif11.cosmo.adapterphysics.AdapterPhysics;
 import ru.cfif11.cosmo.physobject.MassAttractObject3D;
 import ru.cfif11.cosmo.physobject.StarSystemEnum;
+import ru.cfif11.cosmo.scene.Scene;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class Main implements IPaintListener{
 
     //буфер для экрана
 	private FrameBuffer buffer      = null;
+    private Scene scene = null;
 
     //для отлавливания событий с клавиатурой и мышкой
 	private KeyMapper keyMapper     = null;
@@ -106,6 +108,8 @@ public class Main implements IPaintListener{
 		Camera cam = world.getCamera();
 		cam.setPosition(0, 3500,0);
 		cam.lookAt(new SimpleVector());
+
+        scene = new Scene(world, texMan, 1);
 		//cam.setFOV(1.5f);
 	}
 
