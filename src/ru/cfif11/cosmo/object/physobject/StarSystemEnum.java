@@ -1,4 +1,4 @@
-package ru.cfif11.cosmo.physobject;
+package ru.cfif11.cosmo.object.physobject;
 
 import com.threed.jpct.SimpleVector;
 
@@ -13,6 +13,9 @@ public enum StarSystemEnum {
     earth ("Earth",9.44e+11,15e+4f,new SimpleVector(2e+7, 0,0), new SimpleVector(0,0,-35e+3)),
     moon ("Moon", 9e+10, 5e+4f, earth.initialPosition.calcAdd(new SimpleVector(5e+5,0,0)),
             earth.getVelocity().calcAdd(new SimpleVector(0,0,-11.2e+3)));
+   /* sun1 ("Sun", 3.65e+14, 1e+6f, new SimpleVector(0,200,0), new SimpleVector(0,0,0)),
+    sun2 ("Sun", 3.65e+14, 1e+6f, new SimpleVector(200,0,0), new SimpleVector(0,0,0)),
+    sun3 ("Sun", 3.65e+14, 1e+6f, new SimpleVector(200,200,0), new SimpleVector(0,0,0)); */
 
     private String          nameObject;
     private double          mass;
