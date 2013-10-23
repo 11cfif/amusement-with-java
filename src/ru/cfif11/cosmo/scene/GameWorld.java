@@ -5,10 +5,7 @@ import com.threed.jpct.World;
 
 /**
  * Created with IntelliJ IDEA.
- * User: Администратор
- * Date: 22.10.13
- * Time: 19:33
- * To change this template use File | Settings | File Templates.
+ * User: Galkin Aleksandr
  */
 public class GameWorld {
     public GameWorld(World world, TextureManager tm) {

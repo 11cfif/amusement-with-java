@@ -3,21 +3,17 @@ package ru.cfif11.cosmo.scene;
 import com.threed.jpct.*;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Created with IntelliJ IDEA.
- * User: Администратор
- * Date: 22.10.13
- * Time: 19:33
- * To change this template use File | Settings | File Templates.
+ * User: Galkin Aleksandr
  */
 public class Scene implements IPaintListener {
 
-    private GameWorld gameWorld = null;
-    private Cursor cur = null;
-    private ArrayList<Table> listTable = null;
-    private FrameBuffer buffer = null;
+    private GameWorld gameWorld;
+    private Cursor cur;
+    private ArrayList<Table> listTable;
+    private FrameBuffer buffer;
 
     public Scene(World world, TextureManager tm, int local) {
         buffer = new FrameBuffer(800, 600, FrameBuffer.SAMPLINGMODE_NORMAL);
