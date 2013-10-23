@@ -1,14 +1,12 @@
 package ru.cfif11.cosmo;
 
 import com.threed.jpct.*;
-import com.threed.jpct.util.KeyMapper;
-import com.threed.jpct.util.KeyState;
-import org.lwjgl.input.Mouse;
+import ru.cfif11.cosmo.Control.CameraControl;
+import ru.cfif11.cosmo.Control.KeyboardControl;
 import ru.cfif11.cosmo.adapterphysics.AdapterPhysics;
 import ru.cfif11.cosmo.physobject.MassAttractObject3D;
 import ru.cfif11.cosmo.physobject.StarSystemEnum;
 
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 /**
@@ -24,30 +22,23 @@ public class Main implements IPaintListener{
 	private FrameBuffer buffer      = null;
 
     //для отлавливания событий с клавиатурой и мышкой
-	private KeyMapper keyMapper     = null;
-	private MouseMapper mouseMapper = null;
+
 
     private TextureManager texMan = null;
+    private Camera cam = null;
 
 
     //мир и объекты
 	private World world                 = null;
     private ArrayList<MassAttractObject3D> starSystem = null;
     private float scalingFactor = 1e-4f;
-    //переменный для определения направления движения камеры
-	private boolean forward     = false;
-	private boolean backward    = false;
-	private boolean up          = false;
-	private boolean down        = false;
-	private boolean left        = false;
-	private boolean right       = false;
-    private boolean fast        = false;
-    private boolean slow        = false;
+    private CameraControl cameraControl = null;
+    private KeyboardControl keyboardControl = null;
 
-    //переменная для работы с основным циклом
 	private boolean doLoop      = true;
 
-	private float xAngle    = 0;
+
+    private float xAngle    = 0;
 
     //счетчик времени
     private int rate        = 15;
@@ -96,15 +87,16 @@ public class Main implements IPaintListener{
         world.getLights().setRGBScale(Lights.RGB_SCALE_2X);
 
         //создаем обработчики
-		keyMapper   = new KeyMapper();
+		/*keyMapper   = new KeyMapper();
 		mouseMapper = new MouseMapper(buffer);
-		mouseMapper.hide();
-
+		mouseMapper.hide();  */
+        keyboardControl = new KeyboardControl();
+        cameraControl = new CameraControl(world, ticker, buffer, keyboardControl);
         initializationStarSystem();
 
         //создаем камеру, перемещаем в заданную точку и направляем ее взор на центр Солнца
-		Camera cam = world.getCamera();
-		cam.setPosition(0, 3500,0);
+		cam = world.getCamera();
+		cam.setPosition(1000, 0, 0);
 		cam.lookAt(new SimpleVector());
 		//cam.setFOV(1.5f);
 	}
@@ -115,13 +107,13 @@ public class Main implements IPaintListener{
         MassAttractObject3D tempObj = null;
         SimpleVector tempVec = null;
         starSystem = new ArrayList<MassAttractObject3D>();
+        int i = 0;
         for (StarSystemEnum p : StarSystemEnum.values()) {
             tempVec  = p.getVelocity();
             tempVec.scalarMul(scalingFactor);
-            System.out.println("before =" + p.getVelocity());
-            tempObj = new MassAttractObject3D(Primitives.getSphere(100, p.getRadius() * scalingFactor), p.getNameObject(),
+            tempObj = new MassAttractObject3D(Primitives.getSphere(100, p.getRadius() * scalingFactor), p.getNameObject()+i,
                     tempVec, p.getMass());
-            tempObj.setTexture(tempObj.getName());
+            tempObj.setTexture(tempObj.getName().substring(0,tempObj.getName().length() -1));
             tempObj.setEnvmapped(Object3D.ENVMAP_ENABLED);
             tempVec  = p.getInitialPosition();
             tempVec.scalarMul(scalingFactor);
@@ -130,6 +122,7 @@ public class Main implements IPaintListener{
             world.addObject(tempObj);
             tempObj.build();
             tempObj.compileAndStrip();
+            i++;
         }
     }
 
@@ -150,8 +143,8 @@ public class Main implements IPaintListener{
                     starSystem.get(i).calcLocation(0.1f);
                 }
                 //используем обработчик событий для движения камеры
-				pollControls();
-				move(ticks);
+                doLoop = cameraControl.pollControls();
+                cameraControl.move(ticks);
 			}
             //очищаем буфер и рисуем заново
 			buffer.clear();
@@ -174,7 +167,7 @@ public class Main implements IPaintListener{
 	}
 
     //определяем что мы нажали на клаве
-	private void pollControls() {
+	/*private void pollControls() {
 		KeyState ks = null;
 		while ((ks = keyMapper.poll()) != KeyState.NONE) {
 			if (ks.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -217,10 +210,10 @@ public class Main implements IPaintListener{
 		if (org.lwjgl.opengl.Display.isCloseRequested()) {
 			doLoop = false;
 		}
-	}
+	}  */
 
     //двигаем камеру в зависимости от того, куда нажали
-	private void move(long ticks) {
+	/*private void move(long ticks) {
 
 		if (ticks == 0) {
 			return;
@@ -263,7 +256,7 @@ public class Main implements IPaintListener{
         }
 
 		// mouse rotation
-		Matrix rot  = world.getCamera().getBack();
+		Matrix rot  = cam.getBack();
 		int dx      = mouseMapper.getDeltaX();
 		int dy      = mouseMapper.getDeltaY();
 
@@ -278,19 +271,19 @@ public class Main implements IPaintListener{
 		}
 
 		if (dx != 0) {
-			rot.rotateAxis(rot.getYAxis(), ts);
+			//rot.rotateAxis(rot.getXAxis(), ts);
+            rot.rotateY(-ts);
 		}
 
-		if ((dy > 0 && xAngle < Math.PI / 4.2)
-				|| (dy < 0 && xAngle > -Math.PI / 4.2)) {
+        if (dy!=0) {
 			rot.rotateX(tsy);
 			xAngle += tsy;
 		}
 
-	}
+	}    */
 
     //слушатель мышки
-	private static class MouseMapper {
+	/*private static class MouseMapper {
 
 		private boolean hidden  = false;
 		private int height      = 0;
@@ -363,7 +356,7 @@ public class Main implements IPaintListener{
 				throw new RuntimeException(e);
 			}
 		}
-	}
+	}    */
 
 	@Override
 	public void finishedPainting() {
