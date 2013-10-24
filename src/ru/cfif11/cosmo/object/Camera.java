@@ -57,6 +57,10 @@ public class Camera implements ControllableMKInterface, MovableInterface{
         cam.lookAt(obj);
     }
 
+    public void setFOV(float fov) {
+        cam.setFOV(fov);
+    }
+
     @Override
     public boolean pollControls() {
         KeyState ks = keyListener.pollControls();

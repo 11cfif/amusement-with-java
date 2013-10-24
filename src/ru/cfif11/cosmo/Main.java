@@ -6,6 +6,7 @@ import ru.cfif11.cosmo.control.KeyboardListener;
 import ru.cfif11.cosmo.adapterphysics.AdapterPhysics;
 import ru.cfif11.cosmo.object.physobject.MassAttractObject3D;
 import ru.cfif11.cosmo.object.physobject.StarSystemEnum;
+import ru.cfif11.cosmo.scene.Scene;
 
 import java.util.ArrayList;
 
@@ -18,31 +19,34 @@ public class Main implements IPaintListener{
 
 	private static final long serialVersionUID = -3626482109116766979L;
 
+
+
     //буфер для экрана
-	private FrameBuffer buffer      = null;
+	//private FrameBuffer buffer      = null;
 
     //для отлавливания событий с клавиатурой и мышкой
 
 
-    private TextureManager texMan = null;
+    static public TextureManager texMan = null;
 
 
     //мир и объекты
-	private World world                 = null;
-    private ArrayList<MassAttractObject3D> starSystem = null;
-    private float scalingFactor = 1e-4f;
-    private Camera camera = null;
-    private KeyboardListener keyboardControl = null;
+	private Scene                           scene           = null;
+    private ArrayList<MassAttractObject3D>  starSystem      = null;
+    private float                           scalingFactor   = 1e-4f;
+    private Camera                          camera          = null;
+    private KeyboardListener                keyboardControl = null;
+    private int level = 1;
 
-	private boolean doLoop      = true;
+	private boolean                         doLoop          = true;
 
 
 
     //счетчик времени
-    private int rate        = 15;
-	private Ticker ticker   = new Ticker(rate);
-    private int fps         = 0;
-    private long time       = System.currentTimeMillis();
+    private int     rate   = 15;
+	private Ticker  ticker = new Ticker(rate);
+    private int     fps    = 0;
+    private long    time   = System.currentTimeMillis();
 
 	public static void main(String[] args) throws Exception {
 		Config.glVerbose = true;
@@ -67,11 +71,11 @@ public class Main implements IPaintListener{
 	private void init() throws Exception {
 
         //содаем буффер
-		buffer = new FrameBuffer(800, 600, FrameBuffer.SAMPLINGMODE_NORMAL);
+	/*	buffer = new FrameBuffer(800, 600, FrameBuffer.SAMPLINGMODE_NORMAL);
 		buffer.disableRenderer(IRenderer.RENDERER_SOFTWARE);
         //используем openGL, а не всякие swingи или awt
 		buffer.enableRenderer(IRenderer.RENDERER_OPENGL);
-		buffer.setPaintListener(this);
+		buffer.setPaintListener(this);   */
 
         texMan = TextureManager.getInstance();
         texMan.addTexture("Earth", new Texture("texture/Earth.jpg"));
@@ -79,25 +83,22 @@ public class Main implements IPaintListener{
         texMan.addTexture("Moon", new Texture("texture/Moon.jpg"));
 
         //создаем мир
-		world = new World();
-        world.setAmbientLight(100, 100, 100);
-
-        world.getLights().setRGBScale(Lights.RGB_SCALE_2X);
+        scene = new Scene(texMan, ticker, level);
 
 
         keyboardControl = new KeyboardListener();
-        camera = new Camera(world, ticker, buffer);
-        initializationStarSystem();
+        //camera = new Camera(world, ticker, buffer);
+        //initializationStarSystem();
 
         //создаем камеру, перемещаем в заданную точку и направляем ее взор на центр Солнца
-		camera.setPosition(1000, 0, 0);
-		camera.lookAt(new SimpleVector());
+		//camera.setPosition(1000, 0, 0);
+		//camera.lookAt(new SimpleVector());
 		//cam.setFOV(1.5f);
 	}
 
     //данный метод создает объекты из перечисления StarSystemEnum и инициализирует их начальными значениями
     //все объекты записываются в список starSystem
-    private void initializationStarSystem() {
+    /*private void initializationStarSystem() {
         MassAttractObject3D tempObj;
         SimpleVector tempVec;
         starSystem = new ArrayList<MassAttractObject3D>();
@@ -118,17 +119,17 @@ public class Main implements IPaintListener{
             tempObj.compileAndStrip();
             i++;
         }
-    }
+    }                    */
 
     //основной цикл программы
 	private void loop() throws Exception {
 
         //создаем адаптер
-		AdapterPhysics adapter = new AdapterPhysics(world);
+		AdapterPhysics adapter = new AdapterPhysics(scene.getGameWorld().getWorld());
 		long ticks;
 
-		while (doLoop) {
-			ticks = ticker.getTicks();
+		while (scene.getGameWorld().run()) {
+			/*ticks = ticker.getTicks();
 			if (ticks > 0) {
                 //рассчитываем все силы и считаем новые местоположения объектов
 				adapter.calcForce();
@@ -140,21 +141,17 @@ public class Main implements IPaintListener{
                 camera.move(ticks);
 			}
             //очищаем буфер и рисуем заново
-			buffer.clear();
-			buffer.setPaintListenerState(false);
-			world.renderScene(buffer);
-			world.draw(buffer);
-			buffer.update();
-			buffer.displayGLOnly();
+            scene.bufferReset(false);
+
             //не используется, а вообще для подсчета fps
 			if (System.currentTimeMillis() - time >= 1000) {
 				fps = 0;
 				time = System.currentTimeMillis();
-			}
+			} */
 		}
         //очищаем и вырубаем
-		buffer.disableRenderer(IRenderer.RENDERER_OPENGL);
-		buffer.dispose();
+        scene.close();
+
 		System.exit(0);
 	}
 

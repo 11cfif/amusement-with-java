@@ -1,6 +1,7 @@
 package ru.cfif11.cosmo.scene;
 
 import com.threed.jpct.*;
+import ru.cfif11.cosmo.Ticker;
 
 import java.util.ArrayList;
 
@@ -15,16 +16,16 @@ public class Scene implements IPaintListener {
     private ArrayList<Table> listTable;
     private FrameBuffer buffer;
 
-    public Scene(World world, TextureManager tm, int local) {
+    public Scene(TextureManager tm, Ticker ticker, int level) {
         buffer = new FrameBuffer(800, 600, FrameBuffer.SAMPLINGMODE_NORMAL);
         buffer.disableRenderer(IRenderer.RENDERER_SOFTWARE);
         buffer.enableRenderer(IRenderer.RENDERER_OPENGL);
         buffer.setPaintListener(this);
 
 
-        gameWorld = new GameWorld(world, tm);
+        gameWorld = new GameWorld(this, tm, buffer, ticker, level);
         cur = new Cursor(tm);
-        switch (local) {
+        switch (level) {
 
         }
     }
@@ -37,5 +38,23 @@ public class Scene implements IPaintListener {
     @Override
     public void finishedPainting() {
         //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public GameWorld getGameWorld() {
+        return gameWorld;
+    }
+
+    public void bufferReset(boolean state) {
+        buffer.clear();
+        buffer.setPaintListenerState(state);
+        gameWorld.renderScene(buffer);
+        gameWorld.draw(buffer);
+        buffer.update();
+        buffer.displayGLOnly();
+    }
+
+    public void close() {
+        buffer.disableRenderer(IRenderer.RENDERER_OPENGL);
+        buffer.dispose();
     }
 }
