@@ -51,9 +51,9 @@ public class Main {
 
 	private void init() throws Exception {
         texMan = TextureManager.getInstance();
-        texMan.addTexture("Earth", new Texture("texture/Earth.jpg"));
-        texMan.addTexture("Sun", new Texture("texture/Sun.gif"));
-        texMan.addTexture("Moon", new Texture("texture/Moon.jpg"));
+        texMan.addTexture("Earth", new Texture("resources/texture/Earth.jpg"));
+        texMan.addTexture("Sun", new Texture("resources/texture/Sun.gif"));
+        texMan.addTexture("Moon", new Texture("resources/texture/Moon.jpg"));
 
         locMan = new LocationManager(ticker);
         //создаем мир
