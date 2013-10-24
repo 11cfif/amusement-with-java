@@ -2,6 +2,7 @@ package ru.cfif11.cosmo.scene;
 
 import com.threed.jpct.*;
 import ru.cfif11.cosmo.Ticker;
+import ru.cfif11.cosmo.object.Camera;
 
 import java.util.ArrayList;
 
@@ -11,23 +12,23 @@ import java.util.ArrayList;
  */
 public class Scene implements IPaintListener {
 
-    private GameWorld gameWorld;
-    private Cursor cur;
-    private ArrayList<Table> listTable;
-    private FrameBuffer buffer;
+    private GameWorld           gameWorld;
+    private Cursor              cur;
+    private ArrayList<Table>    listTable;
+    private FrameBuffer         buffer;
+    private Camera              camera;
 
-    public Scene(TextureManager tm, Ticker ticker, int level) {
+    public Scene(TextureManager tm, Ticker ticker, GameWorld gameWorld) {
         buffer = new FrameBuffer(800, 600, FrameBuffer.SAMPLINGMODE_NORMAL);
         buffer.disableRenderer(IRenderer.RENDERER_SOFTWARE);
         buffer.enableRenderer(IRenderer.RENDERER_OPENGL);
         buffer.setPaintListener(this);
 
 
-        gameWorld = new GameWorld(this, tm, buffer, ticker, level);
-        cur = new Cursor(tm);
-        switch (level) {
-
-        }
+        this.gameWorld  = gameWorld;
+        camera          = new Camera(gameWorld.getWorld(), ticker, buffer);
+        cur             = new Cursor(tm);
+        gameWorld.tunePositionCamera(camera);
     }
 
     @Override
@@ -38,10 +39,6 @@ public class Scene implements IPaintListener {
     @Override
     public void finishedPainting() {
         //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public GameWorld getGameWorld() {
-        return gameWorld;
     }
 
     public void bufferReset(boolean state) {
@@ -57,4 +54,9 @@ public class Scene implements IPaintListener {
         buffer.disableRenderer(IRenderer.RENDERER_OPENGL);
         buffer.dispose();
     }
+
+    public boolean run() {
+        return gameWorld.run(camera);
+    }
+
 }

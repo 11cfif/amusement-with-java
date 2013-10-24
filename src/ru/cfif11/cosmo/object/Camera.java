@@ -28,21 +28,24 @@ public class Camera implements ControllableMKInterface, MovableInterface{
     private boolean fast        = false;
     private boolean slow        = false;
 
-    private KeyboardListener keyListener= null;
-    private MouseListener mouseListener = null;
-    private World world;
-    private int rate        = 15;
-    private com.threed.jpct.Camera cam;
-    private Ticker ticker;
+    private KeyboardListener        keyListener;
+    private MouseListener           mouseListener;
+    private World                   world;
+    private com.threed.jpct.Camera  cam;
+    private Ticker                  ticker;
+
+    private int rate = 15;
+
+
 
 
     public Camera(World world, Ticker ticker, FrameBuffer buffer) {
-        this.world = world;
-        this.ticker = ticker;
-        this.cam = world.getCamera();
-        mouseListener = new MouseListener(buffer);
+        this.world      = world;
+        this.ticker     = ticker;
+        this.cam        = world.getCamera();
+        keyListener     = new KeyboardListener();
+        mouseListener   = new MouseListener(buffer);
         mouseListener.hide();
-        keyListener = new KeyboardListener();
     }
 
     public void setPosition(float x, float y, float z) {
@@ -109,8 +112,7 @@ public class Camera implements ControllableMKInterface, MovableInterface{
             return;
         }
 
-        // Key controls
-
+        // Key control
         SimpleVector ellipsoid = new SimpleVector(5, 5, 5);
 
         if (forward) {

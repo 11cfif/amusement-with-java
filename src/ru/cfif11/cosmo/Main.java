@@ -1,44 +1,25 @@
 package ru.cfif11.cosmo;
 
-import com.threed.jpct.*;
-import ru.cfif11.cosmo.object.Camera;
+import com.threed.jpct.Config;
+import com.threed.jpct.Texture;
+import com.threed.jpct.TextureManager;
 import ru.cfif11.cosmo.control.KeyboardListener;
-import ru.cfif11.cosmo.adapterphysics.AdapterPhysics;
-import ru.cfif11.cosmo.object.physobject.MassAttractObject3D;
-import ru.cfif11.cosmo.object.physobject.StarSystemEnum;
+import ru.cfif11.cosmo.manager.LocationManager;
+import ru.cfif11.cosmo.scene.GameWorld;
 import ru.cfif11.cosmo.scene.Scene;
-
-import java.util.ArrayList;
 
 /**
  * A simple example of a planet orbiting a star. This example demonstrates the use of physics and libraries jpct
  * @author Galkin Aleksandr
  * 
  */
-public class Main implements IPaintListener{
+public class Main {
 
 	private static final long serialVersionUID = -3626482109116766979L;
-
-
-
-    //буфер для экрана
-	//private FrameBuffer buffer      = null;
-
-    //для отлавливания событий с клавиатурой и мышкой
-
-
-    static public TextureManager texMan = null;
-
-
-    //мир и объекты
-	private Scene                           scene           = null;
-    private ArrayList<MassAttractObject3D>  starSystem      = null;
-    private float                           scalingFactor   = 1e-4f;
-    private Camera                          camera          = null;
-    private KeyboardListener                keyboardControl = null;
-    private int level = 1;
-
-	private boolean                         doLoop          = true;
+    static public TextureManager    texMan;
+    static public LocationManager   locMan;
+	private Scene                   scene           = null;
+    private KeyboardListener        keyboardControl = null;
 
 
 
@@ -69,104 +50,29 @@ public class Main implements IPaintListener{
 	}
 
 	private void init() throws Exception {
-
-        //содаем буффер
-	/*	buffer = new FrameBuffer(800, 600, FrameBuffer.SAMPLINGMODE_NORMAL);
-		buffer.disableRenderer(IRenderer.RENDERER_SOFTWARE);
-        //используем openGL, а не всякие swingи или awt
-		buffer.enableRenderer(IRenderer.RENDERER_OPENGL);
-		buffer.setPaintListener(this);   */
-
         texMan = TextureManager.getInstance();
         texMan.addTexture("Earth", new Texture("texture/Earth.jpg"));
         texMan.addTexture("Sun", new Texture("texture/Sun.gif"));
         texMan.addTexture("Moon", new Texture("texture/Moon.jpg"));
 
+        locMan = new LocationManager(ticker);
         //создаем мир
-        scene = new Scene(texMan, ticker, level);
+        GameWorld startWorld = locMan.getGameWorld(0);
+        scene                = new Scene(texMan, ticker, startWorld);
+        keyboardControl      = new KeyboardListener();
 
-
-        keyboardControl = new KeyboardListener();
-        //camera = new Camera(world, ticker, buffer);
-        //initializationStarSystem();
-
-        //создаем камеру, перемещаем в заданную точку и направляем ее взор на центр Солнца
-		//camera.setPosition(1000, 0, 0);
-		//camera.lookAt(new SimpleVector());
-		//cam.setFOV(1.5f);
 	}
 
-    //данный метод создает объекты из перечисления StarSystemEnum и инициализирует их начальными значениями
-    //все объекты записываются в список starSystem
-    /*private void initializationStarSystem() {
-        MassAttractObject3D tempObj;
-        SimpleVector tempVec;
-        starSystem = new ArrayList<MassAttractObject3D>();
-        int i = 0;
-        for (StarSystemEnum p : StarSystemEnum.values()) {
-            tempVec  = p.getVelocity();
-            tempVec.scalarMul(scalingFactor);
-            tempObj = new MassAttractObject3D(Primitives.getSphere(100, p.getRadius() * scalingFactor), p.getNameObject()+i,
-                    tempVec, p.getMass());
-            tempObj.setTexture(tempObj.getName().substring(0,tempObj.getName().length() -1));
-            tempObj.setEnvmapped(Object3D.ENVMAP_ENABLED);
-            tempVec  = p.getInitialPosition();
-            tempVec.scalarMul(scalingFactor);
-            tempObj.translate(tempVec);
-            starSystem.add(tempObj);
-            world.addObject(tempObj);
-            tempObj.build();
-            tempObj.compileAndStrip();
-            i++;
-        }
-    }                    */
 
     //основной цикл программы
 	private void loop() throws Exception {
-
-        //создаем адаптер
-		AdapterPhysics adapter = new AdapterPhysics(scene.getGameWorld().getWorld());
-		long ticks;
-
-		while (scene.getGameWorld().run()) {
-			/*ticks = ticker.getTicks();
-			if (ticks > 0) {
-                //рассчитываем все силы и считаем новые местоположения объектов
-				adapter.calcForce();
-                for(MassAttractObject3D e : starSystem) {
-                    e.calcLocation(0.1f);
-                }
-                //используем обработчик событий для движения камеры
-                doLoop = camera.pollControls();
-                camera.move(ticks);
-			}
-            //очищаем буфер и рисуем заново
+		while (scene.run()) {
             scene.bufferReset(false);
-
-            //не используется, а вообще для подсчета fps
-			if (System.currentTimeMillis() - time >= 1000) {
-				fps = 0;
-				time = System.currentTimeMillis();
-			} */
 		}
-        //очищаем и вырубаем
         scene.close();
-
 		System.exit(0);
 	}
 
-
-	@Override
-	public void finishedPainting() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void startPainting() {
-		// TODO Auto-generated method stub
-		
-	}
 }
 
 	
