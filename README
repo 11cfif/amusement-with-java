@@ -2,3 +2,9 @@
 следующему пути: "jpct\lib\lwjgl-2.8.0\native"
 В итоге, в данной графе должна быть прописана примерно такая строчка:
 -Djava.library.path="D:\Documents and Settings\Студент\cosmoPlay\jpct\lib\lwjgl-2.8.0\native\windows"
+
+Управление:
+w-ускорить
+стрелки - движение камерой
+page up - поднять камеру
+page down - опустить камеру
