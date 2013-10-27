@@ -54,6 +54,7 @@ public class Main {
         texMan.addTexture("Earth", new Texture("resources/texture/Earth.jpg"));
         texMan.addTexture("Sun", new Texture("resources/texture/Sun.gif"));
         texMan.addTexture("Moon", new Texture("resources/texture/Moon.jpg"));
+        texMan.addTexture("Spot", new Texture("resources/texture/spot.jpg"));
 
         locMan = new LocationManager(ticker);
         //создаем мир

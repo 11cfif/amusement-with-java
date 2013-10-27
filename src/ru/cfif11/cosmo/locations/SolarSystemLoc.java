@@ -1,14 +1,11 @@
 package ru.cfif11.cosmo.locations;
 
-import com.threed.jpct.Lights;
-import com.threed.jpct.Object3D;
-import com.threed.jpct.Primitives;
-import com.threed.jpct.SimpleVector;
+import com.threed.jpct.*;
 import ru.cfif11.cosmo.Ticker;
 import ru.cfif11.cosmo.adapterphysics.AdapterPhysics;
 import ru.cfif11.cosmo.object.Camera;
 import ru.cfif11.cosmo.object.physobject.MassAttractObject3D;
-import ru.cfif11.cosmo.scene.GameWorld;
+import ru.cfif11.cosmo.scene.*;
 
 import java.util.ArrayList;
 
@@ -54,6 +51,19 @@ public class SolarSystemLoc extends GameWorld {
             tempObj.compileAndStrip();
             i++;
         }
+        initializationManagerGraphForm();
+    }
+
+    @Override
+    protected void initializationManagerGraphForm() {
+        ArrayList<GraphicForm> graphicForms = new ArrayList<GraphicForm>();
+        graphicForms.add(new Radar(0,0,20,20,1));
+        manGraphForm = new ManagerGraphicForm(graphicForms);
+    }
+
+    @Override
+    public void blit(FrameBuffer buffer) {
+        manGraphForm.blit(buffer);
     }
 
     @Override

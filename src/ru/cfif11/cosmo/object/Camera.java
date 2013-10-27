@@ -17,7 +17,7 @@ import java.awt.event.KeyEvent;
  * Created with IntelliJ IDEA.
  * User: Galkin Aleksandr
  */
-public class Camera implements ControllableMKInterface, MovableInterface{
+public class Camera implements MovableInterface, ControllableMKInterface{
 
     private boolean forward     = false;
     private boolean backward    = false;
