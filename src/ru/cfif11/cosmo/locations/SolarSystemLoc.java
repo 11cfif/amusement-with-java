@@ -6,6 +6,7 @@ import ru.cfif11.cosmo.adapterphysics.AdapterPhysics;
 import ru.cfif11.cosmo.object.Camera;
 import ru.cfif11.cosmo.object.physobject.MassAttractObject3D;
 import ru.cfif11.cosmo.scene.*;
+import ru.cfif11.cosmo.scene.forms.Radar;
 
 import java.util.ArrayList;
 

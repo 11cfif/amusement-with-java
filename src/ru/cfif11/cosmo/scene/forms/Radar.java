@@ -1,14 +1,15 @@
-package ru.cfif11.cosmo.scene;
+package ru.cfif11.cosmo.scene.forms;
 
 import com.threed.jpct.FrameBuffer;
+import ru.cfif11.cosmo.scene.GraphicForm;
 
 /**
  * Created with IntelliJ IDEA.
  * User: Galkin Aleksandr
  */
 public class Radar extends GraphicForm {
-    public Radar(int x, int y, int width, int height, double scaleFactor) {
-        super(x,y,width,height,scaleFactor);
+    public Radar(int x, int y, int width, int height) {
+        super(x,y,width,height);
     }
 
     @Override

@@ -13,7 +13,7 @@ public abstract class GraphicForm {
     protected int height;
     protected double scaleFactor;
 
-    GraphicForm(int x, int y, int width, int height, double scaleFactor) {
+    protected GraphicForm(int x, int y, int width, int height) {
         this.x              = x;
         this.y              = y;
         this.width          = width;
