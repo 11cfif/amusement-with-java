@@ -43,5 +43,5 @@ public abstract class GameWorld {
 
     protected abstract void initializationManagerGraphForm();
 
-    public abstract void blit(FrameBuffer buffer);
+    public abstract void drawGraphForm(FrameBuffer buffer, Camera camera);
 }

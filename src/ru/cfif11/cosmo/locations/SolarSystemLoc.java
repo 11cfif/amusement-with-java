@@ -58,13 +58,14 @@ public class SolarSystemLoc extends GameWorld {
     @Override
     protected void initializationManagerGraphForm() {
         ArrayList<GraphicForm> graphicForms = new ArrayList<GraphicForm>();
-        graphicForms.add(new Radar(0,0,20,20,1));
+        graphicForms.add(new Radar(256,0,256,205, "Radar", world));
         manGraphForm = new ManagerGraphicForm(graphicForms);
     }
 
     @Override
-    public void blit(FrameBuffer buffer) {
-        manGraphForm.blit(buffer);
+    public void drawGraphForm(FrameBuffer buffer, Camera camera) {
+        manGraphForm.refresh(camera);
+        manGraphForm.drawGraphForm(buffer);
     }
 
     @Override

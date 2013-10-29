@@ -1,6 +1,7 @@
 package ru.cfif11.cosmo.scene;
 
 import com.threed.jpct.FrameBuffer;
+import ru.cfif11.cosmo.object.Camera;
 
 import java.util.ArrayList;
 
@@ -17,9 +18,15 @@ public class ManagerGraphicForm {
         this.graphForms = graphForms;
     }
 
-    public void blit(FrameBuffer buffer) {
+    public void refresh(Camera camera) {
         for(GraphicForm gForm : graphForms) {
-            gForm.blit(buffer);
+            gForm.refresh(camera);
+        }
+    }
+
+    public void drawGraphForm(FrameBuffer buffer) {
+        for(GraphicForm gForm : graphForms) {
+            gForm.draw(buffer);
         }
     }
 }

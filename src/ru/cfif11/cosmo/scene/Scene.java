@@ -47,7 +47,7 @@ public class Scene implements IPaintListener {
         gameWorld.renderScene(buffer);
         gameWorld.draw(buffer);
         buffer.update();
-        gameWorld.blit(buffer);
+        gameWorld.drawGraphForm(buffer, camera);
         buffer.displayGLOnly();
     }
 

@@ -64,6 +64,30 @@ public class Camera implements MovableInterface, ControllableMKInterface{
         cam.setFOV(fov);
     }
 
+    public SimpleVector getDirection() {
+        return cam.getDirection();
+    }
+
+    public SimpleVector getPosition() {
+        return cam.getPosition();
+    }
+
+    public float getFOV() {
+        return cam.getFOV();
+    }
+
+    public float convertRADAngleIntoFOV(float angle) {
+        return cam.convertRADAngleIntoFOV(angle);
+    }
+
+    public SimpleVector getUpVector() {
+        return cam.getUpVector();
+    }
+
+    public SimpleVector getSideVector() {
+        return cam.getSideVector();
+    }
+
     @Override
     public boolean pollControls() {
         KeyState ks = keyListener.pollControls();
