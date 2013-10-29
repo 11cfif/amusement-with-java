@@ -13,6 +13,8 @@ import ru.cfif11.cosmo.scene.GraphicForm;
 public class RadarGraphPrimitive extends GraphPrimitive {
 
     private static final String subName = "Rad";
+    private static final int maxSize = 10;
+    private static final int minSize = 1;
 
     public RadarGraphPrimitive(int x, int y, int width, int height, String name) {
         super(x, y, width, height, name);
@@ -37,14 +39,27 @@ public class RadarGraphPrimitive extends GraphPrimitive {
         float angleRadY = radToObj.calcAngle(camera.getUpVector());
         float fovX = (float) Math.cos(angleRadX) * camera.convertRADAngleIntoFOV(angle);
         float fovY = (float) Math.cos(angleRadY) * camera.convertRADAngleIntoFOV(angle);
-        if (Math.abs(fovY) < Radar.fovY && Math.abs(fovX) < Radar.fovX) {
-            y = (int) ((gForm.getHeight() / 2) * (1 - fovY / Radar.fovY));
-            x = (int) ((gForm.getWidth() / 2) * (1 - fovX / Radar.fovX));
+        if (Math.abs(fovY) < Radar.getFovY() && Math.abs(fovX) < Radar.getFovX()) {
+            y = (int) ((gForm.getHeight() / 2) * (1 - fovY / Radar.getFovY()));
+            x = (int) ((gForm.getWidth() / 2) * (1 - fovX / Radar.getFovX()));
+            getSizeTexture(camToObj);
         } else {
             x = 0;
             y = 0;
         }
 
+    }
+
+    private void getSizeTexture(SimpleVector camToObj) {
+        System.out.println("dest=");
+        if(camToObj.length() < Radar.getMinDestToRad())   {
+            System.out.println();
+            width = maxSize;       }
+        else if(camToObj.length() > Radar.getMaxDestToRad())
+            width = minSize;
+        else
+            width = (int)(maxSize - camToObj.length() / ((Radar.getMaxDestToRad() - Radar.getMinDestToRad()) / (maxSize - minSize)));
+        height = width;
     }
 
 }

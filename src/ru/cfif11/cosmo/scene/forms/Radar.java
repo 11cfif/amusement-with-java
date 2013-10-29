@@ -14,8 +14,10 @@ public class Radar extends GraphicForm {
 
     private StarSystem world;
     private String nameGameWorld;
-    public static float fovX = 0.8f;
-    public static float fovY = 1f;
+    private static float fovX = 0.8f;
+    private static float fovY = 1f;
+    private static float MaxDestToRad = 5000;
+    private static float MinDestToRad = 100;
 
     public Radar(int x, int y, int width, int height, String texture, StarSystem world) {
         super(x, y, width, height, texture);
@@ -52,6 +54,30 @@ public class Radar extends GraphicForm {
 
     public void setFovY(float fovY) {
         this.fovY = fovY;
+    }
+
+    public static float getFovX() {
+        return fovX;
+    }
+
+    public static float getFovY() {
+        return fovY;
+    }
+
+    public static float getMaxDestToRad() {
+        return MaxDestToRad;
+    }
+
+    public static float getMinDestToRad() {
+        return MinDestToRad;
+    }
+
+    public static void setMaxDestToRad(float maxDestToRad) {
+        MaxDestToRad = maxDestToRad;
+    }
+
+    public static void setMinDestToRad(float minDestToRad) {
+        MinDestToRad = minDestToRad;
     }
 
     private void calcPrimitives(Camera camera) {
