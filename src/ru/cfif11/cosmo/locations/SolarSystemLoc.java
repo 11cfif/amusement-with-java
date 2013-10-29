@@ -1,14 +1,13 @@
 package ru.cfif11.cosmo.locations;
 
-import com.threed.jpct.Lights;
-import com.threed.jpct.Object3D;
-import com.threed.jpct.Primitives;
-import com.threed.jpct.SimpleVector;
+import com.threed.jpct.*;
 import ru.cfif11.cosmo.Ticker;
 import ru.cfif11.cosmo.adapterphysics.AdapterPhysics;
+import ru.cfif11.cosmo.locations.enumeration.StarSystemEnum;
 import ru.cfif11.cosmo.object.Camera;
 import ru.cfif11.cosmo.object.physobject.MassAttractObject3D;
-import ru.cfif11.cosmo.scene.GameWorld;
+import ru.cfif11.cosmo.scene.*;
+import ru.cfif11.cosmo.scene.forms.Radar;
 
 import java.util.ArrayList;
 
@@ -16,19 +15,11 @@ import java.util.ArrayList;
  * Created with IntelliJ IDEA.
  * User: Galkin Aleksandr
  */
-public class SolarSystemLoc extends GameWorld {
-
-    private ArrayList<MassAttractObject3D>  starSystem;
-    private float                           scalingFactor = 1e-4f;
-    private AdapterPhysics                  adapter;
-
+public class SolarSystemLoc extends StarSystem {
 
 
     public SolarSystemLoc(Ticker ticker) {
         super(ticker);
-        world.setAmbientLight(100, 100, 100);
-        world.getLights().setRGBScale(Lights.RGB_SCALE_2X);
-        adapter = new AdapterPhysics(world);
         initializationLevel();
     }
 
@@ -36,58 +27,23 @@ public class SolarSystemLoc extends GameWorld {
     protected void initializationLevel() {
         MassAttractObject3D tempObj;
         SimpleVector        tempVec;
-        starSystem = new ArrayList<MassAttractObject3D>();
-        int i = 0;
+        system = new ArrayList<MassAttractObject3D>();
         for (StarSystemEnum p : StarSystemEnum.values()) {
             tempVec  = p.getVelocity();
             tempVec.scalarMul(scalingFactor);
-            tempObj = new MassAttractObject3D(Primitives.getSphere(100, p.getRadius() * scalingFactor), p.getNameObject()+i,
+            tempObj = new MassAttractObject3D(Primitives.getSphere(100, p.getRadius() * scalingFactor), p.getNameObject(),
                     tempVec, p.getMass());
-            tempObj.setTexture(tempObj.getName().substring(0,tempObj.getName().length() -1));
+            tempObj.setTexture(tempObj.getName());
             tempObj.setEnvmapped(Object3D.ENVMAP_ENABLED);
             tempVec  = p.getInitialPosition();
             tempVec.scalarMul(scalingFactor);
             tempObj.translate(tempVec);
-            starSystem.add(tempObj);
+            system.add(tempObj);
             world.addObject(tempObj);
             tempObj.build();
             tempObj.compileAndStrip();
-            i++;
         }
-    }
-
-    @Override
-    public void tunePositionCamera(Camera camera){
-        camera.setPosition(1000, 0, 0);
-        camera.lookAt(new SimpleVector());
-        camera.setFOV(1.5f);
-    }
-
-    @Override
-    public boolean run(Camera camera){
-        boolean doLoop;
-        doLoop = true;
-        adapter = new AdapterPhysics(world);
-        long ticks = ticker.getTicks();
-        if (ticks > 0) {
-            //рассчитываем все силы и считаем новые местоположения объектов
-            adapter.calcForce();
-            for(MassAttractObject3D e : starSystem) {
-                e.calcLocation(0.1f);
-            }
-            //используем обработчик событий для движения камеры
-            doLoop = camera.pollControls();
-            camera.move(ticks);
-        }
-
-
-        //не используется, а вообще для подсчета fps
-        /*if (System.currentTimeMillis() - time >= 1000) {
-            fps = 0;
-            time = System.currentTimeMillis();
-        } */
-        return doLoop;
-
+        initializationManagerGraphForm();
     }
 
 }

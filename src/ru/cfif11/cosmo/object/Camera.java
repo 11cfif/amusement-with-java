@@ -17,7 +17,7 @@ import java.awt.event.KeyEvent;
  * Created with IntelliJ IDEA.
  * User: Galkin Aleksandr
  */
-public class Camera implements ControllableMKInterface, MovableInterface{
+public class Camera implements MovableInterface, ControllableMKInterface{
 
     private boolean forward     = false;
     private boolean backward    = false;
@@ -62,6 +62,30 @@ public class Camera implements ControllableMKInterface, MovableInterface{
 
     public void setFOV(float fov) {
         cam.setFOV(fov);
+    }
+
+    public SimpleVector getDirection() {
+        return cam.getDirection();
+    }
+
+    public SimpleVector getPosition() {
+        return cam.getPosition();
+    }
+
+    public float getFOV() {
+        return cam.getFOV();
+    }
+
+    public float convertRADAngleIntoFOV(float angle) {
+        return cam.convertRADAngleIntoFOV(angle);
+    }
+
+    public SimpleVector getUpVector() {
+        return cam.getUpVector();
+    }
+
+    public SimpleVector getSideVector() {
+        return cam.getSideVector();
     }
 
     @Override
