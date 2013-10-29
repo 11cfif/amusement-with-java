@@ -76,7 +76,7 @@ public abstract class StarSystem extends GameWorld{
     @Override
     protected void initializationManagerGraphForm() {
         ArrayList<GraphicForm> graphicForms = new ArrayList<GraphicForm>();
-        graphicForms.add(new Radar(256,0,256,205, "Radar", this));
+        graphicForms.add(new Radar(256,0,256,200, "Radar", this));
         manGraphForm = new ManagerGraphicForm(graphicForms);
     }
 

@@ -19,7 +19,7 @@ public class Scene implements IPaintListener {
     static FrameBuffer      buffer;
 
     public Scene(TextureManager tm, Ticker ticker, GameWorld gameWorld) {
-        buffer = new FrameBuffer(800, 600, FrameBuffer.SAMPLINGMODE_NORMAL);
+        buffer = new FrameBuffer(1024, 768, FrameBuffer.SAMPLINGMODE_NORMAL);
         buffer.disableRenderer(IRenderer.RENDERER_SOFTWARE);
         buffer.enableRenderer(IRenderer.RENDERER_OPENGL);
         buffer.setPaintListener(this);

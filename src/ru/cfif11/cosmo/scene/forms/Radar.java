@@ -14,8 +14,8 @@ public class Radar extends GraphicForm {
 
     private StarSystem world;
     private String nameGameWorld;
-    private static float fovX = 0.8f;
-    private static float fovY = 1f;
+    private static float fovX = 0.98f;
+    private static float fovY = 1.25f;
     private static float MaxDestToRad = 5000;
     private static float MinDestToRad = 100;
 
@@ -37,7 +37,7 @@ public class Radar extends GraphicForm {
 
     @Override
     public void draw(FrameBuffer buffer) {
-        buffer.blit(texture, 0, 0, buffer.getOutputWidth() - x, y, width, height, FrameBuffer.OPAQUE_BLITTING);
+        buffer.blit(texture, 0, 0, buffer.getOutputWidth() - x, y, width, width, width, height, 0, false);
         for (MassAttractObject3D obj : world.getSystem())
             primitives.get(getNameTypeObj(obj.getName())).blit(buffer);
     }

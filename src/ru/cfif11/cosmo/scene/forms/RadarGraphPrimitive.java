@@ -26,7 +26,7 @@ public class RadarGraphPrimitive extends GraphPrimitive {
 
     @Override
     public void blit(FrameBuffer buffer) {
-        buffer.blit(texture, 0, 0, buffer.getOutputWidth() - x, y, width, height, FrameBuffer.OPAQUE_BLITTING);
+        buffer.blit(texture, 0, 0, buffer.getOutputWidth() - x, y, width, height, width, height, 0, false);
     }
 
     @Override
@@ -51,7 +51,6 @@ public class RadarGraphPrimitive extends GraphPrimitive {
     }
 
     private void getSizeTexture(SimpleVector camToObj) {
-        System.out.println("dest=");
         if(camToObj.length() < Radar.getMinDestToRad())   {
             System.out.println();
             width = maxSize;       }
