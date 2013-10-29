@@ -19,14 +19,12 @@ public class ManagerGraphicForm {
     }
 
     public void refresh(Camera camera) {
-        for(GraphicForm gForm : graphForms) {
+        for(GraphicForm gForm : graphForms)
             gForm.refresh(camera);
-        }
     }
 
     public void drawGraphForm(FrameBuffer buffer) {
-        for(GraphicForm gForm : graphForms) {
+        for(GraphicForm gForm : graphForms)
             gForm.draw(buffer);
-        }
     }
 }

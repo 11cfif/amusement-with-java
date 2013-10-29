@@ -32,13 +32,6 @@ public abstract class StarSystem extends GameWorld{
     }
 
     @Override
-    protected void initializationManagerGraphForm() {
-        ArrayList<GraphicForm> graphicForms = new ArrayList<GraphicForm>();
-        graphicForms.add(new Radar(256,0,256,205, "Radar", this));
-        manGraphForm = new ManagerGraphicForm(graphicForms);
-    }
-
-    @Override
     public void drawGraphForm(FrameBuffer buffer, Camera camera) {
         manGraphForm.refresh(camera);
         manGraphForm.drawGraphForm(buffer);
@@ -54,20 +47,18 @@ public abstract class StarSystem extends GameWorld{
     @Override
     public boolean run(Camera camera){
         boolean doLoop;
-        doLoop = true;
-        adapter = new AdapterPhysics(world);
-        long ticks = ticker.getTicks();
+        doLoop      = true;
+        adapter     = new AdapterPhysics(world);
+        long ticks  = ticker.getTicks();
         if (ticks > 0) {
             //рассчитываем все силы и считаем новые местоположения объектов
             adapter.calcForce();
-            for(MassAttractObject3D e : system) {
+            for(MassAttractObject3D e : system)
                 e.calcLocation(0.1f);
-            }
             //используем обработчик событий для движения камеры
             doLoop = camera.pollControls();
             camera.move(ticks);
         }
-
 
         //не используется, а вообще для подсчета fps
         /*if (System.currentTimeMillis() - time >= 1000) {
@@ -77,4 +68,17 @@ public abstract class StarSystem extends GameWorld{
         return doLoop;
 
     }
+
+    public ArrayList<MassAttractObject3D> getSystem() {
+        return system;
+    }
+
+    @Override
+    protected void initializationManagerGraphForm() {
+        ArrayList<GraphicForm> graphicForms = new ArrayList<GraphicForm>();
+        graphicForms.add(new Radar(256,0,256,205, "Radar", this));
+        manGraphForm = new ManagerGraphicForm(graphicForms);
+    }
+
+
 }

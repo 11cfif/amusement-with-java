@@ -28,7 +28,6 @@ public class SolarSystemLoc extends StarSystem {
         MassAttractObject3D tempObj;
         SimpleVector        tempVec;
         system = new ArrayList<MassAttractObject3D>();
-        int i = 0;
         for (StarSystemEnum p : StarSystemEnum.values()) {
             tempVec  = p.getVelocity();
             tempVec.scalarMul(scalingFactor);
@@ -43,7 +42,6 @@ public class SolarSystemLoc extends StarSystem {
             world.addObject(tempObj);
             tempObj.build();
             tempObj.compileAndStrip();
-            i++;
         }
         initializationManagerGraphForm();
     }

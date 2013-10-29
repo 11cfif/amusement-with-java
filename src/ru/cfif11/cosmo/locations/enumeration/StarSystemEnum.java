@@ -2,7 +2,6 @@ package ru.cfif11.cosmo.locations.enumeration;
 
 import com.threed.jpct.SimpleVector;
 
-import java.util.Enumeration;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,8 +11,8 @@ import java.util.Enumeration;
  */
 public enum StarSystemEnum {
     sun     ("SolarSystemStar", 3.65e+14, 1e+6f, new SimpleVector(0,0,0), new SimpleVector(0,0,0)),
-    earth   ("SolarSystemPlanet1",9.44e+11,15e+4f,new SimpleVector(2e+7, 0,0), new SimpleVector(0,0,-35e+3)),
-    moon    ("SolarSystemSputnik1", 9e+10, 5e+4f, earth.initialPosition.calcAdd(new SimpleVector(5e+5,0,0)),
+    earth   ("SolarSystemPlanet_1",9.44e+11,15e+4f,new SimpleVector(2e+7, 0,0), new SimpleVector(0,0,-35e+3)),
+    moon    ("SolarSystemSputnik_1", 9e+10, 5e+4f, earth.initialPosition.calcAdd(new SimpleVector(5e+5,0,0)),
             earth.getVelocity().calcAdd(new SimpleVector(0,0,-11.2e+3)));
 
     private String          nameObject;

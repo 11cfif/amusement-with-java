@@ -4,6 +4,7 @@ import com.threed.jpct.FrameBuffer;
 import com.threed.jpct.Texture;
 import ru.cfif11.cosmo.Main;
 import ru.cfif11.cosmo.object.Camera;
+import ru.cfif11.cosmo.scene.forms.GraphAbstract;
 import ru.cfif11.cosmo.scene.forms.GraphPrimitive;
 
 import java.util.HashMap;
@@ -12,21 +13,14 @@ import java.util.HashMap;
  * Created with IntelliJ IDEA.
  * User: Galkin Aleksandr
  */
-public abstract class GraphicForm {
+public abstract class GraphicForm extends GraphAbstract{
 
-    protected int x;
-    protected int y;
-    protected int width;
-    protected int height;
-    protected Texture texture;
+
     protected HashMap<String, GraphPrimitive> primitives;
 
     protected GraphicForm(int x, int y, int width, int height, String texture) {
-        this.x          = x;
-        this.y          = y;
-        this.width      = width;
-        this.height     = height;
-        this.texture    = Main.texMan.getTexture(texture);
+        super(x, y, width, height);
+        setTexture(texture);
         primitives = new HashMap<String, GraphPrimitive>();
     }
 

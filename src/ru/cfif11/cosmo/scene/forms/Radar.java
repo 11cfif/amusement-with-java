@@ -1,10 +1,9 @@
 package ru.cfif11.cosmo.scene.forms;
 
 import com.threed.jpct.FrameBuffer;
-import com.threed.jpct.World;
+import ru.cfif11.cosmo.locations.StarSystem;
 import ru.cfif11.cosmo.object.Camera;
-import ru.cfif11.cosmo.object.physobject.PhysObject3D;
-import ru.cfif11.cosmo.scene.GameWorld;
+import ru.cfif11.cosmo.object.physobject.MassAttractObject3D;
 import ru.cfif11.cosmo.scene.GraphicForm;
 
 /**
@@ -13,13 +12,12 @@ import ru.cfif11.cosmo.scene.GraphicForm;
  */
 public class Radar extends GraphicForm {
 
-    private String[] names = {"Star", "Planet", "Sputnik"};
-    private GameWorld world;
+    private StarSystem world;
     private String nameGameWorld;
     public static float fovX = 0.8f;
     public static float fovY = 1f;
 
-    public Radar(int x, int y, int width, int height, String texture, GameWorld world) {
+    public Radar(int x, int y, int width, int height, String texture, StarSystem world) {
         super(x, y, width, height, texture);
         this.world = world;
         setNameGameWorld(world.toString());
@@ -28,29 +26,24 @@ public class Radar extends GraphicForm {
 
     @Override
     public void createForm() {
-        RadarGraphPrimitive prim = null;
-        for (int i = 0; i < names.length; i++) {
-            prim = new RadarGraphPrimitive(0, 0, 4, 4, names[i]);
-            primitives.put(names[i], prim);
+        RadarGraphPrimitive prim;
+        for (MassAttractObject3D obj : world.getSystem()) {
+            prim = new RadarGraphPrimitive(0, 0, 4, 4, getNameTypeObj(obj.getName()));
+            primitives.put(prim.getName(), prim);
         }
     }
 
     @Override
     public void draw(FrameBuffer buffer) {
         buffer.blit(texture, 0, 0, buffer.getOutputWidth() - x, y, width, height, FrameBuffer.OPAQUE_BLITTING);
-        for (int i = 0; i < names.length; i++) {
-            primitives.get(names[i]).blit(buffer);
-        }
+        for (MassAttractObject3D obj : world.getSystem())
+            primitives.get(getNameTypeObj(obj.getName())).blit(buffer);
     }
 
 
     @Override
     public void refresh(Camera camera) {
         calcPrimitives(camera);
-    }
-
-    private void setNameGameWorld(String name) {
-        nameGameWorld = name.substring(name.lastIndexOf(".") + 1, name.indexOf("Loc"));
     }
 
     public void setFovX(float fovX) {
@@ -62,11 +55,16 @@ public class Radar extends GraphicForm {
     }
 
     private void calcPrimitives(Camera camera) {
-       /* PhysObject3D[] obj = {(PhysObject3D)world.getObjectByName("Sun0"), (PhysObject3D)world.getObjectByName("Earth1"),
-                (PhysObject3D)world.getObjectByName("Moon2")};
-        for(int i = 0; i<names.length; i++) {
-            primitives.get(names[i]).calcCoordinates(this, camera, obj[i]);
-        }  */
+        for (MassAttractObject3D obj : world.getSystem())
+            primitives.get(getNameTypeObj(obj.getName())).calcCoordinates(this, camera, obj);
+    }
+
+    private String getNameTypeObj(String objName) {
+        return objName.substring(nameGameWorld.length());
+    }
+
+    private void setNameGameWorld(String name) {
+        nameGameWorld = name.substring(name.lastIndexOf(".") + 1, name.indexOf("Loc"));
     }
 
 }

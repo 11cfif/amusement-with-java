@@ -18,7 +18,7 @@ public class Main {
     static public TextureManager    texMan;
     static public LocationManager   locMan;
 	private Scene                   scene;
-    static public Settings          settings;
+   // static public Settings          settings;
 
 
 
@@ -30,9 +30,9 @@ public class Main {
 
     static {
         texMan = TextureManager.getInstance();
-        texMan.addTexture("SolarSystemPlanet1", new Texture("resources/texture/starSystem/solarSystem/Earth.jpg"));
+        texMan.addTexture("SolarSystemPlanet_1", new Texture("resources/texture/starSystem/solarSystem/Earth.jpg"));
         texMan.addTexture("SolarSystemStar", new Texture("resources/texture/starSystem/solarSystem/Sun.gif"));
-        texMan.addTexture("SolarSystemSputnik1", new Texture("resources/texture/starSystem/solarSystem/Moon.jpg"));
+        texMan.addTexture("SolarSystemSputnik_1", new Texture("resources/texture/starSystem/solarSystem/Moon.jpg"));
         texMan.addTexture("Radar", new Texture("resources/texture/form/radar/radar.jpg"));
         texMan.addTexture("StarRad", new Texture("resources/texture/form/radar/star.jpg"));
         texMan.addTexture("PlanetRad", new Texture("resources/texture/form/radar/planet.jpg"));

@@ -20,7 +20,6 @@ public abstract class GameWorld {
     public GameWorld(Ticker ticker) {
         world = new World();
         this.ticker = ticker;
-       // initializationLevel();
     }
 
     public abstract void tunePositionCamera(Camera camera);

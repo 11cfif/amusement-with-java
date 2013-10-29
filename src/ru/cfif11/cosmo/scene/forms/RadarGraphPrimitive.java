@@ -14,15 +14,24 @@ public class RadarGraphPrimitive extends GraphPrimitive {
 
     private static final String subName = "Rad";
 
-    public RadarGraphPrimitive(int x, int y, int width, int height, String texture) {
-        super(x, y, width, height, (texture + subName));
+    public RadarGraphPrimitive(int x, int y, int width, int height, String name) {
+        super(x, y, width, height, name);
+        if(name.contains("_"))
+            setTexture(name.substring(0,name.indexOf("_")) + subName);
+        else
+            setTexture(name + subName);
+    }
+
+    @Override
+    public void blit(FrameBuffer buffer) {
+        buffer.blit(texture, 0, 0, buffer.getOutputWidth() - x, y, width, height, FrameBuffer.OPAQUE_BLITTING);
     }
 
     @Override
     protected void calcCoordinates(GraphicForm gForm, Camera camera, PhysObject3D obj) {
-        SimpleVector camToObj = obj.getTransformedCenter().calcSub(camera.getPosition());
-        float angle = camToObj.calcAngle(camera.getDirection());
-        SimpleVector radToObj = camToObj.reflect(camera.getDirection()).calcAdd(camToObj);
+        SimpleVector camToObj   = obj.getTransformedCenter().calcSub(camera.getPosition());
+        SimpleVector radToObj   = camToObj.reflect(camera.getDirection()).calcAdd(camToObj);
+        float angle             = camToObj.calcAngle(camera.getDirection());
         radToObj.scalarMul(0.5f);
         float angleRadX = radToObj.calcAngle(camera.getSideVector());
         float angleRadY = radToObj.calcAngle(camera.getUpVector());
@@ -38,8 +47,4 @@ public class RadarGraphPrimitive extends GraphPrimitive {
 
     }
 
-    @Override
-    public void blit(FrameBuffer buffer) {
-        buffer.blit(texture, 0, 0, buffer.getOutputWidth() - x, y, width, height, FrameBuffer.OPAQUE_BLITTING);
-    }
 }
