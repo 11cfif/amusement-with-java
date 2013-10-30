@@ -1,4 +1,4 @@
-package ru.cfif11.cosmo.control;
+package ru.cfif11.cosmo.control1;
 
 /**
  * Created with IntelliJ IDEA.

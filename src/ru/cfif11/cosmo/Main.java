@@ -3,7 +3,7 @@ package ru.cfif11.cosmo;
 import com.threed.jpct.Config;
 import com.threed.jpct.Texture;
 import com.threed.jpct.TextureManager;
-import ru.cfif11.cosmo.control.KeyboardListener;
+import ru.cfif11.cosmo.control1.KeyboardListener;
 import ru.cfif11.cosmo.manager.LocationManager;
 import ru.cfif11.cosmo.scene.GameWorld;
 import ru.cfif11.cosmo.scene.Scene;

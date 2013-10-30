@@ -7,9 +7,9 @@ import com.threed.jpct.World;
 import com.threed.jpct.util.KeyState;
 import org.lwjgl.opengl.Display;
 import ru.cfif11.cosmo.Ticker;
-import ru.cfif11.cosmo.control.ControllableMKInterface;
-import ru.cfif11.cosmo.control.KeyboardListener;
-import ru.cfif11.cosmo.control.MouseListener;
+import ru.cfif11.cosmo.control1.ControllableMKInterface;
+import ru.cfif11.cosmo.control1.KeyboardListener;
+import ru.cfif11.cosmo.control1.MouseListener;
 
 import java.awt.event.KeyEvent;
 
@@ -28,8 +28,8 @@ public class Camera implements ControllableMKInterface, MovableInterface{
     private boolean fast        = false;
     private boolean slow        = false;
 
-    private KeyboardListener        keyListener;
-    private MouseListener           mouseListener;
+    private KeyboardListener keyListener;
+    private MouseListener mouseListener;
     private World                   world;
     private com.threed.jpct.Camera  cam;
     private Ticker                  ticker;
