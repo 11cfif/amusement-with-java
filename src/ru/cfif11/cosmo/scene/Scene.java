@@ -3,7 +3,6 @@ package ru.cfif11.cosmo.scene;
 import com.threed.jpct.FrameBuffer;
 import com.threed.jpct.IPaintListener;
 import com.threed.jpct.IRenderer;
-import com.threed.jpct.TextureManager;
 import ru.cfif11.cosmo.Ticker;
 import ru.cfif11.cosmo.object.Camera;
 
@@ -16,9 +15,9 @@ public class Scene implements IPaintListener {
     private GameWorld       gameWorld;
     private Cursor          cur;
     private Camera          camera;
-    private static FrameBuffer      buffer;
+    private FrameBuffer      buffer;
 
-    public Scene(TextureManager tm, Ticker ticker, GameWorld gameWorld) {
+    public Scene(Ticker ticker, GameWorld gameWorld) {
         buffer = new FrameBuffer(1024, 768, FrameBuffer.SAMPLINGMODE_NORMAL);
         buffer.disableRenderer(IRenderer.RENDERER_SOFTWARE);
         buffer.enableRenderer(IRenderer.RENDERER_OPENGL);

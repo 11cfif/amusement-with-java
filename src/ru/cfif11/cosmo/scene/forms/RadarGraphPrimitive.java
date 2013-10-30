@@ -40,8 +40,8 @@ public class RadarGraphPrimitive extends GraphPrimitive {
         float fovX = (float) Math.cos(angleRadX) * camera.convertRADAngleIntoFOV(angle);
         float fovY = (float) Math.cos(angleRadY) * camera.convertRADAngleIntoFOV(angle);
         if (Math.abs(fovY) < Radar.getFovY() && Math.abs(fovX) < Radar.getFovX()) {
-            y = (int) ((gForm.getHeight() / 2) * (1 - fovY / Radar.getFovY()));
-            x = (int) ((gForm.getWidth() / 2) * (1 - fovX / Radar.getFovX()));
+            y = (int) ((gForm.getHeight() / 2.0) * (1 - fovY / (double)Radar.getFovY()));
+            x = (int) ((gForm.getWidth() / 2.0) * (1 - fovX / (double)Radar.getFovX()));
             getSizeTexture(camToObj);
         } else {
             x = 0;
@@ -57,7 +57,7 @@ public class RadarGraphPrimitive extends GraphPrimitive {
         else if(camToObj.length() > Radar.getMaxDestToRad())
             width = minSize;
         else
-            width = (int)(maxSize - camToObj.length() / ((Radar.getMaxDestToRad() - Radar.getMinDestToRad()) / (maxSize - minSize)));
+            width = (int)(maxSize - camToObj.length() / ((Radar.getMaxDestToRad() - Radar.getMinDestToRad()) / (double)(maxSize - minSize)));
         height = width;
     }
 

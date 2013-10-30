@@ -15,7 +15,7 @@ import ru.cfif11.cosmo.scene.Scene;
 public class Main {
 
 	private static final long serialVersionUID = -3626482109116766979L;
-    static public TextureManager    texMan;
+    static public final TextureManager    texMan;
     private static LocationManager   locMan;
 	private Scene                   scene;
    // static public Settings          settings;
@@ -44,6 +44,8 @@ public class Main {
 		Main cd = new Main();
 		cd.init();
 		cd.loop();
+
+        System.exit(0);
 	}
 
     //инициализация
@@ -65,7 +67,7 @@ public class Main {
         locMan = new LocationManager(ticker);
         //создаем мир
         GameWorld startWorld = locMan.getGameWorld(0);
-        scene                = new Scene(texMan, ticker, startWorld);
+        scene                = new Scene(ticker, startWorld);
 	}
 
 
@@ -75,7 +77,6 @@ public class Main {
             scene.bufferReset(false);
 		}
         scene.close();
-		System.exit(0);
 	}
 
 }

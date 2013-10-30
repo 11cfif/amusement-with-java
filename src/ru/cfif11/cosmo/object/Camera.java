@@ -121,8 +121,6 @@ public class Camera implements MovableInterface, ControllableMKInterface{
 
             ks = keyListener.pollControls();
         }
-        if (Display.isCloseRequested())
-            return false;
 
         return !Display.isCloseRequested();
     }
