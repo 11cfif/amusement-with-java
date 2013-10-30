@@ -1,10 +1,11 @@
 package ru.cfif11.cosmo.scene;
 
-import com.threed.jpct.*;
+import com.threed.jpct.FrameBuffer;
+import com.threed.jpct.IPaintListener;
+import com.threed.jpct.IRenderer;
+import com.threed.jpct.TextureManager;
 import ru.cfif11.cosmo.Ticker;
 import ru.cfif11.cosmo.object.Camera;
-
-import java.util.ArrayList;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,14 +13,13 @@ import java.util.ArrayList;
  */
 public class Scene implements IPaintListener {
 
-    private GameWorld           gameWorld;
-    private Cursor              cur;
-    private ArrayList<Table>    listTable;
-    private FrameBuffer         buffer;
-    private Camera              camera;
+    private GameWorld       gameWorld;
+    private Cursor          cur;
+    private Camera          camera;
+    static FrameBuffer      buffer;
 
     public Scene(TextureManager tm, Ticker ticker, GameWorld gameWorld) {
-        buffer = new FrameBuffer(800, 600, FrameBuffer.SAMPLINGMODE_NORMAL);
+        buffer = new FrameBuffer(1024, 768, FrameBuffer.SAMPLINGMODE_NORMAL);
         buffer.disableRenderer(IRenderer.RENDERER_SOFTWARE);
         buffer.enableRenderer(IRenderer.RENDERER_OPENGL);
         buffer.setPaintListener(this);
@@ -47,6 +47,7 @@ public class Scene implements IPaintListener {
         gameWorld.renderScene(buffer);
         gameWorld.draw(buffer);
         buffer.update();
+        gameWorld.drawGraphForm(buffer, camera);
         buffer.displayGLOnly();
     }
 

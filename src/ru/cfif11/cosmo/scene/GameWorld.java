@@ -14,6 +14,7 @@ public abstract class GameWorld {
 
     protected World world;
     protected Ticker ticker;
+    protected ManagerGraphicForm manGraphForm;
 
 
     public GameWorld(Ticker ticker) {
@@ -39,4 +40,7 @@ public abstract class GameWorld {
 
     protected abstract void initializationLevel();
 
+    protected abstract void initializationManagerGraphForm();
+
+    public abstract void drawGraphForm(FrameBuffer buffer, Camera camera);
 }
