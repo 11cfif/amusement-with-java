@@ -4,19 +4,19 @@ package ru.cfif11.cosmo;
  * Created with IntelliJ IDEA.
  * User: Galkin Aleksandr
  */
-public class Settings {
+class Settings {
 
-    public static final int defWidth = 800;
-    public static final int defHeight = 600;
-    public static boolean fullScreen;
+    private static final int defWidth = 800;
+    private static final int defHeight = 600;
+    private static boolean fullScreen;
 
     public static double scaleFactor = 1;
 
-    public static double width;
-    public static int height;
+    private static double width;
+    private static int height;
 
-    public static void init(boolean fullScreenn) {
-        fullScreen = fullScreenn;
+    public static void init(boolean fullScreen1) {
+        fullScreen = fullScreen1;
         calcParam();
 
     }
@@ -25,8 +25,6 @@ public class Settings {
         if(!fullScreen) {
             height = defHeight;
             width = defWidth;
-        } else {
-
         }
     }
 

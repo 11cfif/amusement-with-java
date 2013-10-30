@@ -16,7 +16,7 @@ public class Scene implements IPaintListener {
     private GameWorld       gameWorld;
     private Cursor          cur;
     private Camera          camera;
-    static FrameBuffer      buffer;
+    private static FrameBuffer      buffer;
 
     public Scene(TextureManager tm, Ticker ticker, GameWorld gameWorld) {
         buffer = new FrameBuffer(1024, 768, FrameBuffer.SAMPLINGMODE_NORMAL);
@@ -27,7 +27,7 @@ public class Scene implements IPaintListener {
 
         this.gameWorld  = gameWorld;
         camera          = new Camera(gameWorld.getWorld(), ticker, buffer);
-        cur             = new Cursor(tm);
+        cur             = new Cursor();
         gameWorld.tunePositionCamera(camera);
     }
 

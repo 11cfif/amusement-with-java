@@ -27,7 +27,7 @@ public class Radar extends GraphicForm {
     }
 
     @Override
-    public void createForm() {
+    protected void createForm() {
         RadarGraphPrimitive prim;
         for (MassAttractObject3D obj : world.getSystem()) {
             prim = new RadarGraphPrimitive(0, 0, 4, 4, getNameTypeObj(obj.getName()));
@@ -49,11 +49,11 @@ public class Radar extends GraphicForm {
     }
 
     public void setFovX(float fovX) {
-        this.fovX = fovX;
+        Radar.fovX = fovX;
     }
 
     public void setFovY(float fovY) {
-        this.fovY = fovY;
+        Radar.fovY = fovY;
     }
 
     public static float getFovX() {

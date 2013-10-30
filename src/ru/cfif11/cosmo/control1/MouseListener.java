@@ -24,7 +24,7 @@ public class MouseListener {
         }
     }
 
-    public void show() {
+    void show() {
         if (hidden) {
             Mouse.setGrabbed(false);
             hidden = false;

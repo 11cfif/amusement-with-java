@@ -13,7 +13,7 @@ public abstract class Physics {
     /**
      * The simulator is initialized with zero values
      */
-	public Physics() {
+    Physics() {
 		this.totalForce = new SimpleVector();
 		this.location = new SimpleVector();
 	}
@@ -52,7 +52,7 @@ public abstract class Physics {
      * Set location of the PhysObject3D to be calculated
      * @param location the location
      */
-    protected void setLocation(SimpleVector location) {
+    void setLocation(SimpleVector location) {
         this.location = location;
     }
 
@@ -60,7 +60,7 @@ public abstract class Physics {
      * Sets the total active force
      * @param totalForce the total force
      */
-	protected void setTotalForce(SimpleVector totalForce) {
+    void setTotalForce(SimpleVector totalForce) {
 		this.totalForce = totalForce;
 	}
 
@@ -68,7 +68,7 @@ public abstract class Physics {
      * Returns location of the PhysObject3D to be calculated
      * @return the location
      */
-	protected SimpleVector getLocation() {
+    SimpleVector getLocation() {
 		return location;
 	}
 

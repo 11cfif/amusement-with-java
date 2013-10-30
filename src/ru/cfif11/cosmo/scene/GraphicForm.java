@@ -1,8 +1,6 @@
 package ru.cfif11.cosmo.scene;
 
 import com.threed.jpct.FrameBuffer;
-import com.threed.jpct.Texture;
-import ru.cfif11.cosmo.Main;
 import ru.cfif11.cosmo.object.Camera;
 import ru.cfif11.cosmo.scene.forms.GraphAbstract;
 import ru.cfif11.cosmo.scene.forms.GraphPrimitive;

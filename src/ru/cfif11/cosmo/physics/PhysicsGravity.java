@@ -56,7 +56,7 @@ public class PhysicsGravity extends Physics {
     /**
      * Calculates the force of gravity
      */
-	protected void calcGravityForce() {
+    void calcGravityForce() {
 		double scalar;
 		double dist;
 		for(int i = 0; i < mass.length; i++) {

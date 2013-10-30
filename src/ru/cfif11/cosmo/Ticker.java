@@ -16,7 +16,7 @@ public class Ticker {
      * Returns the current time in milliseconds
      * @return the current time
      */
-    public static long getTime() {
+    private static long getTime() {
         return System.currentTimeMillis();
     }
 

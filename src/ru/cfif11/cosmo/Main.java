@@ -16,7 +16,7 @@ public class Main {
 
 	private static final long serialVersionUID = -3626482109116766979L;
     static public TextureManager    texMan;
-    static public LocationManager   locMan;
+    private static LocationManager   locMan;
 	private Scene                   scene;
    // static public Settings          settings;
 
@@ -59,7 +59,7 @@ public class Main {
 		Config.glTrilinear          = true;
 	}
 
-	private void init() throws Exception {
+	private void init(){
 
 
         locMan = new LocationManager(ticker);
@@ -70,7 +70,7 @@ public class Main {
 
 
     //основной цикл программы
-	private void loop() throws Exception {
+	private void loop(){
 		while (scene.run()) {
             scene.bufferReset(false);
 		}

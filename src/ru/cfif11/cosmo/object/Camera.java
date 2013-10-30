@@ -121,11 +121,10 @@ public class Camera implements MovableInterface, ControllableMKInterface{
 
             ks = keyListener.pollControls();
         }
-
         if (Display.isCloseRequested())
             return false;
 
-        return true;
+        return !Display.isCloseRequested();
     }
 
     //двигаем камеру в зависимости от того, куда нажали

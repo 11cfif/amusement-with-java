@@ -17,7 +17,7 @@ public abstract class GameWorld {
     protected ManagerGraphicForm manGraphForm;
 
 
-    public GameWorld(Ticker ticker) {
+    protected GameWorld(Ticker ticker) {
         world = new World();
         this.ticker = ticker;
     }

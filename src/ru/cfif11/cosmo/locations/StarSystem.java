@@ -20,11 +20,11 @@ import java.util.ArrayList;
  */
 public abstract class StarSystem extends GameWorld{
 
-    protected ArrayList<MassAttractObject3D>    system;
-    protected float                             scalingFactor = 1e-4f;
+    ArrayList<MassAttractObject3D>    system;
+    float                             scalingFactor = 1e-4f;
     private AdapterPhysics                      adapter;
 
-    public StarSystem(Ticker ticker) {
+    StarSystem(Ticker ticker) {
         super(ticker);
         world.setAmbientLight(100, 100, 100);
         world.getLights().setRGBScale(Lights.RGB_SCALE_2X);

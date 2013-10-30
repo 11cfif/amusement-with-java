@@ -11,9 +11,9 @@ import ru.cfif11.cosmo.scene.GraphicForm;
  */
 public abstract class GraphPrimitive extends GraphAbstract{
 
-    protected String name;
+    private String name;
 
-    protected GraphPrimitive(int x, int y, int width, int height, String name) {
+    GraphPrimitive(int x, int y, int width, int height, String name) {
         super(x, y, width, height);
         this.name = name;
     }
