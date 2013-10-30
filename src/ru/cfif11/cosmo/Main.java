@@ -37,6 +37,11 @@ public class Main {
         texMan.addTexture("StarRad", new Texture("resources/texture/form/radar/star.jpg"));
         texMan.addTexture("PlanetRad", new Texture("resources/texture/form/radar/planet.jpg"));
         texMan.addTexture("SputnikRad", new Texture("resources/texture/form/radar/sputnik.jpg"));
+        texMan.addTexture("Information", new Texture("resources/texture/form/information/information.jpg"));
+        texMan.addTexture("CameraInf", new Texture("resources/texture/form/information/select/camera.jpg"));
+        texMan.addTexture("StarInf", new Texture("resources/texture/form/information/select/star.jpg"));
+        texMan.addTexture("PlanetInf", new Texture("resources/texture/form/information/select/planet.jpg"));
+        texMan.addTexture("SputnikInf", new Texture("resources/texture/form/information/select/sputnik.jpg"));
     }
 
 	public static void main(String[] args) throws Exception {

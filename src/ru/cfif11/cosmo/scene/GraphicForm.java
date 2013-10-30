@@ -16,8 +16,8 @@ public abstract class GraphicForm extends GraphAbstract{
 
     protected HashMap<String, GraphPrimitive> primitives;
 
-    protected GraphicForm(int x, int y, int width, int height, String texture) {
-        super(x, y, width, height);
+    protected GraphicForm(int x, int y, int width, int height, int widthDest, int heightDest, String texture) {
+        super(x, y, width, height, widthDest, heightDest);
         setTexture(texture);
         primitives = new HashMap<String, GraphPrimitive>();
     }

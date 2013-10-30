@@ -13,8 +13,8 @@ public abstract class GraphPrimitive extends GraphAbstract{
 
     private String name;
 
-    GraphPrimitive(int x, int y, int width, int height, String name) {
-        super(x, y, width, height);
+    GraphPrimitive(int x, int y, int width, int height, int widthDest, int heightDest, String name) {
+        super(x, y, width, height, widthDest, heightDest);
         this.name = name;
     }
 

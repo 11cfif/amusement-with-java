@@ -10,6 +10,7 @@ import ru.cfif11.cosmo.object.physobject.MassAttractObject3D;
 import ru.cfif11.cosmo.scene.GameWorld;
 import ru.cfif11.cosmo.scene.GraphicForm;
 import ru.cfif11.cosmo.scene.ManagerGraphicForm;
+import ru.cfif11.cosmo.scene.forms.InformationForm;
 import ru.cfif11.cosmo.scene.forms.Radar;
 
 import java.util.ArrayList;
@@ -76,7 +77,8 @@ public abstract class StarSystem extends GameWorld{
     @Override
     protected void initializationManagerGraphForm() {
         ArrayList<GraphicForm> graphicForms = new ArrayList<GraphicForm>();
-        graphicForms.add(new Radar(256,0,256,200, "Radar", this));
+        graphicForms.add(new InformationForm(900, 568, 1500, 600, 800, 200,  "Information", this));
+        graphicForms.add(new Radar(900-800+256, 568, 500, 400, 256,200, "Radar", this));
         manGraphForm = new ManagerGraphicForm(graphicForms);
     }
 

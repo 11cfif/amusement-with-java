@@ -16,8 +16,8 @@ public class RadarGraphPrimitive extends GraphPrimitive {
     private static final int maxSize = 10;
     private static final int minSize = 1;
 
-    public RadarGraphPrimitive(int x, int y, int width, int height, String name) {
-        super(x, y, width, height, name);
+    public RadarGraphPrimitive(int x, int y, int width, int height, int widthDest, int heightDest, String name) {
+        super(x, y, width, height, widthDest, heightDest, name);
         if(name.contains("_"))
             setTexture(name.substring(0,name.indexOf("_")) + subName);
         else
@@ -26,7 +26,7 @@ public class RadarGraphPrimitive extends GraphPrimitive {
 
     @Override
     public void blit(FrameBuffer buffer) {
-        buffer.blit(texture, 0, 0, buffer.getOutputWidth() - x, y, width, height, width, height, 0, false);
+        buffer.blit(texture, 0, 0, buffer.getOutputWidth() - x, y, width, height, widthDest, heightDest, 0, false);
     }
 
     @Override
@@ -40,8 +40,8 @@ public class RadarGraphPrimitive extends GraphPrimitive {
         float fovX = (float) Math.cos(angleRadX) * camera.convertRADAngleIntoFOV(angle);
         float fovY = (float) Math.cos(angleRadY) * camera.convertRADAngleIntoFOV(angle);
         if (Math.abs(fovY) < Radar.getFovY() && Math.abs(fovX) < Radar.getFovX()) {
-            y = (int) ((gForm.getHeight() / 2.0) * (1 - fovY / (double)Radar.getFovY()));
-            x = (int) ((gForm.getWidth() / 2.0) * (1 - fovX / (double)Radar.getFovX()));
+            x = (int) ((gForm.widthDest / 2.0) * (1 - fovX / (double)Radar.getFovX())) + gForm.x - gForm.widthDest;
+            y = (int) ((gForm.heightDest / 2.0) * (1 - fovY / (double)Radar.getFovY())) + gForm.y;
             getSizeTexture(camToObj);
         } else {
             x = 0;
@@ -53,12 +53,12 @@ public class RadarGraphPrimitive extends GraphPrimitive {
     private void getSizeTexture(SimpleVector camToObj) {
         if(camToObj.length() < Radar.getMinDestToRad())   {
             System.out.println();
-            width = maxSize;       }
+            widthDest = maxSize;       }
         else if(camToObj.length() > Radar.getMaxDestToRad())
-            width = minSize;
+            widthDest = minSize;
         else
-            width = (int)(maxSize - camToObj.length() / ((Radar.getMaxDestToRad() - Radar.getMinDestToRad()) / (double)(maxSize - minSize)));
-        height = width;
+            widthDest = (int)(maxSize - camToObj.length() / ((Radar.getMaxDestToRad() - Radar.getMinDestToRad()) / (double)(maxSize - minSize)));
+        heightDest = widthDest;
     }
 
 }

@@ -6,6 +6,8 @@ import ru.cfif11.cosmo.object.Camera;
 import ru.cfif11.cosmo.object.physobject.MassAttractObject3D;
 import ru.cfif11.cosmo.scene.GraphicForm;
 
+import java.awt.*;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Galkin Aleksandr
@@ -19,8 +21,8 @@ public class Radar extends GraphicForm {
     private static float MaxDestToRad = 5000;
     private static float MinDestToRad = 100;
 
-    public Radar(int x, int y, int width, int height, String texture, StarSystem world) {
-        super(x, y, width, height, texture);
+    public Radar(int x, int y, int width, int height, int widthDest, int heightDest, String texture, StarSystem world) {
+        super(x, y, width, height, widthDest, heightDest, texture);
         this.world = world;
         setNameGameWorld(world.toString());
         createForm();
@@ -30,14 +32,14 @@ public class Radar extends GraphicForm {
     protected void createForm() {
         RadarGraphPrimitive prim;
         for (MassAttractObject3D obj : world.getSystem()) {
-            prim = new RadarGraphPrimitive(0, 0, 4, 4, getNameTypeObj(obj.getName()));
+            prim = new RadarGraphPrimitive(x-widthDest, y, 8, 8, 4, 4, getNameTypeObj(obj.getName()));
             primitives.put(prim.getName(), prim);
         }
     }
 
     @Override
     public void draw(FrameBuffer buffer) {
-        buffer.blit(texture, 0, 0, buffer.getOutputWidth() - x, y, width, width, width, height, 0, false);
+        buffer.blit(texture, 0, 0, buffer.getOutputWidth() - x, y, width, width, widthDest, heightDest, 0, false, new Color(165, 100 , 50));
         for (MassAttractObject3D obj : world.getSystem())
             primitives.get(getNameTypeObj(obj.getName())).blit(buffer);
     }

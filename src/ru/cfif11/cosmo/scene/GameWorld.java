@@ -4,6 +4,7 @@ import com.threed.jpct.FrameBuffer;
 import com.threed.jpct.World;
 import ru.cfif11.cosmo.Ticker;
 import ru.cfif11.cosmo.object.Camera;
+import ru.cfif11.cosmo.object.physobject.PhysObject3D;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,6 +16,7 @@ public abstract class GameWorld {
     protected World world;
     protected Ticker ticker;
     protected ManagerGraphicForm manGraphForm;
+    protected PhysObject3D selectObject = null;
 
 
     protected GameWorld(Ticker ticker) {
@@ -36,6 +38,14 @@ public abstract class GameWorld {
 
     public void draw(FrameBuffer buffer) {
         world.draw(buffer);
+    }
+
+    public PhysObject3D getSelectObject() {
+        return selectObject;
+    }
+
+    public void setSelectObject(PhysObject3D selectObject) {
+        this.selectObject = selectObject;
     }
 
     protected abstract void initializationLevel();
