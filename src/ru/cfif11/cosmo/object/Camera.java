@@ -7,6 +7,7 @@ import com.threed.jpct.World;
 import com.threed.jpct.util.KeyState;
 import org.lwjgl.opengl.Display;
 import ru.cfif11.cosmo.Ticker;
+import ru.cfif11.cosmo.control1.ControllableMKInterface;
 import ru.cfif11.cosmo.control1.KeyboardListener;
 import ru.cfif11.cosmo.control1.MouseListener;
 
@@ -16,7 +17,7 @@ import java.awt.event.KeyEvent;
  * Created with IntelliJ IDEA.
  * User: Galkin Aleksandr
  */
-public class Camera implements MovableInterface{
+public class Camera implements ControllableMKInterface, MovableInterface{
 
     private boolean forward     = false;
     private boolean backward    = false;
@@ -63,7 +64,7 @@ public class Camera implements MovableInterface{
         cam.setFOV(fov);
     }
 
-
+    @Override
     public boolean pollControls() {
         KeyState ks = keyListener.pollControls();
         while (ks != KeyState.NONE) {
