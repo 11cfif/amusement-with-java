@@ -28,8 +28,10 @@ public class Camera implements MovableInterface, ControllableMKInterface{
     private boolean fast        = false;
     private boolean slow        = false;
 
-    private KeyboardListener keyListener;
-    private MouseListener mouseListener;
+    private boolean fix      = true;
+
+    private KeyboardListener        keyListener;
+    private MouseListener           mouseListener;
     private World                   world;
     private com.threed.jpct.Camera  cam;
     private Ticker                  ticker;
@@ -46,46 +48,6 @@ public class Camera implements MovableInterface, ControllableMKInterface{
         keyListener     = new KeyboardListener();
         mouseListener   = new MouseListener(buffer);
         mouseListener.hide();
-    }
-
-    public void setPosition(float x, float y, float z) {
-        cam.setPosition(x,y,z);
-    }
-
-    public void setPosition(SimpleVector pos) {
-        cam.setPosition(pos);
-    }
-
-    public void lookAt(SimpleVector obj) {
-        cam.lookAt(obj);
-    }
-
-    public void setFOV(float fov) {
-        cam.setFOV(fov);
-    }
-
-    public SimpleVector getDirection() {
-        return cam.getDirection();
-    }
-
-    public SimpleVector getPosition() {
-        return cam.getPosition();
-    }
-
-    public float getFOV() {
-        return cam.getFOV();
-    }
-
-    public float convertRADAngleIntoFOV(float angle) {
-        return cam.convertRADAngleIntoFOV(angle);
-    }
-
-    public SimpleVector getUpVector() {
-        return cam.getUpVector();
-    }
-
-    public SimpleVector getSideVector() {
-        return cam.getSideVector();
     }
 
     @Override
@@ -194,4 +156,47 @@ public class Camera implements MovableInterface, ControllableMKInterface{
 
     }
 
+    public void setPosition(float x, float y, float z) {
+        cam.setPosition(x,y,z);
+    }
+
+    public void setPosition(SimpleVector pos) {
+        cam.setPosition(pos);
+    }
+
+    public void lookAt(SimpleVector obj) {
+        cam.lookAt(obj);
+    }
+
+    public void setFOV(float fov) {
+        cam.setFOV(fov);
+    }
+
+    public SimpleVector getDirection() {
+        return cam.getDirection();
+    }
+
+    public float getFOV() {
+        return cam.getFOV();
+    }
+
+    public float convertRADAngleIntoFOV(float angle) {
+        return cam.convertRADAngleIntoFOV(angle);
+    }
+
+    public SimpleVector getUpVector() {
+        return cam.getUpVector();
+    }
+
+    public SimpleVector getSideVector() {
+        return cam.getSideVector();
+    }
+
+    public  Matrix getBack() {
+        return cam.getBack();
+    }
+
+    public SimpleVector getPosition() {
+        return cam.getPosition();
+    }
 }
