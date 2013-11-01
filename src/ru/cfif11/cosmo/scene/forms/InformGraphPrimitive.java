@@ -15,7 +15,7 @@ public class InformGraphPrimitive extends GraphPrimitive{
     static final String subName = "Inf";
 
     InformGraphPrimitive(int x, int y, int width, int height, int widthDest, int heightDest, String name) {
-        super(x, y, width, height, widthDest, heightDest,name);
+        super(x, y, width, height, widthDest, heightDest, name);
         if(name.contains("_"))
             setTexture(name.substring(0,name.indexOf("_")) + subName);
         else
@@ -29,6 +29,10 @@ public class InformGraphPrimitive extends GraphPrimitive{
 
     @Override
     protected void calcCoordinates(GraphicForm gForm, Camera camera, PhysObject3D obj) {
-
+        if(camera.isFixedOrientation() && !getName().equals("Looker"))
+            setName("Looker");
+        else if(!camera.isFixedOrientation() && !getName().equals("Camera"))
+            setName("Camera");
+        setTexture(getName() + subName);
     }
 }

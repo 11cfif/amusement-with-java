@@ -22,6 +22,10 @@ public abstract class GraphPrimitive extends GraphAbstract{
         return  name;
     }
 
+    protected void setName(String newName) {
+        name = newName;
+    }
+
     public abstract void blit(FrameBuffer buffer);
 
     protected abstract void calcCoordinates(GraphicForm gForm, Camera camera, PhysObject3D obj);

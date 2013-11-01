@@ -30,7 +30,7 @@ public class Camera implements MovableInterface, ControllableMKInterface {
     private boolean fixation = false;
 
     private boolean firstPress = false;
-    private boolean fixedOrientation = true;
+    private boolean fixedOrientation = false;
 
     private KeyboardListener keyListener;
     private MouseListener mouseListener;
@@ -50,6 +50,8 @@ public class Camera implements MovableInterface, ControllableMKInterface {
         this.cam = world.getCamera();
         keyListener = new KeyboardListener();
         mouseListener = new MouseListener(buffer);
+        if(!fixedOrientation)
+            mouseListener.hide();
         height = buffer.getOutputHeight();
         width  = buffer.getOutputWidth();
     }
