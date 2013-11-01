@@ -12,7 +12,6 @@ import ru.cfif11.cosmo.object.Camera;
 public class Scene{
 
     private GameWorld       gameWorld;
-    private Cursor          cur;
     private Camera          camera;
     private FrameBuffer     buffer;
 
@@ -22,7 +21,6 @@ public class Scene{
         buffer.enableRenderer(IRenderer.RENDERER_OPENGL);
         this.gameWorld  = gameWorld;
         camera          = new Camera(gameWorld.getWorld(), ticker, buffer);
-        cur             = new Cursor();
         gameWorld.tunePositionCamera(camera);
     }
 
