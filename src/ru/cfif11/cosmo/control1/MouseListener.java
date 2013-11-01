@@ -11,9 +11,14 @@ public class MouseListener {
 
     private boolean hidden  = false;
     private int height      = 0;
+    private int width       = 0;
+    private int lastMouseX;
+    private int lastMouseY;
 
     public MouseListener(FrameBuffer buffer) {
+
         height = buffer.getOutputHeight();
+        width  = buffer.getOutputWidth();
         init();
     }
 
@@ -21,10 +26,11 @@ public class MouseListener {
         if (!hidden) {
             Mouse.setGrabbed(true);
             hidden = true;
+            setLastCoordMouse();
         }
     }
 
-    void show() {
+    public void show() {
         if (hidden) {
             Mouse.setGrabbed(false);
             hidden = false;
@@ -70,8 +76,21 @@ public class MouseListener {
         }
     }
 
+    public boolean isInsideWindow() {
+        boolean result = Mouse.isInsideWindow();
+        if(result)
+            setLastCoordMouse();
+        return  result;
+    }
+
+    public void setCursorPosition() {
+        Mouse.setCursorPosition(lastMouseX, lastMouseY);
+    }
+
     private void init() {
         try {
+            Mouse.setCursorPosition((int)(width/2.0), ((int)(height/2.0) ));
+            setLastCoordMouse();
             if (!Mouse.isCreated()) {
                 Mouse.create();
             }
@@ -79,6 +98,11 @@ public class MouseListener {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void setLastCoordMouse() {
+        lastMouseX = Mouse.getX();
+        lastMouseY = Mouse.getY();
     }
 
 }

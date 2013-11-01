@@ -6,6 +6,6 @@ package ru.cfif11.cosmo.object;
  */
 public interface MovableInterface {
 
-    void move(long ticks);
+    public void move(long ticks);
 
 }

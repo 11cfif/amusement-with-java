@@ -23,7 +23,7 @@ public abstract class StarSystem extends GameWorld{
 
     ArrayList<MassAttractObject3D>    system;
     float                             scalingFactor = 1e-4f;
-    private AdapterPhysics                      adapter;
+    private AdapterPhysics            adapter;
 
     StarSystem(Ticker ticker) {
         super(ticker);

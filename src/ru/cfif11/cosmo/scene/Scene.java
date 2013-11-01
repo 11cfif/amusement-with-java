@@ -1,7 +1,6 @@
 package ru.cfif11.cosmo.scene;
 
 import com.threed.jpct.FrameBuffer;
-import com.threed.jpct.IPaintListener;
 import com.threed.jpct.IRenderer;
 import ru.cfif11.cosmo.Ticker;
 import ru.cfif11.cosmo.object.Camera;
@@ -10,34 +9,21 @@ import ru.cfif11.cosmo.object.Camera;
  * Created with IntelliJ IDEA.
  * User: Galkin Aleksandr
  */
-public class Scene implements IPaintListener {
+public class Scene{
 
     private GameWorld       gameWorld;
     private Cursor          cur;
     private Camera          camera;
-    private FrameBuffer      buffer;
+    private FrameBuffer     buffer;
 
     public Scene(Ticker ticker, GameWorld gameWorld) {
         buffer = new FrameBuffer(1024, 768, FrameBuffer.SAMPLINGMODE_NORMAL);
         buffer.disableRenderer(IRenderer.RENDERER_SOFTWARE);
         buffer.enableRenderer(IRenderer.RENDERER_OPENGL);
-        buffer.setPaintListener(this);
-
-
         this.gameWorld  = gameWorld;
         camera          = new Camera(gameWorld.getWorld(), ticker, buffer);
         cur             = new Cursor();
         gameWorld.tunePositionCamera(camera);
-    }
-
-    @Override
-    public void startPainting() {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void finishedPainting() {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public void bufferReset(boolean state) {
@@ -57,6 +43,10 @@ public class Scene implements IPaintListener {
 
     public boolean run() {
         return gameWorld.run(camera);
+    }
+
+    protected FrameBuffer getBuffer() {
+        return  buffer;
     }
 
 }

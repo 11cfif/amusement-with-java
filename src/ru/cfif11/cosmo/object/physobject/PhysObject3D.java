@@ -2,17 +2,20 @@ package ru.cfif11.cosmo.object.physobject;
 
 import com.threed.jpct.Object3D;
 import com.threed.jpct.SimpleVector;
+import ru.cfif11.cosmo.object.SelectableInterface;
 
 /**
  * Abstract class PhysObject3D extends Object3D(jpct.lib).
  * It has physical velocity and acceleration parameters.
  */
-public abstract class PhysObject3D extends Object3D{
+public abstract class PhysObject3D extends Object3D implements SelectableInterface{
 
 	private static final long serialVersionUID = 2530831725509380538L;
 
     private SimpleVector velocity;
     private SimpleVector acceleration;
+
+    protected boolean select = false;
 
     /**
      * Create PhysObject3D based on Object3D and vector velocity, acceleration by default the zero vector
@@ -25,6 +28,26 @@ public abstract class PhysObject3D extends Object3D{
 		this.velocity = velocity;
 		this.acceleration = new SimpleVector();
 	}
+
+    @Override
+    public SimpleVector getPosition() {
+        return getTransformedCenter();
+    }
+
+    @Override
+    public boolean hasTexture() {
+        return true;
+    }
+
+    @Override
+    public boolean isSelect() {
+        return select;
+    }
+
+    @Override
+    public void setSelect(boolean select) {
+        this.select = select;
+    }
 
     /**
      *  Calculates the new location of the PhysObject3D to a new step
