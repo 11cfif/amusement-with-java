@@ -17,43 +17,47 @@ import java.awt.event.KeyEvent;
  * Created with IntelliJ IDEA.
  * User: Galkin Aleksandr
  */
-public class Camera implements MovableInterface, ControllableMKInterface{
+public class Camera implements MovableInterface, ControllableMKInterface {
 
-    private boolean forward     = false;
-    private boolean backward    = false;
-    private boolean up          = false;
-    private boolean down        = false;
-    private boolean left        = false;
-    private boolean right       = false;
-    private boolean fast        = false;
-    private boolean slow        = false;
+    private boolean forward = false;
+    private boolean backward = false;
+    private boolean up = false;
+    private boolean down = false;
+    private boolean left = false;
+    private boolean right = false;
+    private boolean fast = false;
+    private boolean slow = false;
+    private boolean fixation = false;
 
-    private boolean fix      = true;
+    private boolean firstPress = false;
+    private boolean fixedOrientation = true;
 
-    private KeyboardListener        keyListener;
-    private MouseListener           mouseListener;
-    private World                   world;
-    private com.threed.jpct.Camera  cam;
-    private Ticker                  ticker;
+    private KeyboardListener keyListener;
+    private MouseListener mouseListener;
+    private World world;
+    private com.threed.jpct.Camera cam;
+    private Ticker ticker;
+
+    private int height;
+    private int width;
 
     private int rate = 15;
 
 
-
-
     public Camera(World world, Ticker ticker, FrameBuffer buffer) {
-        this.world      = world;
-        this.ticker     = ticker;
-        this.cam        = world.getCamera();
-        keyListener     = new KeyboardListener();
-        mouseListener   = new MouseListener(buffer);
-        mouseListener.hide();
+        this.world = world;
+        this.ticker = ticker;
+        this.cam = world.getCamera();
+        keyListener = new KeyboardListener();
+        mouseListener = new MouseListener(buffer);
+        height = buffer.getOutputHeight();
+        width  = buffer.getOutputWidth();
     }
 
     @Override
     public boolean pollControls() {
         KeyState ks = keyListener.pollControls();
-        while (ks != KeyState.NONE) {
+        while (ks!= KeyState.NONE) {
             if (ks.getKeyCode() == KeyEvent.VK_ESCAPE)
                 return false;
 
@@ -81,6 +85,12 @@ public class Camera implements MovableInterface, ControllableMKInterface{
             if (ks.getKeyCode() == KeyEvent.VK_Q)
                 slow = ks.getState();
 
+            if (ks.getKeyCode() == KeyEvent.VK_C) {
+                fixation = ks.getState();
+                if(fixation)
+                    firstPress = true;
+            }
+
             ks = keyListener.pollControls();
         }
 
@@ -99,11 +109,11 @@ public class Camera implements MovableInterface, ControllableMKInterface{
         SimpleVector ellipsoid = new SimpleVector(5, 5, 5);
 
         if (forward) {
-            world.checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEIN, ellipsoid, ticks, 5);
+            world.checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEUP, ellipsoid, ticks, 5);
         }
 
         if (backward) {
-            world.checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEOUT, ellipsoid, ticks, 5);
+            world.checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEDOWN, ellipsoid, ticks, 5);
         }
 
         if (left) {
@@ -115,49 +125,89 @@ public class Camera implements MovableInterface, ControllableMKInterface{
         }
 
         if (up) {
-            world.checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEUP, ellipsoid, ticks, 5);
+            world.checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEIN, ellipsoid, ticks, 5);
         }
 
         if (down) {
-            world.checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEDOWN, ellipsoid, ticks, 5);
+            world.checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEOUT, ellipsoid, ticks, 5);
         }
 
         if (fast) {
-            if(rate > 2) {rate--; ticker.setRate(rate); }
+            if (rate > 2) {
+                rate--;
+                ticker.setRate(rate);
+            }
         }
 
         if (slow) {
-            if(rate < 30) {rate++; ticker.setRate(rate); }
+            if (rate < 30) {
+                rate++;
+                ticker.setRate(rate);
+            }
+        }
+
+        if(fixation) {
+            changeFixation();
         }
 
         // mouse rotation
-        Matrix rot  = cam.getBack();
-        int dx      = mouseListener.getDeltaX();
-        int dy      = mouseListener.getDeltaY();
+        if (!fixedOrientation) {
+            Matrix rot = cam.getBack();
+            int dx = mouseListener.getDeltaX();
+            int dy = mouseListener.getDeltaY();
 
-        float ts    = 0.2f * ticks;
-        float tsy   = ts;
+            float ts = 0.2f * ticks;
+            float tsy = ts;
 
-        if (dx != 0) {
-            ts = dx / 500f;
-        }
-        if (dy != 0) {
-            tsy = dy / 500f;
-        }
+            if (dx != 0) {
+                ts = dx / 500f;
+            }
+            if (dy != 0) {
+                tsy = dy / 500f;
+            }
 
-        if (dx != 0) {
-            //rot.rotateAxis(rot.getXAxis(), ts);
-            rot.rotateY(-ts);
-        }
+            if (dx != 0) {
+                //rot.rotateAxis(rot.getXAxis(), ts);
+                rot.rotateY(-ts);
+            }
 
-        if (dy!=0) {
-            rot.rotateX(tsy);
+            if (dy != 0) {
+                rot.rotateX(tsy);
+            }
+        } else {
+            if(!mouseListener.isInsideWindow()) {
+                mouseListener.setCursorPosition();
+            }
+            if(mouseListener.getMouseX() < 10) {
+                world.checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVELEFT, ellipsoid, ticks, 5);
+            } else if(mouseListener.getMouseX() > width - 10) {
+                world.checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVERIGHT, ellipsoid, ticks, 5);
+            }
+            if(mouseListener.getMouseY() < 10) {
+                world.checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEUP, ellipsoid, ticks, 5);
+            } else if(mouseListener.getMouseY() > height - 10) {
+                world.checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEDOWN, ellipsoid, ticks, 5);
+            }
+
         }
 
     }
 
+    private void changeFixation() {
+        if(firstPress) {
+            if(fixedOrientation) {
+                fixedOrientation = false;
+                mouseListener.hide();
+            } else {
+                fixedOrientation = true;
+                mouseListener.show();
+            }
+            firstPress = false;
+        }
+    }
+
     public void setPosition(float x, float y, float z) {
-        cam.setPosition(x,y,z);
+        cam.setPosition(x, y, z);
     }
 
     public void setPosition(SimpleVector pos) {
@@ -192,11 +242,24 @@ public class Camera implements MovableInterface, ControllableMKInterface{
         return cam.getSideVector();
     }
 
-    public  Matrix getBack() {
+    public Matrix getBack() {
         return cam.getBack();
     }
 
     public SimpleVector getPosition() {
         return cam.getPosition();
     }
+
+    public boolean isFixedOrientation() {
+        return fixedOrientation;
+    }
+
+    public void setFixedOrientation(boolean fixedOrientation) {
+        this.fixedOrientation = fixedOrientation;
+        if(fixedOrientation)
+            mouseListener.show();
+        else
+            mouseListener.hide();
+    }
+
 }
