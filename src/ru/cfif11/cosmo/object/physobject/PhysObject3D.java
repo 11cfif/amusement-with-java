@@ -14,6 +14,7 @@ public abstract class PhysObject3D extends Object3D implements SelectableInterfa
 
     private SimpleVector velocity;
     private SimpleVector acceleration;
+    protected int[] characteristicSize;
 
     protected boolean select = false;
 
@@ -30,23 +31,17 @@ public abstract class PhysObject3D extends Object3D implements SelectableInterfa
 	}
 
     @Override
-    public SimpleVector getPosition() {
-        return getTransformedCenter();
-    }
-
-    @Override
-    public boolean hasTexture() {
-        return true;
-    }
-
-    @Override
     public boolean isSelect() {
         return select;
     }
 
     @Override
-    public void setSelect(boolean select) {
+    public void setSelect (boolean select) {
         this.select = select;
+    }
+
+    public int[] getCharacteristicSize() {
+        return characteristicSize;
     }
 
     /**

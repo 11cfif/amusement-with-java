@@ -26,7 +26,7 @@ public abstract class GameWorld {
 
     public abstract void tunePositionCamera(Camera camera);
 
-    public abstract boolean run(Camera camera);
+    public abstract boolean run(Camera camera, FrameBuffer buffer);
 
     public World getWorld() {
         return world;

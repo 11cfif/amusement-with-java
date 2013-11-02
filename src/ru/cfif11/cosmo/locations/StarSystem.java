@@ -46,7 +46,7 @@ public abstract class StarSystem extends GameWorld{
     }
 
     @Override
-    public boolean run(Camera camera){
+    public boolean run(Camera camera, FrameBuffer buffer){
         boolean doLoop;
         doLoop      = true;
         adapter     = new AdapterPhysics(world);
@@ -58,7 +58,7 @@ public abstract class StarSystem extends GameWorld{
                 e.calcLocation(0.1f);
             //используем обработчик событий для движения камеры
             doLoop = camera.pollControls();
-            camera.move(ticks);
+            camera.move(ticks, buffer);
         }
 
         //не используется, а вообще для подсчета fps

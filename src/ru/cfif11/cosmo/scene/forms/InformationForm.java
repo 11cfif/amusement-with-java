@@ -33,10 +33,8 @@ public class InformationForm extends GraphicForm {
     @Override
     public void draw(FrameBuffer buffer) {
         buffer.blit(texture, 0, 0, buffer.getOutputWidth() - x, y, width, height, widthDest, heightDest, 0, false);
-        for(String str : namePrimitives) {
-            if(str != namePrimitives[0] || selectObjectName.equals("null") )
+        for(String str : namePrimitives)
                 primitives.get(str).blit(buffer);
-        }
     }
 
     @Override

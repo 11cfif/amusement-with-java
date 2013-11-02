@@ -20,7 +20,7 @@ public class Scene{
         buffer.disableRenderer(IRenderer.RENDERER_SOFTWARE);
         buffer.enableRenderer(IRenderer.RENDERER_OPENGL);
         this.gameWorld  = gameWorld;
-        camera          = new Camera(gameWorld.getWorld(), ticker, buffer);
+        camera          = new Camera(gameWorld, ticker, buffer);
         gameWorld.tunePositionCamera(camera);
     }
 
@@ -40,7 +40,7 @@ public class Scene{
     }
 
     public boolean run() {
-        return gameWorld.run(camera);
+        return gameWorld.run(camera, buffer);
     }
 
     protected FrameBuffer getBuffer() {
