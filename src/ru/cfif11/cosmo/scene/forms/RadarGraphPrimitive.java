@@ -42,6 +42,10 @@ public class RadarGraphPrimitive extends GraphPrimitive {
         if (Math.abs(fovY) < Radar.getFovY() && Math.abs(fovX) < Radar.getFovX()) {
             x = (int) ((gForm.widthDest / 2.0) * (1 - fovX / (double)Radar.getFovX())) + gForm.x - gForm.widthDest;
             y = (int) ((gForm.heightDest / 2.0) * (1 - fovY / (double)Radar.getFovY())) + gForm.y;
+            if(getName().equals("Select")) {
+                x += 1;
+                y -= 1;
+            }
             getSizeTexture(camToObj);
         } else {
             x = 0;
@@ -58,7 +62,10 @@ public class RadarGraphPrimitive extends GraphPrimitive {
             widthDest = minSize;
         else
             widthDest = (int)(maxSize - camToObj.length() / ((Radar.getMaxDestToRad() - Radar.getMinDestToRad()) / (double)(maxSize - minSize)));
+        if(getName().equals("Select"))
+            widthDest += 2;
         heightDest = widthDest;
+
     }
 
 }

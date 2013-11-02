@@ -34,6 +34,7 @@ public class Main {
         texMan.addTexture("SolarSystemStar", new Texture("resources/texture/starSystem/solarSystem/Sun.gif"));
         texMan.addTexture("SolarSystemSputnik_1", new Texture("resources/texture/starSystem/solarSystem/Moon.jpg"));
         texMan.addTexture("Radar", new Texture("resources/texture/form/radar/radar.jpg"));
+        texMan.addTexture("SelectRad", new Texture("resources/texture/form/radar/select.jpg"));
         texMan.addTexture("StarRad", new Texture("resources/texture/form/radar/star.jpg"));
         texMan.addTexture("PlanetRad", new Texture("resources/texture/form/radar/planet.jpg"));
         texMan.addTexture("SputnikRad", new Texture("resources/texture/form/radar/sputnik.jpg"));
