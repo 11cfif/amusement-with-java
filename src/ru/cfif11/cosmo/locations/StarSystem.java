@@ -57,8 +57,8 @@ public abstract class StarSystem extends GameWorld{
             for(MassAttractObject3D e : system)
                 e.calcLocation(0.1f);
             //используем обработчик событий для движения камеры
-            doLoop = camera.pollControls();
-            camera.move(ticks, buffer);
+            if((doLoop = camera.pollControls()))
+                camera.move(ticks, buffer);
         }
 
         //не используется, а вообще для подсчета fps

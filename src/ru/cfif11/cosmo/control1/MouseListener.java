@@ -48,7 +48,7 @@ public class MouseListener {
         }
     }
 
-    public boolean buttonDown(int button) {
+    public boolean isButtonDown(int button) {
         return Mouse.isButtonDown(button);
     }
 
@@ -67,6 +67,7 @@ public class MouseListener {
             return 0;
         }
     }
+
 
     public int getDeltaY() {
         if (Mouse.isGrabbed()) {

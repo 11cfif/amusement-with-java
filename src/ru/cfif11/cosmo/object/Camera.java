@@ -13,7 +13,6 @@ import ru.cfif11.cosmo.control1.MouseListener;
 import ru.cfif11.cosmo.object.physobject.PhysObject3D;
 import ru.cfif11.cosmo.scene.GameWorld;
 
-import java.awt.event.KeyEvent;
 import java.util.Enumeration;
 
 /**
@@ -22,18 +21,9 @@ import java.util.Enumeration;
  */
 public class Camera implements MovableInterface, ControllableMKInterface {
 
-    private boolean forward     = false;
-    private boolean backward    = false;
-    private boolean up          = false;
-    private boolean down        = false;
-    private boolean left        = false;
-    private boolean right       = false;
-    private boolean fast        = false;
-    private boolean slow        = false;
-    private boolean fixation    = false;
-
     private boolean firstPress          = false;
     private boolean fixedOrientation    = false;
+    private boolean rotate              = false;
 
     private KeyboardListener        keyListener;
     private MouseListener           mouseListener;
@@ -45,6 +35,11 @@ public class Camera implements MovableInterface, ControllableMKInterface {
     private int width;
 
     private int rate = 15;
+
+    public static final String[] KEYS = new String[] {  "Up", "Down", "Left"    , "Right"       , "W",
+                                                        "Q" , "C"   , "Page Up" , "Page Down"   , "Escape"};
+
+    private boolean[] keyStates = new boolean[KEYS.length];
 
 
     public Camera(GameWorld gameWorld, Ticker ticker, FrameBuffer buffer) {
@@ -61,151 +56,93 @@ public class Camera implements MovableInterface, ControllableMKInterface {
 
     @Override
     public boolean pollControls() {
-        KeyState ks = keyListener.pollControls();
-        while (ks!= KeyState.NONE) {
-            if (ks.getKeyCode() == KeyEvent.VK_ESCAPE)
+
+
+        keyListener.setMainState();
+        while(keyListener.getMainState() != KeyState.NONE) {
+            keyListener.pollControls(KEYS, keyStates);
+            if(keyStates[keyStates.length-1] == true)
                 return false;
-
-            if (ks.getKeyCode() == KeyEvent.VK_UP) {
-                if(fixedOrientation)
-                    forward = ks.getState();
-                else
-                    up = ks.getState();
-            }
-
-            if (ks.getKeyCode() == KeyEvent.VK_DOWN) {
-                if(fixedOrientation)
-                    backward = ks.getState();
-                else
-                    down = ks.getState();
-            }
-
-            if (ks.getKeyCode() == KeyEvent.VK_LEFT)
-                left = ks.getState();
-
-            if (ks.getKeyCode() == KeyEvent.VK_RIGHT)
-                right = ks.getState();
-
-            if (ks.getKeyCode() == KeyEvent.VK_PAGE_UP) {
-                if(fixedOrientation)
-                    up = ks.getState();
-                else
-                    forward = ks.getState();
-            }
-
-            if (ks.getKeyCode() == KeyEvent.VK_PAGE_DOWN) {
-                if(fixedOrientation)
-                    down = ks.getState();
-                else
-                    backward = ks.getState();
-            }
-
-            if (ks.getKeyCode() == KeyEvent.VK_W)
-                fast = ks.getState();
-
-            if (ks.getKeyCode() == KeyEvent.VK_Q)
-                slow = ks.getState();
-
-            if (ks.getKeyCode() == KeyEvent.VK_C) {
-                allFalse();
-                fixation = ks.getState();
-                if(fixation)
-                    firstPress = true;
-            }
-
-            ks = keyListener.pollControls();
         }
 
         return !Display.isCloseRequested();
     }
 
     private void allFalse() {
-        forward     = false;
-        backward    = false;
-        up          = false;
-        down        = false;
-        left        = false;
-        right       = false;
-        fast        = false;
-        slow        = false;
+        for(boolean bool : keyStates)
+            bool = false;
     }
 
     //двигаем камеру в зависимости от того, куда нажали
     @Override
     public void move(long ticks, FrameBuffer buffer) {
 
-        if (ticks == 0) {
+        if(keyStates == null || ticks == 0) {
             return;
         }
 
         // Key control
         SimpleVector ellipsoid = new SimpleVector(5, 5, 5);
 
-        if (forward) {
-            gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEUP, ellipsoid, ticks, 5);
+        if (keyStates[0]) {
+            if(fixedOrientation)
+                gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEUP, ellipsoid, ticks, 5);
+            else
+                gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEIN, ellipsoid, ticks, 5);
         }
 
-        if (backward) {
-            gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEDOWN, ellipsoid, ticks, 5);
+        if (keyStates[1]) {
+            if(fixedOrientation)
+                gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEDOWN, ellipsoid, ticks, 5);
+            else
+                gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEOUT, ellipsoid, ticks, 5);
         }
 
-        if (left) {
+        if (keyStates[2]) {
             gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVELEFT, ellipsoid, ticks, 5);
         }
 
-        if (right) {
+        if (keyStates[3]) {
             gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVERIGHT, ellipsoid, ticks, 5);
         }
 
-        if (up) {
-            gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEIN, ellipsoid, ticks, 5);
-        }
-
-        if (down) {
-            gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEOUT, ellipsoid, ticks, 5);
-        }
-
-        if (fast) {
+        if (keyStates[4]) {
             if (rate > 2) {
                 rate--;
                 ticker.setRate(rate);
             }
         }
 
-        if (slow) {
+        if (keyStates[5]) {
             if (rate < 30) {
                 rate++;
                 ticker.setRate(rate);
             }
         }
 
-        if(fixation) {
-            changeFixation();
+        if(keyStates[6]) {
+            if(!firstPress)
+                changeFixation();
+            firstPress = true;
+        } else
+            firstPress = false;
+
+        if (keyStates[7]) {
+            if(fixedOrientation)
+                gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEIN, ellipsoid, ticks, 5);
+            else
+                gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEUP, ellipsoid, ticks, 5);
+        }
+
+        if (keyStates[8]) {
+            if(fixedOrientation)
+                gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEOUT, ellipsoid, ticks, 5);
+            else
+                gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEDOWN, ellipsoid, ticks, 5);
         }
 
         if (!fixedOrientation) {
-            Matrix rot = cam.getBack();
-            int dx = mouseListener.getDeltaX();
-            int dy = mouseListener.getDeltaY();
-
-            float ts = 0.2f * ticks;
-            float tsy = ts;
-
-            if (dx != 0) {
-                ts = dx / 500f;
-            }
-            if (dy != 0) {
-                tsy = dy / 500f;
-            }
-
-            if (dx != 0) {
-                //rot.rotateAxis(rot.getXAxis(), ts);
-                rot.rotateY(-ts);
-            }
-
-            if (dy != 0) {
-                rot.rotateX(tsy);
-            }
+            rotateCamera(ticks);
         } else {
             if(!mouseListener.isInsideWindow())
                 mouseListener.setCursorPosition();
@@ -218,10 +155,49 @@ public class Camera implements MovableInterface, ControllableMKInterface {
             else if(mouseListener.getMouseY() > height - 10)
                 gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEDOWN, ellipsoid, ticks, 5);
 
-            if(mouseListener.buttonDown(0))
-                objectSelection(buffer);
+            if(mouseListener.isButtonDown(0)) {
+                if(!rotate) {
+                    if(!objectSelection(buffer))
+                        rotate = true;
+                }
+                if(rotate)
+                    rotateCamera(ticks);
+            } else {
+                if(fixedOrientation && !mouseListener.isVisible())
+                    mouseListener.show();
+                rotate = false;
+            }
         }
 
+    }
+
+    private void rotateCamera(long ticks) {
+        int t = 1;
+        if(rotate) {
+            mouseListener.hide();
+            t = -1;
+        }
+        Matrix rot = cam.getBack();
+        int dx = mouseListener.getDeltaX()*t;
+        int dy = mouseListener.getDeltaY()*t;
+        float ts = 0.2f * ticks;
+        float tsy = ts;
+
+        if (dx != 0) {
+            ts = dx / 500f;
+        }
+        if (dy != 0) {
+            tsy = dy / 500f;
+        }
+
+        if (dx != 0) {
+            //rot.rotateAxis(rot.getXAxis(), ts);
+            rot.rotateY(-ts);
+        }
+
+        if (dy != 0) {
+            rot.rotateX(tsy);
+        }
     }
 
     public void setPosition(float x, float y, float z) {
@@ -281,7 +257,7 @@ public class Camera implements MovableInterface, ControllableMKInterface {
     }
 
 
-    private void objectSelection(FrameBuffer buffer) {
+    private boolean objectSelection(FrameBuffer buffer) {
         PhysObject3D                obj;
         SimpleVector                objCenBuf;
         SimpleVector                objBound;
@@ -293,31 +269,32 @@ public class Camera implements MovableInterface, ControllableMKInterface {
             float fov = convertRADAngleIntoFOV(obj.getTransformedCenter().calcSub(getPosition()).calcAngle(getDirection()));
             if(fov <= cam.getMaxFOV()) {
                 objCenBuf = Interact2D.projectCenter3D2D(buffer, obj);
-                if((objCenBuf.x > 0 && objCenBuf.x < buffer.getOutputWidth()) && (
-                        objCenBuf.y > 0 && objCenBuf.y < buffer.getOutputHeight())) {
+                if((objCenBuf.x > 0 && objCenBuf.x < width) && (
+                        objCenBuf.y > 0 && objCenBuf.y < height)) {
                     shiftCenObj = cam.getSideVector();
                     shiftCenObj.scalarMul(obj.getCharacteristicSize()[0]);
                     objBound = obj.getTransformedCenter().calcAdd(shiftCenObj);
                     radius = objCenBuf.calcSub(Interact2D.project3D2D(cam, buffer, objBound)).length();
                     if(objCenBuf.calcSub(new SimpleVector(mouseListener.getMouseX(),
-                            mouseListener.getMouseY(), 0)).length() < radius)
+                            mouseListener.getMouseY(), 0)).length() < radius) {
                         gameWorld.setSelectObject(obj);
+                        return true;
+                    }
                 }
             }
         }
+        return false;
     }
 
     private void changeFixation() {
-        if(firstPress) {
-            if(fixedOrientation) {
-                fixedOrientation = false;
-                mouseListener.hide();
-            } else {
-                fixedOrientation = true;
-                mouseListener.show();
-            }
-            firstPress = false;
+        if(fixedOrientation) {
+            fixedOrientation = false;
+            mouseListener.hide();
+        } else {
+            fixedOrientation = true;
+            mouseListener.show();
         }
+        allFalse();
     }
 
 }
