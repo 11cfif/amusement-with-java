@@ -36,7 +36,7 @@ public abstract class GraphAbstract {
     }
 
     protected void setTexture(String texture) {
-        this.texture = Main.texMan.getTexture(texture);
+        this.texture = Main.TEX_MAN.getTexture(texture);
     }
 
 

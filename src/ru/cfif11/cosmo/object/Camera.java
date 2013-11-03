@@ -34,7 +34,6 @@ public class Camera implements MovableInterface, ControllableMKInterface {
     private int height;
     private int width;
 
-    private int rate = 15;
 
     public static final String[] KEYS = new String[] {  "Up", "Down", "Left"    , "Right"       , "W",
                                                         "Q" , "C"   , "Page Up" , "Page Down"   , "Escape"};
@@ -56,8 +55,6 @@ public class Camera implements MovableInterface, ControllableMKInterface {
 
     @Override
     public boolean pollControls() {
-
-
         keyListener.setMainState();
         while(keyListener.getMainState() != KeyState.NONE) {
             keyListener.pollControls(KEYS, keyStates);
@@ -75,7 +72,7 @@ public class Camera implements MovableInterface, ControllableMKInterface {
 
     //двигаем камеру в зависимости от того, куда нажали
     @Override
-    public void move(long ticks, FrameBuffer buffer) {
+    public void applyControl(long ticks, FrameBuffer buffer) {
 
         if(keyStates == null || ticks == 0) {
             return;
@@ -106,19 +103,19 @@ public class Camera implements MovableInterface, ControllableMKInterface {
             gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVERIGHT, ellipsoid, ticks, 5);
         }
 
-        if (keyStates[4]) {
-            if (rate > 2) {
-                rate--;
-                ticker.setRate(rate);
+        /*if (keyStates[4]) {
+            if (Main.rate > 2) {
+                Main.rate--;
+                ticker.setRate(Main.rate);
             }
         }
 
         if (keyStates[5]) {
-            if (rate < 30) {
-                rate++;
-                ticker.setRate(rate);
+            if (Main.rate < 30) {
+                Main.rate++;
+                ticker.setRate(Main.rate);
             }
-        }
+        }   */
 
         if(keyStates[6]) {
             if(!firstPress)
@@ -170,6 +167,9 @@ public class Camera implements MovableInterface, ControllableMKInterface {
         }
 
     }
+
+    @Override
+    public void move(long ticks, FrameBuffer buffer){}
 
     private void rotateCamera(long ticks) {
         int t = 1;
