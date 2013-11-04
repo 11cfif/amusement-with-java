@@ -2,7 +2,6 @@ package ru.cfif11.cosmo.scene;
 
 import com.threed.jpct.FrameBuffer;
 import com.threed.jpct.World;
-import com.threed.jpct.util.KeyState;
 import org.lwjgl.opengl.Display;
 import ru.cfif11.cosmo.Main;
 import ru.cfif11.cosmo.Ticker;
@@ -17,10 +16,10 @@ import ru.cfif11.cosmo.object.physobject.PhysObject3D;
 public abstract class GameWorld implements ControllableMKInterface{
 
 
-    protected World world;
-    protected Ticker ticker;
-    protected ManagerGraphicForm manGraphForm;
-    protected PhysObject3D selectObject = null;
+    protected World                 world;
+    protected Ticker                ticker;
+    protected ManagerGraphicForm    manGraphForm;
+    protected PhysObject3D          selectObject = null;
 
     public static final String[] KEYS = new String[] {"W", "Q", "Escape"};
     private boolean[] keyStates = new boolean[KEYS.length];
@@ -33,12 +32,9 @@ public abstract class GameWorld implements ControllableMKInterface{
 
     @Override
     public boolean pollControls(){
-        Main.KEYBOARD_LISTENER.setMainState();
-        while(Main.KEYBOARD_LISTENER.getMainState() != KeyState.NONE) {
-            Main.KEYBOARD_LISTENER.pollControls(KEYS, keyStates);
-            if(keyStates[keyStates.length-1] == true)
-                return false;
-        }
+        Main.KEYBOARD_LISTENER.recordPollСontrols(KEYS, keyStates);
+        if(keyStates[keyStates.length-1] == true)
+            return false;
 
         return !Display.isCloseRequested();
     }

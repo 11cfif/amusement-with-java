@@ -3,6 +3,8 @@ package ru.cfif11.cosmo.locations;
 import com.threed.jpct.FrameBuffer;
 import com.threed.jpct.Lights;
 import com.threed.jpct.SimpleVector;
+import com.threed.jpct.util.KeyState;
+import ru.cfif11.cosmo.Main;
 import ru.cfif11.cosmo.Ticker;
 import ru.cfif11.cosmo.adapterphysics.AdapterPhysics;
 import ru.cfif11.cosmo.object.Camera;
@@ -57,10 +59,17 @@ public abstract class StarSystem extends GameWorld{
             for(MassAttractObject3D e : system)
                 e.calcLocation(0.1f);
             //используем обработчик событий для движения камеры
-            if((doLoop = pollControls()))
+
+            Main.KEYBOARD_LISTENER.setMainState();
+            while(Main.KEYBOARD_LISTENER.getMainState() != KeyState.NONE) {
+                Main.KEYBOARD_LISTENER.pollControls();
+
+            }
+            if((doLoop = pollControls())) {
                 applyControl(ticks, buffer);
-            if((doLoop = camera.pollControls()))
+                camera.pollControls();
                 camera.applyControl(ticks, buffer);
+            }
         }
 
         //не используется, а вообще для подсчета fps

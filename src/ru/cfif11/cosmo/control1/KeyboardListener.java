@@ -5,6 +5,7 @@ import com.threed.jpct.util.KeyState;
 
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,6 +15,7 @@ import java.util.HashMap;
 public class KeyboardListener {
     public static final HashMap<String, Integer>    KEYS;
     public static final int                         MAX_KEY = 130;
+    private boolean[] keyStates;
 
     private KeyMapper   keyMapper;
     private KeyState    mainState = KeyState.NONE;
@@ -29,13 +31,16 @@ public class KeyboardListener {
 
     public KeyboardListener() {
         keyMapper = new KeyMapper();
+        keyStates = new boolean[MAX_KEY];
     }
 
-    public  void pollControls(String[] keyNames, boolean result[]) {
+    public  void pollControls() {
         while (mainState != KeyState.NONE) {
-            for (int i = 0; i < keyNames.length; i++) {
-                if(mainState.getKeyCode() == KEYS.get(keyNames[i]))
-                    result[i] = mainState.getState();
+            Set<String> keyNames = KEYS.keySet();
+            for (String str : keyNames) {
+                if(mainState.getKeyCode() == KEYS.get(str)) {
+                    keyStates[KEYS.get(str)] = mainState.getState();
+                }
             }
             setMainState();
         }
@@ -51,4 +56,9 @@ public class KeyboardListener {
     }
 
 
+    public void recordPollСontrols(String[] keys, boolean[] keyStates) {
+        for(int i = 0; i < keys.length; i++) {
+            keyStates[i] = this.keyStates[KEYS.get(keys[i])];
+        }
+    }
 }

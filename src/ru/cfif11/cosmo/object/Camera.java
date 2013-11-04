@@ -4,11 +4,10 @@ import com.threed.jpct.FrameBuffer;
 import com.threed.jpct.Interact2D;
 import com.threed.jpct.Matrix;
 import com.threed.jpct.SimpleVector;
-import com.threed.jpct.util.KeyState;
 import org.lwjgl.opengl.Display;
+import ru.cfif11.cosmo.Main;
 import ru.cfif11.cosmo.Ticker;
 import ru.cfif11.cosmo.control1.ControllableMKInterface;
-import ru.cfif11.cosmo.control1.KeyboardListener;
 import ru.cfif11.cosmo.control1.MouseListener;
 import ru.cfif11.cosmo.object.physobject.PhysObject3D;
 import ru.cfif11.cosmo.scene.GameWorld;
@@ -25,7 +24,6 @@ public class Camera implements MovableInterface, ControllableMKInterface {
     private boolean fixedOrientation    = false;
     private boolean rotate              = false;
 
-    private KeyboardListener        keyListener;
     private MouseListener           mouseListener;
     private GameWorld               gameWorld;
     private com.threed.jpct.Camera  cam;
@@ -35,8 +33,8 @@ public class Camera implements MovableInterface, ControllableMKInterface {
     private int width;
 
 
-    public static final String[] KEYS = new String[] {  "Up", "Down", "Left"    , "Right"       , "W",
-                                                        "Q" , "C"   , "Page Up" , "Page Down"   , "Escape"};
+    public static final String[] KEYS = new String[] {  "Up", "Down", "Left"    , "Right"   , "W",
+                                                        "Q" , "C"   , "Page Up" , "Page Down"};
 
     private boolean[] keyStates = new boolean[KEYS.length];
 
@@ -45,7 +43,6 @@ public class Camera implements MovableInterface, ControllableMKInterface {
         this.gameWorld  = gameWorld;
         this.ticker     = ticker;
         this.cam        = gameWorld.getWorld().getCamera();
-        keyListener     = new KeyboardListener();
         mouseListener   = new MouseListener(buffer);
         if(!fixedOrientation)
             mouseListener.hide();
@@ -55,13 +52,7 @@ public class Camera implements MovableInterface, ControllableMKInterface {
 
     @Override
     public boolean pollControls() {
-        keyListener.setMainState();
-        while(keyListener.getMainState() != KeyState.NONE) {
-            keyListener.pollControls(KEYS, keyStates);
-            if(keyStates[keyStates.length-1] == true)
-                return false;
-        }
-
+        Main.KEYBOARD_LISTENER.recordPollСontrols(KEYS, keyStates);
         return !Display.isCloseRequested();
     }
 
@@ -74,7 +65,7 @@ public class Camera implements MovableInterface, ControllableMKInterface {
     @Override
     public void applyControl(long ticks, FrameBuffer buffer) {
 
-        if(keyStates == null || ticks == 0) {
+        if(ticks == 0) {
             return;
         }
 
@@ -102,20 +93,6 @@ public class Camera implements MovableInterface, ControllableMKInterface {
         if (keyStates[3]) {
             gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVERIGHT, ellipsoid, ticks, 5);
         }
-
-        /*if (keyStates[4]) {
-            if (Main.rate > 2) {
-                Main.rate--;
-                ticker.setRate(Main.rate);
-            }
-        }
-
-        if (keyStates[5]) {
-            if (Main.rate < 30) {
-                Main.rate++;
-                ticker.setRate(Main.rate);
-            }
-        }   */
 
         if(keyStates[6]) {
             if(!firstPress)
