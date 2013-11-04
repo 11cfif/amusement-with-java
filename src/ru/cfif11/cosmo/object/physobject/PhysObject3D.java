@@ -1,30 +1,48 @@
-package ru.cfif11.cosmo.physobject;
+package ru.cfif11.cosmo.object.physobject;
 
 import com.threed.jpct.Object3D;
 import com.threed.jpct.SimpleVector;
+import ru.cfif11.cosmo.object.SelectableInterface;
 
 /**
  * Abstract class PhysObject3D extends Object3D(jpct.lib).
  * It has physical velocity and acceleration parameters.
  */
-public abstract class PhysObject3D extends Object3D{
+public abstract class PhysObject3D extends Object3D implements SelectableInterface{
 
 	private static final long serialVersionUID = 2530831725509380538L;
 
     private SimpleVector velocity;
     private SimpleVector acceleration;
+    protected int[] characteristicSize;
+
+    protected boolean select = false;
 
     /**
      * Create PhysObject3D based on Object3D and vector velocity, acceleration by default the zero vector
      * @param obj the Object3D
      * @param velocity the initial velocity
      */
-	public PhysObject3D(Object3D obj, String name, SimpleVector velocity) {
+    PhysObject3D(Object3D obj, String name, SimpleVector velocity) {
 		super(obj);
         setName(name);
 		this.velocity = velocity;
 		this.acceleration = new SimpleVector();
 	}
+
+    @Override
+    public boolean isSelect() {
+        return select;
+    }
+
+    @Override
+    public void setSelect (boolean select) {
+        this.select = select;
+    }
+
+    public int[] getCharacteristicSize() {
+        return characteristicSize;
+    }
 
     /**
      *  Calculates the new location of the PhysObject3D to a new step
@@ -61,7 +79,7 @@ public abstract class PhysObject3D extends Object3D{
      * @param ay the Y component of the acceleration
      * @param az the Z component of the acceleration
      */
-	protected void setAcceleration(float ax, float ay, float az) {
+    void setAcceleration(float ax, float ay, float az) {
 		this.acceleration.set(ax, ay, az);
 	}
 
@@ -69,7 +87,7 @@ public abstract class PhysObject3D extends Object3D{
      * Sets the acceleration of the PhysObject3D
      * @param acceleration the velocity vector
      */
-	protected void setAccelaration(SimpleVector acceleration) {
+    void setAccelaration(SimpleVector acceleration) {
 		this.acceleration = acceleration;
 	}
 
@@ -77,7 +95,7 @@ public abstract class PhysObject3D extends Object3D{
      *  Calculates the new velocity of the PhysObject3D to a new step
      * @param dT the time step
      */
-	protected void calcVelocity(float dT){
+    void calcVelocity(float dT){
 		SimpleVector dVelocity = new SimpleVector(this.acceleration);
 		dVelocity.scalarMul(dT);
 		this.velocity.add(dVelocity);

@@ -1,4 +1,4 @@
-package ru.cfif11.cosmo.physobject;
+package ru.cfif11.cosmo.object.physobject;
 
 
 

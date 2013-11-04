@@ -2,9 +2,9 @@ package ru.cfif11.cosmo.adapterphysics;
 
 import com.threed.jpct.SimpleVector;
 import com.threed.jpct.World;
+import ru.cfif11.cosmo.object.physobject.*;
 import ru.cfif11.cosmo.physics.Physics;
 import ru.cfif11.cosmo.physics.PhysicsGravity;
-import ru.cfif11.cosmo.physobject.*;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -46,9 +46,7 @@ public class AdapterPhysics {
      * calculates the force acting on the PhysObject3D
      */
 	public void calcForce() {
-		Physics p;
-		for(int i = 0; i < simulators.size(); i++) {
-			p = simulators.get(i);
+		for(Physics p: simulators) {
 			if(p instanceof PhysicsGravity) {
 				MassObject3D mo;
 				arguments = new double[sourceGravity[numObjs]];

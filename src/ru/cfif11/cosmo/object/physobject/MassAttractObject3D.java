@@ -1,4 +1,4 @@
-package ru.cfif11.cosmo.physobject;
+package ru.cfif11.cosmo.object.physobject;
 
 import com.threed.jpct.Object3D;
 import com.threed.jpct.SimpleVector;
@@ -16,8 +16,9 @@ public class MassAttractObject3D extends MassObject3D implements CanAttractInter
      * @param velocity the velocity
      * @param mass the mass
      */
-	public MassAttractObject3D(Object3D obj, String name, SimpleVector velocity, double mass) {
+	public MassAttractObject3D(Object3D obj, String name, SimpleVector velocity, double mass, int radius) {
 		super(obj, name, velocity, mass);
+        characteristicSize = new int[] {radius};
 	}
 
 }

@@ -1,4 +1,4 @@
-package ru.cfif11.cosmo.physobject;
+package ru.cfif11.cosmo.object.physobject;
 
 import com.threed.jpct.Object3D;
 import com.threed.jpct.SimpleVector;
@@ -17,7 +17,7 @@ public class MassObject3D extends PhysObject3D implements HasMassInterface {
      * @param velocity the velocity
      * @param mass the mass
      */
-	public MassObject3D(Object3D obj, String name, SimpleVector velocity, double mass) {
+    MassObject3D(Object3D obj, String name, SimpleVector velocity, double mass) {
 		super(obj, name, velocity);
 		this.mass = mass;
 	}
@@ -53,9 +53,9 @@ public class MassObject3D extends PhysObject3D implements HasMassInterface {
 
 	@Override
 	public boolean isGravity(SimpleVector GravityField) {
-		if(GravityField.length() < 0.0005) {
+		if(GravityField.length() < 0.0005)
 			return false;
-		}
+
 		return true;
 	}
 
