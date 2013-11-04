@@ -47,11 +47,11 @@ public class SolarSystemLoc extends StarSystem {
         }
         initializationManagerGraphForm();
 
-        sheep = new MassObject3D(Loader.load3DS("resources/3ds/sts.3ds", 1f)[0], "sheep", new SimpleVector(0,0,0), 0);
+/*        sheep = new MassObject3D(Loader.load3DS("resources/3ds/sts.3ds", 1f)[0], "sheep", new SimpleVector(0,0,0), 0);
         sheep.translate(0, 0, 200);
         world.addObject(sheep);
         sheep.build();
-        sheep.compileAndStrip();
+        sheep.compileAndStrip();  */
     }
 
 
