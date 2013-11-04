@@ -17,7 +17,7 @@ public class MassObject3D extends PhysObject3D implements HasMassInterface {
      * @param velocity the velocity
      * @param mass the mass
      */
-    MassObject3D(Object3D obj, String name, SimpleVector velocity, double mass) {
+    public MassObject3D(Object3D obj, String name, SimpleVector velocity, double mass) {
 		super(obj, name, velocity);
 		this.mass = mass;
 	}

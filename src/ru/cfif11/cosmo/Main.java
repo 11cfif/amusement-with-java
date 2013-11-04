@@ -70,6 +70,7 @@ public class Main {
 		Config.lightMul             = 1;
 		Config.collideOffset        = 500;
 		Config.glTrilinear          = true;
+        Config.oldStyle3DSLoader    = true;
 	}
 
 	private void init(){

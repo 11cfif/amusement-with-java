@@ -1,11 +1,13 @@
 package ru.cfif11.cosmo.locations;
 
+import com.threed.jpct.Loader;
 import com.threed.jpct.Object3D;
 import com.threed.jpct.Primitives;
 import com.threed.jpct.SimpleVector;
 import ru.cfif11.cosmo.Ticker;
 import ru.cfif11.cosmo.locations.enumeration.StarSystemEnum;
 import ru.cfif11.cosmo.object.physobject.MassAttractObject3D;
+import ru.cfif11.cosmo.object.physobject.MassObject3D;
 
 import java.util.ArrayList;
 
@@ -14,6 +16,8 @@ import java.util.ArrayList;
  * User: Galkin Aleksandr
  */
 public class SolarSystemLoc extends StarSystem {
+
+    MassObject3D sheep;
 
 
     public SolarSystemLoc(Ticker ticker) {
@@ -42,6 +46,13 @@ public class SolarSystemLoc extends StarSystem {
             tempObj.compileAndStrip();
         }
         initializationManagerGraphForm();
+
+        sheep = new MassObject3D(Loader.load3DS("resources/3ds/sts.3ds", 1f)[0], "sheep", new SimpleVector(0,0,0), 0);
+        sheep.translate(0, 0, 200);
+        world.addObject(sheep);
+        sheep.build();
+        sheep.compileAndStrip();
     }
+
 
 }
