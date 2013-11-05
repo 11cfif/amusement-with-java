@@ -77,6 +77,7 @@ public class Main {
         locMan = new LocationManager(ticker);
         //создаем мир
         GameWorld startWorld = locMan.getGameWorld(0);
+
         scene                = new Scene(ticker, startWorld);
 	}
 

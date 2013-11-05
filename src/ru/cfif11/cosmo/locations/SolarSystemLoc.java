@@ -8,6 +8,7 @@ import ru.cfif11.cosmo.Ticker;
 import ru.cfif11.cosmo.locations.enumeration.StarSystemEnum;
 import ru.cfif11.cosmo.object.physobject.MassAttractObject3D;
 import ru.cfif11.cosmo.object.physobject.MassObject3D;
+import ru.cfif11.cosmo.object.physobject.Ship;
 
 import java.util.ArrayList;
 
@@ -17,7 +18,7 @@ import java.util.ArrayList;
  */
 public class SolarSystemLoc extends StarSystem {
 
-    MassObject3D sheep;
+    Ship ship;
 
 
     public SolarSystemLoc(Ticker ticker) {
@@ -29,7 +30,8 @@ public class SolarSystemLoc extends StarSystem {
     protected void initializationLevel() {
         MassAttractObject3D tempObj;
         SimpleVector        tempVec;
-        system = new ArrayList<MassAttractObject3D>();
+        system  = new ArrayList<MassAttractObject3D>();
+        ships   = new ArrayList<Ship>();
         for (StarSystemEnum p : StarSystemEnum.values()) {
             tempVec  = p.getVelocity();
             tempVec.scalarMul(scalingFactor);
@@ -47,11 +49,13 @@ public class SolarSystemLoc extends StarSystem {
         }
         initializationManagerGraphForm();
 
-        sheep = new MassObject3D(Loader.load3DS("resources/3ds/sts.3ds", 1f)[0], "sheep", new SimpleVector(0,0,0), 0);
-        sheep.translate(0, 0, 200);
-        world.addObject(sheep);
-        sheep.build();
-        sheep.compileAndStrip();
+        ship = new Ship(Loader.load3DS("resources/3ds/sts.3ds", 1f)[0], "sheep", new SimpleVector(0,0,0), 1e10, new int[] {3,3,3});
+        ship.translate(1950, 0, 0);
+        ship.setOrientation(new SimpleVector(1, 0, 0), new SimpleVector(0, 1, 0));
+        ships.add(ship);
+        world.addObject(ship);
+        ship.build();
+        ship.compileAndStrip();
     }
 
 

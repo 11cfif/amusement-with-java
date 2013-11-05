@@ -9,6 +9,8 @@ import ru.cfif11.cosmo.Ticker;
 import ru.cfif11.cosmo.adapterphysics.AdapterPhysics;
 import ru.cfif11.cosmo.object.Camera;
 import ru.cfif11.cosmo.object.physobject.MassAttractObject3D;
+import ru.cfif11.cosmo.object.physobject.MassObject3D;
+import ru.cfif11.cosmo.object.physobject.Ship;
 import ru.cfif11.cosmo.scene.GameWorld;
 import ru.cfif11.cosmo.scene.GraphicForm;
 import ru.cfif11.cosmo.scene.ManagerGraphicForm;
@@ -23,9 +25,10 @@ import java.util.ArrayList;
  */
 public abstract class StarSystem extends GameWorld{
 
-    ArrayList<MassAttractObject3D>    system;
-    float                             scalingFactor = 1e-4f;
-    private AdapterPhysics            adapter;
+    ArrayList<MassAttractObject3D>  system;
+    float                           scalingFactor = 1e-4f;
+    private AdapterPhysics          adapter;
+    ArrayList<Ship>                 ships;
 
     StarSystem(Ticker ticker) {
         super(ticker);
@@ -43,7 +46,7 @@ public abstract class StarSystem extends GameWorld{
     @Override
     public void tunePositionCamera(Camera camera){
         camera.setPosition(1000, 0, 0);
-        camera.lookAt(new SimpleVector());
+        camera.lookAt(new SimpleVector(2000,0,0));
         camera.setFOV(1.5f);
     }
 
@@ -56,9 +59,11 @@ public abstract class StarSystem extends GameWorld{
         if (ticks > 0) {
             //рассчитываем все силы и считаем новые местоположения объектов
             adapter.calcForce();
-            for(MassAttractObject3D e : system)
+            for(MassObject3D e : system)
                 e.calcLocation(0.1f);
-            //используем обработчик событий для движения камеры
+
+            for (MassObject3D e : ships)
+                e.calcLocation(0.1f);
 
             Main.KEYBOARD_LISTENER.setMainState();
             while(Main.KEYBOARD_LISTENER.getMainState() != KeyState.NONE) {
@@ -83,6 +88,10 @@ public abstract class StarSystem extends GameWorld{
 
     public ArrayList<MassAttractObject3D> getSystem() {
         return system;
+    }
+
+    public void addShip(Ship ship) {
+        ships.add(ship);
     }
 
     @Override
