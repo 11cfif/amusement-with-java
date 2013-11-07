@@ -29,21 +29,18 @@ public class Camera implements MovableInterface, ControllableMKInterface {
 
     private GameWorld               gameWorld;
     private com.threed.jpct.Camera  cam;
-    private Ticker                  ticker;
 
     private int height;
     private int width;
 
 
-    public static final String[] KEYS = new String[] {  "Up", "Down", "Left"    , "Right"   , "W",
-                                                        "Q" , "C"   , "Page Up" , "Page Down"};
+    public static final String[] KEYS = new String[] {  "Up", "Down", "Left", "Right", "C", "Page Up", "Page Down"};
 
     private boolean[] keyStates = new boolean[KEYS.length];
 
 
     public Camera(GameWorld gameWorld, Ticker ticker, FrameBuffer buffer) {
         this.gameWorld  = gameWorld;
-        this.ticker     = ticker;
         this.cam        = gameWorld.getWorld().getCamera();
         MOUSE_LISTENER   = new MouseListener(buffer);
         if(!fixedOrientation)
@@ -96,21 +93,21 @@ public class Camera implements MovableInterface, ControllableMKInterface {
             gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVERIGHT, ellipsoid, ticks, 5);
         }
 
-        if(keyStates[6]) {
+        if(keyStates[4]) {
             if(!firstPress)
                 changeFixation();
             firstPress = true;
         } else
             firstPress = false;
 
-        if (keyStates[7]) {
+        if (keyStates[5]) {
             if(fixedOrientation)
                 gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEIN, ellipsoid, ticks, 5);
             else
                 gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEUP, ellipsoid, ticks, 5);
         }
 
-        if (keyStates[8]) {
+        if (keyStates[6]) {
             if(fixedOrientation)
                 gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEOUT, ellipsoid, ticks, 5);
             else

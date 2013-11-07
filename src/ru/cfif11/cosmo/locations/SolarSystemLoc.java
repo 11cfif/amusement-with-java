@@ -49,7 +49,7 @@ public class SolarSystemLoc extends StarSystem {
         }
         initializationManagerGraphForm();
 
-        ship = new Ship(Loader.load3DS("resources/3ds/sts.3ds", 1f)[0], "sheep", new SimpleVector(0,0,0), 1e10, new int[] {3,3,3});
+        ship = new Ship(Loader.load3DS("resources/3ds/sts.3ds", 1f)[0], "SolarSystemSheep", new SimpleVector(0,0,0), 1e10, new int[] {3,3,3});
         ship.translate(1950, 0, 0);
         ship.setOrientation(new SimpleVector(1, 0, 0), new SimpleVector(0, 1, 0));
         ships.add(ship);

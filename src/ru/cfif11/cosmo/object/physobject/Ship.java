@@ -16,12 +16,10 @@ import ru.cfif11.cosmo.object.MovableInterface;
  */
 public class Ship extends MassObject3D implements ControllableMKInterface, MovableInterface {
 
-    public static final String[] KEYS = new String[] {  "Up", "Down", "Left"    , "Right"   , "W",
-            "Q" , "C"   , "Page Up" , "Page Down"};
+    public static final String[] KEYS = new String[] {  "Up", "Down", "Left", "Right", "W", "S"};
 
     private boolean[] keyStates = new boolean[KEYS.length];
 
-    private MouseListener mouseListener;
 
 
     /**
@@ -34,7 +32,6 @@ public class Ship extends MassObject3D implements ControllableMKInterface, Movab
     public Ship(Object3D obj, String name, SimpleVector velocity, double mass, int[] characteristicSize) {
         super(obj, name, velocity, mass);
         this.characteristicSize = characteristicSize;
-        movable = true;
     }
 
     public Ship(String model, float scale, String name, SimpleVector velocity, double mass, int[] characteristicSize) {
@@ -50,7 +47,7 @@ public class Ship extends MassObject3D implements ControllableMKInterface, Movab
 
     @Override
     public void applyControl(long ticks, FrameBuffer buffer) {
-    /*    if(ticks == 0) {
+        if(ticks == 0) {
             return;
         }
 
@@ -58,79 +55,29 @@ public class Ship extends MassObject3D implements ControllableMKInterface, Movab
         SimpleVector ellipsoid = new SimpleVector(5, 5, 5);
 
         if (keyStates[0]) {
-            if(fixedOrientation)
-                gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEUP, ellipsoid, ticks, 5);
-            else
-                gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEIN, ellipsoid, ticks, 5);
+
         }
 
         if (keyStates[1]) {
-            if(fixedOrientation)
-                gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEDOWN, ellipsoid, ticks, 5);
-            else
-                gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEOUT, ellipsoid, ticks, 5);
+
         }
 
         if (keyStates[2]) {
-            gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVELEFT, ellipsoid, ticks, 5);
+
         }
 
         if (keyStates[3]) {
-            gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVERIGHT, ellipsoid, ticks, 5);
+
         }
 
-        if(keyStates[6]) {
-            if(!firstPress)
-                changeFixation();
-            firstPress = true;
-        } else
-            firstPress = false;
+        if(keyStates[5]) {
 
-        if (keyStates[7]) {
-            if(fixedOrientation)
-                gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEIN, ellipsoid, ticks, 5);
-            else
-                gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEUP, ellipsoid, ticks, 5);
         }
 
-        if (keyStates[8]) {
-            if(fixedOrientation)
-                gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEOUT, ellipsoid, ticks, 5);
-            else
-                gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEDOWN, ellipsoid, ticks, 5);
-        }
-
-        if (!fixedOrientation) {
-            rotateCamera(ticks);
-        } else {
-            if(!mouseListener.isInsideWindow())
-                mouseListener.setCursorPosition();
-            if(mouseListener.getMouseX() < 10)
-                gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVELEFT, ellipsoid, ticks, 5);
-            else if(mouseListener.getMouseX() > width - 10)
-                gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVERIGHT, ellipsoid, ticks, 5);
-            if(mouseListener.getMouseY() < 10)
-                gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEUP, ellipsoid, ticks, 5);
-            else if(mouseListener.getMouseY() > height - 10)
-                gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEDOWN, ellipsoid, ticks, 5);
-
-            if(mouseListener.isButtonDown(0)) {
-                if(!rotate) {
-                    if(!objectSelection(buffer))
-                        rotate = true;
-                }
-                if(rotate)
-                    rotateCamera(ticks);
-            } else {
-                if(fixedOrientation && !mouseListener.isVisible())
-                    mouseListener.show();
-                rotate = false;
-            }
-        }    */
     }
 
     @Override
     public void move(long ticks, FrameBuffer buffer) {
-        //To change body of implemented methods use File | Settings | File Templates.
+
     }
 }

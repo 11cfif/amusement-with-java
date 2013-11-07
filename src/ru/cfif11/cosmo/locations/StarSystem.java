@@ -7,7 +7,9 @@ import com.threed.jpct.util.KeyState;
 import ru.cfif11.cosmo.Main;
 import ru.cfif11.cosmo.Ticker;
 import ru.cfif11.cosmo.adapterphysics.AdapterPhysics;
+import ru.cfif11.cosmo.control1.ControllableMKInterface;
 import ru.cfif11.cosmo.object.Camera;
+import ru.cfif11.cosmo.object.MovableInterface;
 import ru.cfif11.cosmo.object.physobject.MassAttractObject3D;
 import ru.cfif11.cosmo.object.physobject.MassObject3D;
 import ru.cfif11.cosmo.object.physobject.Ship;
@@ -72,8 +74,13 @@ public abstract class StarSystem extends GameWorld{
             }
             if((doLoop = pollControls())) {
                 applyControl(ticks, buffer);
-                camera.pollControls();
-                camera.applyControl(ticks, buffer);
+                if(selectObject instanceof ControllableMKInterface) {
+                    ((ControllableMKInterface) selectObject).pollControls();
+                    ((ControllableMKInterface) selectObject).applyControl(ticks, buffer);
+                } else {
+                    camera.pollControls();
+                    camera.applyControl(ticks, buffer);
+                }
             }
         }
 

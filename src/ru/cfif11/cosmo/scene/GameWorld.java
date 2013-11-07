@@ -19,9 +19,9 @@ public abstract class GameWorld implements ControllableMKInterface{
     protected World                 world;
     protected Ticker                ticker;
     protected ManagerGraphicForm    manGraphForm;
-    protected PhysObject3D          selectObject = null;
+    protected PhysObject3D selectObject = null;
 
-    public static final String[] KEYS = new String[] {"W", "Q", "Escape"};
+    public static final String[] KEYS = new String[] {"Minus", "Equals", "NumPad -", "NumPad +", "Escape"};
     private boolean[] keyStates = new boolean[KEYS.length];
 
 
@@ -45,14 +45,14 @@ public abstract class GameWorld implements ControllableMKInterface{
             return;
         }
 
-        if (keyStates[0]) {
+        if (keyStates[1] || keyStates[3]) {
             if (Main.rate > 2) {
                 Main.rate--;
                 ticker.setRate(Main.rate);
             }
         }
 
-        if (keyStates[1]) {
+        if (keyStates[0] || keyStates[2]) {
             if (Main.rate < 30) {
                 Main.rate++;
                 ticker.setRate(Main.rate);
