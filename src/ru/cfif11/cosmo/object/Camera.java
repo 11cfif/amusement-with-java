@@ -24,7 +24,9 @@ public class Camera implements MovableInterface, ControllableMKInterface {
     private boolean fixedOrientation    = false;
     private boolean rotate              = false;
 
-    private MouseListener           mouseListener;
+
+    public static MouseListener MOUSE_LISTENER;
+
     private GameWorld               gameWorld;
     private com.threed.jpct.Camera  cam;
     private Ticker                  ticker;
@@ -43,9 +45,9 @@ public class Camera implements MovableInterface, ControllableMKInterface {
         this.gameWorld  = gameWorld;
         this.ticker     = ticker;
         this.cam        = gameWorld.getWorld().getCamera();
-        mouseListener   = new MouseListener(buffer);
+        MOUSE_LISTENER   = new MouseListener(buffer);
         if(!fixedOrientation)
-            mouseListener.hide();
+            MOUSE_LISTENER.hide();
         height = buffer.getOutputHeight();
         width  = buffer.getOutputWidth();
     }
@@ -118,18 +120,18 @@ public class Camera implements MovableInterface, ControllableMKInterface {
         if (!fixedOrientation) {
             rotateCamera(ticks);
         } else {
-            if(!mouseListener.isInsideWindow())
-                mouseListener.setCursorPosition();
-            if(mouseListener.getMouseX() < 10)
+            if(!MOUSE_LISTENER.isInsideWindow())
+                MOUSE_LISTENER.setCursorPosition();
+            if(MOUSE_LISTENER.getMouseX() < 10)
                 gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVELEFT, ellipsoid, ticks, 5);
-            else if(mouseListener.getMouseX() > width - 10)
+            else if(MOUSE_LISTENER.getMouseX() > width - 10)
                 gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVERIGHT, ellipsoid, ticks, 5);
-            if(mouseListener.getMouseY() < 10)
+            if(MOUSE_LISTENER.getMouseY() < 10)
                 gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEUP, ellipsoid, ticks, 5);
-            else if(mouseListener.getMouseY() > height - 10)
+            else if(MOUSE_LISTENER.getMouseY() > height - 10)
                 gameWorld.getWorld().checkCameraCollisionEllipsoid(com.threed.jpct.Camera.CAMERA_MOVEDOWN, ellipsoid, ticks, 5);
 
-            if(mouseListener.isButtonDown(0)) {
+            if(MOUSE_LISTENER.isButtonDown(0)) {
                 if(!rotate) {
                     if(!objectSelection(buffer))
                         rotate = true;
@@ -137,8 +139,8 @@ public class Camera implements MovableInterface, ControllableMKInterface {
                 if(rotate)
                     rotateCamera(ticks);
             } else {
-                if(fixedOrientation && !mouseListener.isVisible())
-                    mouseListener.show();
+                if(fixedOrientation && !MOUSE_LISTENER.isVisible())
+                    MOUSE_LISTENER.show();
                 rotate = false;
             }
         }
@@ -151,12 +153,12 @@ public class Camera implements MovableInterface, ControllableMKInterface {
     private void rotateCamera(long ticks) {
         int t = 1;
         if(rotate) {
-            mouseListener.hide();
+            MOUSE_LISTENER.hide();
             t = -1;
         }
         Matrix rot = cam.getBack();
-        int dx = mouseListener.getDeltaX()*t;
-        int dy = mouseListener.getDeltaY()*t;
+        int dx = MOUSE_LISTENER.getDeltaX()*t;
+        int dy = MOUSE_LISTENER.getDeltaY()*t;
         float ts = 0.2f * ticks;
         float tsy = ts;
 
@@ -227,10 +229,7 @@ public class Camera implements MovableInterface, ControllableMKInterface {
 
     public void setFixedOrientation(boolean fixedOrientation) {
         this.fixedOrientation = fixedOrientation;
-        if(fixedOrientation)
-            mouseListener.show();
-        else
-            mouseListener.hide();
+        cursorVisibility();
     }
 
 
@@ -252,8 +251,8 @@ public class Camera implements MovableInterface, ControllableMKInterface {
                     shiftCenObj.scalarMul(obj.getCharacteristicSize()[0]);
                     objBound = obj.getTransformedCenter().calcAdd(shiftCenObj);
                     radius = objCenBuf.calcSub(Interact2D.project3D2D(cam, buffer, objBound)).length();
-                    if(objCenBuf.calcSub(new SimpleVector(mouseListener.getMouseX(),
-                            mouseListener.getMouseY(), 0)).length() < radius) {
+                    if(objCenBuf.calcSub(new SimpleVector(MOUSE_LISTENER.getMouseX(),
+                            MOUSE_LISTENER.getMouseY(), 0)).length() < radius) {
                         gameWorld.setSelectObject(obj);
                         return true;
                     }
@@ -264,14 +263,16 @@ public class Camera implements MovableInterface, ControllableMKInterface {
     }
 
     private void changeFixation() {
-        if(fixedOrientation) {
-            fixedOrientation = false;
-            mouseListener.hide();
-        } else {
-            fixedOrientation = true;
-            mouseListener.show();
-        }
+        fixedOrientation = !fixedOrientation;
+        cursorVisibility();
         allFalse();
+    }
+
+    private void cursorVisibility() {
+        if(fixedOrientation)
+            MOUSE_LISTENER.show();
+        else
+            MOUSE_LISTENER.hide();
     }
 
 }

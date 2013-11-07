@@ -16,7 +16,8 @@ public abstract class PhysObject3D extends Object3D implements SelectableInterfa
     private SimpleVector acceleration;
     protected int[] characteristicSize;
 
-    protected boolean select = false;
+    protected boolean select    = false;
+    protected boolean movable   = false;
 
     /**
      * Create PhysObject3D based on Object3D and vector velocity, acceleration by default the zero vector
@@ -101,10 +102,15 @@ public abstract class PhysObject3D extends Object3D implements SelectableInterfa
 		this.velocity.add(dVelocity);
 	}
 
+    public boolean isMovable() {
+        return  movable;
+    }
+
     /**
      * Calculates the acceleration of the PhysObject3D  by force acting on it
      * @param force the vector acting force
      */
 	protected abstract void calcAcceleration(SimpleVector force);
+
 
 }
