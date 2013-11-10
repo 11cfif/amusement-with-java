@@ -67,6 +67,9 @@ public abstract class StarSystem extends GameWorld{
             for (MassObject3D e : ships)
                 e.calcLocation(0.1f);
 
+            if(selectObject instanceof ControllableMKInterface && tickerCamPos.getTicks() != 0)
+                camera.lookTo(selectObject);
+
             Main.KEYBOARD_LISTENER.setMainState();
             while(Main.KEYBOARD_LISTENER.getMainState() != KeyState.NONE) {
                 Main.KEYBOARD_LISTENER.pollControls();
@@ -74,13 +77,21 @@ public abstract class StarSystem extends GameWorld{
             }
             if((doLoop = pollControls())) {
                 applyControl(ticks, buffer);
+               // System.out.println(this.getClass().toString() + " 1 step");
                 if(selectObject instanceof ControllableMKInterface) {
+
+              //      System.out.println(this.getClass().toString() + " 2 step");
                     ((ControllableMKInterface) selectObject).pollControls();
                     ((ControllableMKInterface) selectObject).applyControl(ticks, buffer);
+                    camera.applyControl(ticks, buffer);
                 } else {
+
+               //     System.out.println(this.getClass().toString() + " 3 step");
                     camera.pollControls();
                     camera.applyControl(ticks, buffer);
                 }
+
+               // System.out.println(this.getClass().toString() + " 4 step");
             }
         }
 
@@ -95,6 +106,10 @@ public abstract class StarSystem extends GameWorld{
 
     public ArrayList<MassAttractObject3D> getSystem() {
         return system;
+    }
+
+    public ArrayList<Ship> getShip() {
+        return ships;
     }
 
     public void addShip(Ship ship) {

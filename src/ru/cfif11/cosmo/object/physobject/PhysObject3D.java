@@ -14,6 +14,9 @@ public abstract class PhysObject3D extends Object3D implements SelectableInterfa
 
     private SimpleVector velocity;
     private SimpleVector acceleration;
+
+    private SimpleVector upVector;
+    private SimpleVector sideVector;
     protected int[] characteristicSize;
 
     protected boolean select    = false;
@@ -38,6 +41,21 @@ public abstract class PhysObject3D extends Object3D implements SelectableInterfa
     @Override
     public void setSelect (boolean select) {
         this.select = select;
+    }
+
+
+    public void setOrientation(SimpleVector up, SimpleVector side) {
+        upVector    = up;
+        sideVector  = side;
+        super.setOrientation(up, side);
+    }
+
+    public SimpleVector getUpVector() {
+        return upVector;
+    }
+
+    public SimpleVector getSideVector() {
+        return sideVector;
     }
 
     public int[] getCharacteristicSize() {

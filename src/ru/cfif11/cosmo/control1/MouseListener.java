@@ -90,7 +90,7 @@ public class MouseListener {
 
     private void init() {
         try {
-            Mouse.setCursorPosition((int)(width/2.0), ((int)(height/2.0) ));
+            setCursorOnCenter();
             setLastCoordMouse();
             if (!Mouse.isCreated()) {
                 Mouse.create();
@@ -104,6 +104,18 @@ public class MouseListener {
     private void setLastCoordMouse() {
         lastMouseX = Mouse.getX();
         lastMouseY = Mouse.getY();
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setCursorOnCenter() {
+        Mouse.setCursorPosition((int)(width/2.0), ((int)(height/2.0) ));
     }
 
 }

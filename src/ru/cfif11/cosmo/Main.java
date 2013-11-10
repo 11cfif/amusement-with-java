@@ -42,10 +42,12 @@ public class Main {
         TEX_MAN.addTexture("StarRad", new Texture("resources/texture/form/radar/star.jpg"));
         TEX_MAN.addTexture("PlanetRad", new Texture("resources/texture/form/radar/planet.jpg"));
         TEX_MAN.addTexture("SputnikRad", new Texture("resources/texture/form/radar/sputnik.jpg"));
+        TEX_MAN.addTexture("ShipRad", new Texture("resources/texture/form/radar/ship.jpg"));
         TEX_MAN.addTexture("Information", new Texture("resources/texture/form/information/information.jpg"));
         TEX_MAN.addTexture("StarInf", new Texture("resources/texture/form/information/select/star.jpg"));
         TEX_MAN.addTexture("PlanetInf", new Texture("resources/texture/form/information/select/planet.jpg"));
         TEX_MAN.addTexture("SputnikInf", new Texture("resources/texture/form/information/select/sputnik.jpg"));
+        TEX_MAN.addTexture("ShipInf", new Texture("resources/texture/form/information/select/ship.jpg"));
         TEX_MAN.addTexture("CameraInf", new Texture("resources/texture/form/information/select/camera.jpg"));
         TEX_MAN.addTexture("LookerInf", new Texture("resources/texture/form/information/select/looker.jpg"));
         TEX_MAN.addTexture("NullInf", new Texture("resources/texture/form/information/select/null.jpg"));

@@ -3,6 +3,7 @@ package ru.cfif11.cosmo.scene;
 import com.threed.jpct.FrameBuffer;
 import com.threed.jpct.IRenderer;
 import ru.cfif11.cosmo.Ticker;
+import ru.cfif11.cosmo.control1.MouseListener;
 import ru.cfif11.cosmo.object.Camera;
 
 /**
@@ -14,11 +15,13 @@ public class Scene{
     private GameWorld       gameWorld;
     private Camera          camera;
     private FrameBuffer     buffer;
+    public static MouseListener MOUSE_LISTENER;
 
     public Scene(Ticker ticker, GameWorld gameWorld) {
         buffer = new FrameBuffer(1024, 768, FrameBuffer.SAMPLINGMODE_NORMAL);
         buffer.disableRenderer(IRenderer.RENDERER_SOFTWARE);
         buffer.enableRenderer(IRenderer.RENDERER_OPENGL);
+        MOUSE_LISTENER = new MouseListener(buffer);
         this.gameWorld  = gameWorld;
         camera          = new Camera(gameWorld, ticker, buffer);
         gameWorld.tunePositionCamera(camera);

@@ -4,6 +4,7 @@ import com.threed.jpct.FrameBuffer;
 import ru.cfif11.cosmo.locations.StarSystem;
 import ru.cfif11.cosmo.object.Camera;
 import ru.cfif11.cosmo.object.physobject.MassAttractObject3D;
+import ru.cfif11.cosmo.object.physobject.Ship;
 import ru.cfif11.cosmo.scene.GraphicForm;
 
 import java.awt.*;
@@ -37,6 +38,10 @@ public class Radar extends GraphicForm {
             prim = new RadarGraphPrimitive(x-widthDest, y, 8, 8, 4, 4, getNameTypeObj(obj.getName()));
             primitives.put(prim.getName(), prim);
         }
+        for (Ship obj : world.getShip()) {
+            prim = new RadarGraphPrimitive(x-widthDest, y, 8, 8, 4, 4, getNameTypeObj(obj.getName()));
+            primitives.put(prim.getName(), prim);
+        }
 
     }
 
@@ -46,7 +51,8 @@ public class Radar extends GraphicForm {
         primitives.get("Select").blit(buffer);
         for (MassAttractObject3D obj : world.getSystem())
             primitives.get(getNameTypeObj(obj.getName())).blit(buffer);
-
+        for (Ship obj : world.getShip())
+            primitives.get(getNameTypeObj(obj.getName())).blit(buffer);
     }
 
 
@@ -89,6 +95,11 @@ public class Radar extends GraphicForm {
 
     private void calcPrimitives(Camera camera) {
         for (MassAttractObject3D obj : world.getSystem()) {
+            primitives.get(getNameTypeObj(obj.getName())).calcCoordinates(this, camera, obj);
+            if(obj.equals(world.getSelectObject()))
+                primitives.get("Select").calcCoordinates(this, camera, obj);
+        }
+        for (Ship obj : world.getShip()) {
             primitives.get(getNameTypeObj(obj.getName())).calcCoordinates(this, camera, obj);
             if(obj.equals(world.getSelectObject()))
                 primitives.get("Select").calcCoordinates(this, camera, obj);
