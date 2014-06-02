@@ -5,7 +5,7 @@ import com.threed.jpct.World;
 import org.lwjgl.opengl.Display;
 import ru.cfif11.cosmo.Main;
 import ru.cfif11.cosmo.Ticker;
-import ru.cfif11.cosmo.control1.ControllableMKInterface;
+import ru.cfif11.cosmo.control.ControllableMKInterface;
 import ru.cfif11.cosmo.object.Camera;
 import ru.cfif11.cosmo.object.physobject.PhysObject3D;
 

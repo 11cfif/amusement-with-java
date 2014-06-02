@@ -1,110 +1,237 @@
 package ru.cfif11.cosmo.object.physobject;
 
+import java.util.*;
+
 import com.threed.jpct.Object3D;
 import com.threed.jpct.SimpleVector;
 import ru.cfif11.cosmo.object.SelectableInterface;
+import ru.cfif11.cosmo.physics.*;
 
 /**
  * Abstract class PhysObject3D extends Object3D(jpct.lib).
  * It has physical velocity and acceleration parameters.
  */
-public abstract class PhysObject3D extends Object3D implements SelectableInterface{
+public class PhysObject3D extends Object3D implements SelectableInterface {
 
 	private static final long serialVersionUID = 2530831725509380538L;
 
-    private SimpleVector velocity;
-    private SimpleVector acceleration;
-    protected int[] characteristicSize;
+	private SimpleVector velocity;
+	private SimpleVector acceleration = new SimpleVector();
 
-    protected boolean select = false;
+	private double mass;
+	private double charge;
+	private double temperature;
+	private int[] characteristicSizes;
+	private boolean select = false;
 
-    /**
-     * Create PhysObject3D based on Object3D and vector velocity, acceleration by default the zero vector
-     * @param obj the Object3D
-     * @param velocity the initial velocity
-     */
-    PhysObject3D(Object3D obj, String name, SimpleVector velocity) {
-		super(obj);
-        setName(name);
-		this.velocity = velocity;
-		this.acceleration = new SimpleVector();
+	private Set<AppliedInteraction> interactionTypes;
+
+	private List<Interaction> interactions = new ArrayList<>();
+
+	//========================== static Common API ==========================
+
+	public static Builder newBuilder(Object3D object3D, String name) {
+		return new Builder(object3D, name);
+	}
+	public static Builder newBuilder(Object3D object3D, String name, AppliedInteraction... types) {
+		return new Builder(object3D, name, types);
 	}
 
-    @Override
-    public boolean isSelect() {
-        return select;
-    }
+	public static PhysObject3D createPhysObject3D(Object3D object3D, String name, AppliedInteraction... types) {
+		return newBuilder(object3D, name, types).build();
+	}
 
-    @Override
-    public void setSelect (boolean select) {
-        this.select = select;
-    }
+	//========================== Common API ==========================
 
-    public int[] getCharacteristicSize() {
-        return characteristicSize;
-    }
+	@Override
+	public boolean isSelect() {
+		return select;
+	}
 
-    /**
-     *  Calculates the new location of the PhysObject3D to a new step
-     * @param dT the time step
-     */
-    public void calcLocation(float dT){
-        calcVelocity(dT);
-        SimpleVector dLocation = new SimpleVector(this.velocity);
-        dLocation.scalarMul(dT);
-        translate(dLocation);
-    }
+	@Override
+	public void setSelect(boolean select) {
+		this.select = select;
+	}
 
-    /**
-     * Sets the velocity of the PhysObject3D
-     * @param velocity the velocity vector
-     */
-	protected void setVelocity(SimpleVector velocity) {
+	public int[] getCharacteristicSizes() {
+		return characteristicSizes;
+	}
+
+	public SimpleVector getVelocity() {
+		return velocity;
+	}
+
+	public SimpleVector getAcceleration() {
+		return acceleration;
+	}
+
+	public Set<AppliedInteraction> getInteractionTypes() {
+		return interactionTypes;
+	}
+
+	public double getMass() {
+		return mass;
+	}
+
+	public double getCharge() {
+		return charge;
+	}
+
+	public double getTemperature() {
+		return temperature;
+	}
+
+	public void addInteraction(Interaction interaction) {
+		this.interactions.add(interaction);
+	}
+
+	public void removeInteraction(Interaction interaction) {
+		this.interactions.remove(interaction);
+	}
+
+	/**
+	 * Calculates the new location of the PhysObject3D to a new step
+	 *
+	 * @param dT the time step
+	 */
+	public void calcLocation(float dT) {
+		calcVelocity(dT);
+		SimpleVector dLocation = new SimpleVector(this.velocity);
+		dLocation.scalarMul(dT);
+		translate(dLocation);
+	}
+
+	/**
+	 * Sets the velocity of the PhysObject3D
+	 *
+	 * @param velocity the velocity vector
+	 */
+	public void setVelocity(SimpleVector velocity) {
 		this.velocity = velocity;
 	}
 
-    /**
-     * Sets the velocity of the PhysObject3D based on the three parameters
-     * @param vx the X component of the velocity
-     * @param vy the Y component of the velocity
-     * @param vz the Z component of the velocity
-     */
-	protected void setVelocity(float vx, float vy, float vz) {
+	/**
+	 * Sets the velocity of the PhysObject3D based on the three parameters
+	 *
+	 * @param vx the X component of the velocity
+	 * @param vy the Y component of the velocity
+	 * @param vz the Z component of the velocity
+	 */
+	public void setVelocity(float vx, float vy, float vz) {
 		this.acceleration.set(vx, vy, vz);
 	}
 
-    /**
-     * Sets the acceleration of the PhysObject3D based on the three parameters
-     * @param ax the X component of the acceleration
-     * @param ay the Y component of the acceleration
-     * @param az the Z component of the acceleration
-     */
-    void setAcceleration(float ax, float ay, float az) {
-		this.acceleration.set(ax, ay, az);
-	}
-
-    /**
-     * Sets the acceleration of the PhysObject3D
-     * @param acceleration the velocity vector
-     */
-    void setAccelaration(SimpleVector acceleration) {
+	public void setAcceleration(SimpleVector acceleration) {
 		this.acceleration = acceleration;
 	}
 
-    /**
-     *  Calculates the new velocity of the PhysObject3D to a new step
-     * @param dT the time step
-     */
-    void calcVelocity(float dT){
+	public boolean isConsiderInteraction(InteractionType key) {
+		return true;
+	}
+
+	public InteractionWithObject[] getInteraction(InteractionType key) {
+		return new InteractionWithObject[0];
+		//todo:
+	}
+
+	public class AppliedInteraction {
+
+		private InteractionType interactionType;
+		private final InteractionType type;
+		private final boolean considered;
+
+		public AppliedInteraction(InteractionType interactionType, InteractionType type, boolean considered) {
+			this.interactionType = interactionType;
+			this.type = type;
+			this.considered = considered;
+		}
+
+		public boolean isConsidered() {
+			return considered;
+		}
+
+		public InteractionType getType() {
+			return type;
+		}
+	}
+
+	//========================== private implementation ==========================
+
+	private PhysObject3D(Object3D obj, String name, SimpleVector velocity, int[] sizes, Set<AppliedInteraction> types,
+		double mass, double charge, double temperature)
+	{
+		super(obj);
+		setName(name);
+		this.velocity = velocity;
+		this.acceleration = new SimpleVector();
+		this.velocity = velocity;
+		this.characteristicSizes = sizes;
+		this.interactionTypes = types;
+		this.mass = mass;
+		this.charge = charge;
+		this.temperature = temperature;
+	}
+
+	private void calcVelocity(float dT) {
 		SimpleVector dVelocity = new SimpleVector(this.acceleration);
 		dVelocity.scalarMul(dT);
 		this.velocity.add(dVelocity);
 	}
 
-    /**
-     * Calculates the acceleration of the PhysObject3D  by force acting on it
-     * @param force the vector acting force
-     */
-	protected abstract void calcAcceleration(SimpleVector force);
+	//========================== Builder ==========================
+
+	public static class Builder {
+
+		private Object3D object3D;
+		private String name;
+		private SimpleVector velocity;
+		private double mass;
+		private double charge;
+		private double temperature;
+		private int[] characteristicSizes;
+		private Set<AppliedInteraction> types;
+
+		Builder(Object3D object3D, String name, AppliedInteraction... types) {
+			this.object3D = object3D;
+			this.name = name;
+			this.types.addAll(Arrays.asList(types));
+		}
+
+		public final Builder withMass(double mass) {
+			this.mass = mass;
+			return this;
+		}
+
+		public final Builder withInteractionTypes(AppliedInteraction... types) {
+			this.types.addAll(Arrays.asList(types));
+			return this;
+		}
+
+		public final Builder withCharge(double charge) {
+			this.charge = charge;
+			return this;
+		}
+
+		public final Builder withTemperature(double temperature) {
+			this.temperature = temperature;
+			return this;
+		}
+
+		public final Builder withVelocity(SimpleVector velocity) {
+			this.velocity = velocity;
+			return this;
+		}
+
+		public final Builder withCharacteristicSize(int[] sizes) {
+			this.characteristicSizes = sizes;
+			return this;
+		}
+
+		public PhysObject3D build() {
+			return new PhysObject3D(object3D, name, velocity != null ? velocity : new SimpleVector(),
+				characteristicSizes, types, mass, charge, temperature);
+		}
+
+	}
 
 }

@@ -1,10 +1,9 @@
 package ru.cfif11.cosmo.manager;
 
-import ru.cfif11.cosmo.Ticker;
-import ru.cfif11.cosmo.locations.SolarSystemLoc;
-import ru.cfif11.cosmo.scene.GameWorld;
-
 import java.util.ArrayList;
+
+import ru.cfif11.cosmo.Ticker;
+import ru.cfif11.cosmo.scene.GameWorld;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,21 +11,21 @@ import java.util.ArrayList;
  */
 public class LocationManager {
 
-    private ArrayList<GameWorld> locations;
-    private Ticker ticker;
+	private ArrayList<GameWorld> locations;
+	private Ticker ticker;
 
-    public LocationManager(Ticker ticker) {
-        locations = new ArrayList<GameWorld>();
-        this.ticker = ticker;
-        init();
-    }
+	public LocationManager(Ticker ticker) {
+		locations = new ArrayList<>();
+		this.ticker = ticker;
+		init();
+	}
 
-    private void init() {
-        GameWorld temp = new SolarSystemLoc(ticker);
-        locations.add(temp);
-    }
+	private void init() {
+		// GameWorld temp = new SolarSystemLoc(ticker);
+//        locations.add(temp);
+	}
 
-    public GameWorld getGameWorld(int i) {
-        return locations.get(i);
-    }
+	public GameWorld getGameWorld(int i) {
+		return locations.get(i);
+	}
 }

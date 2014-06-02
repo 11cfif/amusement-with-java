@@ -1,4 +1,4 @@
-package ru.cfif11.cosmo.control1;
+package ru.cfif11.cosmo.control;
 
 import com.threed.jpct.FrameBuffer;
 

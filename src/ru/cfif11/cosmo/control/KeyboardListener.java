@@ -1,11 +1,11 @@
-package ru.cfif11.cosmo.control1;
-
-import com.threed.jpct.util.KeyMapper;
-import com.threed.jpct.util.KeyState;
+package ru.cfif11.cosmo.control;
 
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Set;
+
+import com.threed.jpct.util.KeyMapper;
+import com.threed.jpct.util.KeyState;
 
 /**
  * Created with IntelliJ IDEA.
