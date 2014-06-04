@@ -1,9 +1,6 @@
 package ru.cfif11.cosmo;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Galkin Aleksandr.
- *
  * This class is a time counter. Based on it is read the mouse event and buttons, as well as calculated Physics.
  */
 public class Ticker {
@@ -22,10 +19,10 @@ public class Ticker {
 
     /**
      * Creates a time counter based on the time interval in milliseconds.
-     * @param tickrateMS the time interval in milliseconds
+     * @param tickRateMS the time interval in milliseconds
      */
-    public Ticker(int tickrateMS) {
-        rate = tickrateMS;
+    public Ticker(int tickRateMS) {
+        rate = tickRateMS;
         s2 = Ticker.getTime();
     }
 

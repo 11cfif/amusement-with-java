@@ -33,6 +33,7 @@ public class PhysObject3D extends Object3D implements SelectableInterface {
 	public static Builder newBuilder(Object3D object3D, String name) {
 		return new Builder(object3D, name);
 	}
+
 	public static Builder newBuilder(Object3D object3D, String name, AppliedInteraction... types) {
 		return new Builder(object3D, name, types);
 	}
@@ -129,20 +130,35 @@ public class PhysObject3D extends Object3D implements SelectableInterface {
 		return true;
 	}
 
-	public InteractionWithObject[] getInteraction(InteractionType key) {
-		return new InteractionWithObject[0];
-		//todo:
+	public void calculate(Map.Entry<InteractionType, Set<PhysObject3D>> typeSetsEntry, float dT) {
+		if(isConsiderInteraction(typeSetsEntry.getKey())) {
+			for(PhysObject3D minorObj : typeSetsEntry.getValue()) {
+				for(InteractionWithObject interWithObj : getInteraction(typeSetsEntry.getKey())) {
+					interWithObj.interactWithObject(this, minorObj);
+				}
+			}
+		}
+		calcLocation(dT);
 	}
 
-	public class AppliedInteraction {
+	@Override
+	public String toString() {
+		return "PhysObj " + getName() +
+			"( pos: " + getTransformedCenter() +
+			", vel:" + velocity +
+			", accel:" + acceleration +
+			", mass:" + mass +
+			", charge:" + charge +
+			", temperature:" + temperature + ")";
+	}
 
-		private InteractionType interactionType;
+	public static class AppliedInteraction {
+
 		private final InteractionType type;
 		private final boolean considered;
 
-		public AppliedInteraction(InteractionType interactionType, InteractionType type, boolean considered) {
-			this.interactionType = interactionType;
-			this.type = type;
+		public AppliedInteraction(InteractionType interactionType, boolean considered) {
+			this.type = interactionType;
 			this.considered = considered;
 		}
 
@@ -178,6 +194,16 @@ public class PhysObject3D extends Object3D implements SelectableInterface {
 		this.velocity.add(dVelocity);
 	}
 
+	private List<InteractionWithObject> getInteraction(InteractionType key) {
+		List<InteractionWithObject> interWithObjects = new ArrayList<>();
+		for (Interaction interaction : interactions) {
+			if(interaction instanceof InteractionWithObject && interaction.getInteractionType() == key)
+				interWithObjects.add((InteractionWithObject)interaction);
+		}
+		return interWithObjects;
+	}
+
+
 	//========================== Builder ==========================
 
 	public static class Builder {
@@ -189,12 +215,13 @@ public class PhysObject3D extends Object3D implements SelectableInterface {
 		private double charge;
 		private double temperature;
 		private int[] characteristicSizes;
-		private Set<AppliedInteraction> types;
+		private Set<AppliedInteraction> types = new HashSet<>();
 
 		Builder(Object3D object3D, String name, AppliedInteraction... types) {
 			this.object3D = object3D;
 			this.name = name;
-			this.types.addAll(Arrays.asList(types));
+			if(types != null)
+				this.types.addAll(Arrays.asList(types));
 		}
 
 		public final Builder withMass(double mass) {
@@ -203,7 +230,8 @@ public class PhysObject3D extends Object3D implements SelectableInterface {
 		}
 
 		public final Builder withInteractionTypes(AppliedInteraction... types) {
-			this.types.addAll(Arrays.asList(types));
+			if(types != null)
+				this.types.addAll(Arrays.asList(types));
 			return this;
 		}
 
@@ -219,6 +247,11 @@ public class PhysObject3D extends Object3D implements SelectableInterface {
 
 		public final Builder withVelocity(SimpleVector velocity) {
 			this.velocity = velocity;
+			return this;
+		}
+
+		public final Builder withInitialPos(SimpleVector position) {
+			object3D.setOrigin(position);
 			return this;
 		}
 

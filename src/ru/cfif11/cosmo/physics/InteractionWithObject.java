@@ -10,6 +10,11 @@ public abstract class InteractionWithObject implements Interaction {
 		this.type = type;
 	}
 
+	@Override
+	public InteractionType getInteractionType() {
+		return type;
+	}
+
 	public abstract void interactWithObject(PhysObject3D mainObject, PhysObject3D minorObject);
 
 }

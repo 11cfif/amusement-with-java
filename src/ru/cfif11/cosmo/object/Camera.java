@@ -1,9 +1,8 @@
 package ru.cfif11.cosmo.object;
 
-import com.threed.jpct.FrameBuffer;
-import com.threed.jpct.Interact2D;
-import com.threed.jpct.Matrix;
-import com.threed.jpct.SimpleVector;
+import java.util.Enumeration;
+
+import com.threed.jpct.*;
 import org.lwjgl.opengl.Display;
 import ru.cfif11.cosmo.Main;
 import ru.cfif11.cosmo.Ticker;
@@ -11,8 +10,6 @@ import ru.cfif11.cosmo.control.ControllableMKInterface;
 import ru.cfif11.cosmo.control.MouseListener;
 import ru.cfif11.cosmo.object.physobject.PhysObject3D;
 import ru.cfif11.cosmo.scene.GameWorld;
-
-import java.util.Enumeration;
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,8 +30,8 @@ public class Camera implements MovableInterface, ControllableMKInterface {
 	private int width;
 
 
-	public static final String[] KEYS = new String[]{"Up", "Down", "Left", "Right", "W",
-			"Q", "C", "Page Up", "Page Down"};
+	public static final String[] KEYS = new String[] {"Up", "Down", "Left", "Right", "W",
+		"Q", "C", "Page Up", "Page Down"};
 
 	private boolean[] keyStates = new boolean[KEYS.length];
 
@@ -240,6 +237,7 @@ public class Camera implements MovableInterface, ControllableMKInterface {
 		SimpleVector objCenBuf;
 		SimpleVector objBound;
 		SimpleVector shiftCenObj;
+		@SuppressWarnings("unchecked")
 		Enumeration<PhysObject3D> objs = gameWorld.getWorld().getObjects();
 		float radius;
 		while (objs.hasMoreElements()) {
@@ -248,13 +246,15 @@ public class Camera implements MovableInterface, ControllableMKInterface {
 			if (fov <= cam.getMaxFOV()) {
 				objCenBuf = Interact2D.projectCenter3D2D(buffer, obj);
 				if ((objCenBuf.x > 0 && objCenBuf.x < width) && (
-						objCenBuf.y > 0 && objCenBuf.y < height)) {
+					objCenBuf.y > 0 && objCenBuf.y < height))
+				{
 					shiftCenObj = cam.getSideVector();
 					shiftCenObj.scalarMul(obj.getCharacteristicSizes()[0]);
 					objBound = obj.getTransformedCenter().calcAdd(shiftCenObj);
 					radius = objCenBuf.calcSub(Interact2D.project3D2D(cam, buffer, objBound)).length();
 					if (objCenBuf.calcSub(new SimpleVector(mouseListener.getMouseX(),
-							mouseListener.getMouseY(), 0)).length() < radius) {
+						mouseListener.getMouseY(), 0)).length() < radius)
+					{
 						gameWorld.setSelectObject(obj);
 						return true;
 					}

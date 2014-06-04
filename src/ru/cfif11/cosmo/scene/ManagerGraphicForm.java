@@ -1,9 +1,9 @@
 package ru.cfif11.cosmo.scene;
 
+import java.util.ArrayList;
+
 import com.threed.jpct.FrameBuffer;
 import ru.cfif11.cosmo.object.Camera;
-
-import java.util.ArrayList;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,19 +12,19 @@ import java.util.ArrayList;
 public class ManagerGraphicForm {
 
 
-    private ArrayList<GraphicForm> graphForms;
+	private ArrayList<GraphicForm> graphForms;
 
-    public ManagerGraphicForm(ArrayList<GraphicForm> graphForms) {
-        this.graphForms = graphForms;
-    }
+	public ManagerGraphicForm(ArrayList<GraphicForm> graphForms) {
+		this.graphForms = graphForms;
+	}
 
-    public void refresh(Camera camera) {
-        for(GraphicForm gForm : graphForms)
-            gForm.refresh(camera);
-    }
+	public void refresh(Camera camera) {
+		for (GraphicForm gForm : graphForms)
+			gForm.refresh(camera);
+	}
 
-    public void drawGraphForm(FrameBuffer buffer) {
-        for(GraphicForm gForm : graphForms)
-            gForm.draw(buffer);
-    }
+	public void drawGraphForm(FrameBuffer buffer) {
+		for (GraphicForm gForm : graphForms)
+			gForm.draw(buffer);
+	}
 }

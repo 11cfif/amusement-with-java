@@ -4,6 +4,7 @@ import java.awt.*;
 
 import com.threed.jpct.FrameBuffer;
 import ru.cfif11.cosmo.object.Camera;
+import ru.cfif11.cosmo.scene.GameWorld;
 import ru.cfif11.cosmo.scene.GraphicForm;
 
 /**
@@ -19,7 +20,7 @@ public class Radar extends GraphicForm {
 	private static float MaxDestToRad = 5000;
 	private static float MinDestToRad = 100;
 
-	public Radar(int x, int y, int width, int height, int widthDest, int heightDest, String texture/*, StarSystem world*/) {
+	public Radar(int x, int y, int width, int height, int widthDest, int heightDest, String texture, GameWorld world) {
 		super(x, y, width, height, widthDest, heightDest, texture);
 		//    this.world = world;
 		//  setNameGameWorld(world.toString());

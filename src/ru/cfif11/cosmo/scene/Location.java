@@ -1,24 +1,22 @@
-package ru.cfif11.cosmo.locations.enumeration;
+package ru.cfif11.cosmo.scene;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ru.cfif11.cosmo.object.physobject.Medium;
 import ru.cfif11.cosmo.object.physobject.PhysObject3D;
-import ru.cfif11.cosmo.physics.PhysEngine;
 
 public class Location {
 
 	private final List<PhysObject3D> objects = new ArrayList<>();
 	private final List<Medium> mediums = new ArrayList<>();
+	private PhysObject3D selectObject = null;
 
-	private PhysEngine engine;
 
 	public Location(List<PhysObject3D> objects, List<Medium> mediums) {
 		this.objects.addAll(objects);
-		this.mediums.addAll(mediums);
-		this.engine = new PhysEngine(this);
-		initLocation();
+		//this.mediums.addAll(mediums);
+		init();
 	}
 
 	public List<PhysObject3D> getObjects() {
@@ -30,10 +28,23 @@ public class Location {
 	}
 
 	public void addPhysObject(PhysObject3D physObject3D) {
-		engine.addPhysObject(physObject3D);
+		objects.add(physObject3D);
 	}
 
-	private void initLocation() {
-		engine.init();
+	public void init() {
+
+	}
+
+	public PhysObject3D getSelectObject() {
+		return selectObject;
+	}
+
+	public void setSelectObject(PhysObject3D selectObject) {
+		this.selectObject = selectObject;
+	}
+
+	@Override
+	public String toString() {
+		return objects.toString();
 	}
 }

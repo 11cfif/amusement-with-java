@@ -8,6 +8,6 @@ import com.threed.jpct.FrameBuffer;
  */
 public interface MovableInterface {
 
-    public void move(long ticks, FrameBuffer buffer);
+	public void move(long ticks, FrameBuffer buffer);
 
 }

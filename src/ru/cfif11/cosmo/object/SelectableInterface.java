@@ -7,7 +7,8 @@ package ru.cfif11.cosmo.object;
 public interface SelectableInterface {
 
 
-    public boolean isSelect();
-    public void setSelect(boolean select);
+	public boolean isSelect();
+
+	public void setSelect(boolean select);
 
 }

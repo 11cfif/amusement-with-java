@@ -7,6 +7,7 @@ import com.threed.jpct.FrameBuffer;
  * User: Galkin Aleksandr
  */
 public interface ControllableMKInterface {
-    boolean pollControls();
-    void    applyControl(long ticks, FrameBuffer buffer);
+	boolean pollControls();
+
+	void applyControl(long ticks, FrameBuffer buffer);
 }

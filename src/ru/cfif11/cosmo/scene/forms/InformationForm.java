@@ -2,6 +2,7 @@ package ru.cfif11.cosmo.scene.forms;
 
 import com.threed.jpct.FrameBuffer;
 import ru.cfif11.cosmo.object.Camera;
+import ru.cfif11.cosmo.scene.GameWorld;
 import ru.cfif11.cosmo.scene.GraphicForm;
 
 /**
@@ -15,7 +16,7 @@ public class InformationForm extends GraphicForm {
 	//  private StarSystem world;
 	private final String[] namePrimitives = new String[] {"selectObj", "mode"};
 
-	public InformationForm(int x, int y, int width, int height, int widthDest, int heightDest, String texture/*, StarSystem world*/) {
+	public InformationForm(int x, int y, int width, int height, int widthDest, int heightDest, String texture, GameWorld world) {
 		super(x, y, width, height, widthDest, heightDest, texture);
 	 /*   setNameGameWorld(world.toString());
         this.world = world;*/

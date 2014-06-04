@@ -9,42 +9,42 @@ import ru.cfif11.cosmo.object.Camera;
  * Created with IntelliJ IDEA.
  * User: Galkin Aleksandr
  */
-public class Scene{
+public class Scene {
 
-    private GameWorld       gameWorld;
-    private Camera          camera;
-    private FrameBuffer     buffer;
+	private GameWorld gameWorld;
+	private Camera camera;
+	private FrameBuffer buffer;
 
-    public Scene(Ticker ticker, GameWorld gameWorld) {
-        buffer = new FrameBuffer(1024, 768, FrameBuffer.SAMPLINGMODE_NORMAL);
-        buffer.disableRenderer(IRenderer.RENDERER_SOFTWARE);
-        buffer.enableRenderer(IRenderer.RENDERER_OPENGL);
-        this.gameWorld  = gameWorld;
-        camera          = new Camera(gameWorld, ticker, buffer);
-        gameWorld.tunePositionCamera(camera);
-    }
+	public Scene(Ticker ticker, GameWorld gameWorld) {
+		buffer = new FrameBuffer(1024, 768, FrameBuffer.SAMPLINGMODE_NORMAL);
+		buffer.disableRenderer(IRenderer.RENDERER_SOFTWARE);
+		buffer.enableRenderer(IRenderer.RENDERER_OPENGL);
+		this.gameWorld = gameWorld;
+		camera = new Camera(gameWorld, ticker, buffer);
+		gameWorld.tunePositionCamera(camera);
+	}
 
-    public void bufferReset(boolean state) {
-        buffer.clear();
-        buffer.setPaintListenerState(state);
-        gameWorld.renderScene(buffer);
-        gameWorld.draw(buffer);
-        buffer.update();
-        gameWorld.drawGraphForm(buffer, camera);
-        buffer.displayGLOnly();
-    }
+	public void bufferReset(boolean state) {
+		buffer.clear();
+		buffer.setPaintListenerState(state);
+		gameWorld.renderScene(buffer);
+		gameWorld.draw(buffer);
+		buffer.update();
+		gameWorld.drawGraphForm(buffer, camera);
+		buffer.displayGLOnly();
+	}
 
-    public void close() {
-        buffer.disableRenderer(IRenderer.RENDERER_OPENGL);
-        buffer.dispose();
-    }
+	public void close() {
+		buffer.disableRenderer(IRenderer.RENDERER_OPENGL);
+		buffer.dispose();
+	}
 
-    public boolean run() {
-        return gameWorld.run(camera, buffer);
-    }
+	public boolean run() {
+		return gameWorld.run(camera, buffer);
+	}
 
-    protected FrameBuffer getBuffer() {
-        return  buffer;
-    }
+	protected FrameBuffer getBuffer() {
+		return buffer;
+	}
 
 }

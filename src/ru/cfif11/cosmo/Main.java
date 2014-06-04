@@ -1,12 +1,13 @@
 package ru.cfif11.cosmo;
 
-import com.threed.jpct.Config;
-import com.threed.jpct.Texture;
-import com.threed.jpct.TextureManager;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.threed.jpct.*;
 import ru.cfif11.cosmo.control.KeyboardListener;
-import ru.cfif11.cosmo.manager.LocationManager;
-import ru.cfif11.cosmo.scene.GameWorld;
-import ru.cfif11.cosmo.scene.Scene;
+import ru.cfif11.cosmo.object.physobject.PhysObject3D;
+import ru.cfif11.cosmo.physics.InteractionType;
+import ru.cfif11.cosmo.scene.*;
 
 /**
  * A simple example of a planet orbiting a star. This example demonstrates the use of physics and libraries jpct
@@ -16,9 +17,10 @@ import ru.cfif11.cosmo.scene.Scene;
 public class Main {
 
 	private static final long serialVersionUID = -3626482109116766979L;
-	public static final TextureManager TEX_MAN;
-	public static final KeyboardListener KEYBOARD_LISTENER;
-	private static LocationManager locMan;
+	public static  TextureManager TEX_MAN;
+	public static KeyboardListener KEYBOARD_LISTENER;
+	private static List<PhysObject3D> objects = new ArrayList<>();
+
 	private Scene scene;
 	// static public Settings          settings;
 
@@ -29,9 +31,30 @@ public class Main {
 	private int fps = 0;
 	private long time = System.currentTimeMillis();
 
+
 	static {
+		PhysObject3D.Builder builder =
+			PhysObject3D.newBuilder(Primitives.getSphere(1),"Earth",
+			new PhysObject3D.AppliedInteraction(InteractionType.GRAVITATIONAL, false));
+		builder.withMass(9.44e+11);
+		objects.add(builder.build());
+
+		builder =
+			PhysObject3D.newBuilder(Primitives.getSphere(1),"boll",
+				new PhysObject3D.AppliedInteraction(InteractionType.GRAVITATIONAL, true))
+			.withMass(1)
+			.withInitialPos(new SimpleVector(new SimpleVector(2e+7 + 100, 0,0)));
+		objects.add(builder.build());
+
+		builder =
+			PhysObject3D.newBuilder(Primitives.getSphere(1),"boll",
+				new PhysObject3D.AppliedInteraction(InteractionType.GRAVITATIONAL, true))
+				.withMass(4)
+				.withInitialPos(new SimpleVector(new SimpleVector(2e+7 + 57, 0,0)));
+		objects.add(builder.build());
+
 		KEYBOARD_LISTENER = new KeyboardListener();
-		TEX_MAN = TextureManager.getInstance();
+		/*TEX_MAN = TextureManager.getInstance();
 		TEX_MAN.addTexture("SolarSystemPlanet_1", new Texture("resources/texture/starSystem/solarSystem/Earth.jpg"));
 		TEX_MAN.addTexture("SolarSystemStar", new Texture("resources/texture/starSystem/solarSystem/Sun.gif"));
 		TEX_MAN.addTexture("SolarSystemSputnik_1", new Texture("resources/texture/starSystem/solarSystem/Moon.jpg"));
@@ -46,7 +69,7 @@ public class Main {
 		TEX_MAN.addTexture("SputnikInf", new Texture("resources/texture/form/information/select/sputnik.jpg"));
 		TEX_MAN.addTexture("CameraInf", new Texture("resources/texture/form/information/select/camera.jpg"));
 		TEX_MAN.addTexture("LookerInf", new Texture("resources/texture/form/information/select/looker.jpg"));
-		TEX_MAN.addTexture("NullInf", new Texture("resources/texture/form/information/select/null.jpg"));
+		TEX_MAN.addTexture("NullInf", new Texture("resources/texture/form/information/select/null.jpg"));*/
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -73,10 +96,11 @@ public class Main {
 	}
 
 	private void init() {
-		locMan = new LocationManager(ticker);
+	/*	locMan = new LocationManager(ticker);
 		//создаем мир
 		GameWorld startWorld = locMan.getGameWorld(0);
-		scene = new Scene(ticker, startWorld);
+		scene = new Scene(ticker, startWorld);*/
+		scene = new Scene(ticker, new ConsoleGameWorld(ticker, new Location(objects, null)));
 	}
 
 
@@ -89,5 +113,3 @@ public class Main {
 	}
 
 }
-
-	
