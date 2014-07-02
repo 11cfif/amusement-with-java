@@ -16,7 +16,7 @@ public class Scene {
 	private FrameBuffer buffer;
 
 	public Scene(Ticker ticker, GameWorld gameWorld) {
-		buffer = new FrameBuffer(1024, 768, FrameBuffer.SAMPLINGMODE_NORMAL);
+		buffer = new FrameBuffer(1024, 768, FrameBuffer. SAMPLINGMODE_NORMAL);
 		buffer.disableRenderer(IRenderer.RENDERER_SOFTWARE);
 		buffer.enableRenderer(IRenderer.RENDERER_OPENGL);
 		this.gameWorld = gameWorld;
@@ -30,7 +30,6 @@ public class Scene {
 		gameWorld.renderScene(buffer);
 		gameWorld.draw(buffer);
 		buffer.update();
-		gameWorld.drawGraphForm(buffer, camera);
 		buffer.displayGLOnly();
 	}
 

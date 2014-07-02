@@ -1,7 +1,5 @@
 package ru.cfif11.cosmo.scene;
 
-import java.util.ArrayList;
-
 import com.threed.jpct.FrameBuffer;
 import com.threed.jpct.util.KeyState;
 import ru.cfif11.cosmo.Main;
@@ -19,10 +17,13 @@ public class ConsoleGameWorld extends GameWorld {
 	public boolean run(Camera camera, FrameBuffer buffer) {
 		boolean doLoop;
 		doLoop = true;
-		long ticks  = ticker.getTicks();
-		if (ticks > 0) {
+		if(!ticker.isStarted())
+			ticker.start();
+		else
+			ticker.waitTimestamp();
+		if (ticker.isNotOver()) {
 			//рассчитываем все силы и считаем новые местоположения объектов
-			engine.calculate(0.1f);
+			engine.calculate(ticker.getPhysTimestamp());
 
 			//используем обработчик событий для движения камеры
 
@@ -33,14 +34,9 @@ public class ConsoleGameWorld extends GameWorld {
 			}
 			doLoop = pollControls();
 		}
-		return doLoop;
+		return doLoop && ticker.isNotOver();
 	}
 
-	@Override
-	public void drawGraphForm(FrameBuffer buffer, Camera camera) {
-		if(ticker.getTicks() > 0)
-			System.out.println(getLocation().toString());
-	}
 
 	@Override
 	public void tunePositionCamera(Camera camera) {
@@ -49,12 +45,7 @@ public class ConsoleGameWorld extends GameWorld {
 
 	@Override
 	protected void initializationLocation() {
-		getLocation().init();
-		engine.init(getLocation());
+
 	}
 
-	@Override
-	protected void initializationManagerGraphForm() {
-		manGraphForm = new ManagerGraphicForm(new ArrayList<GraphicForm>());
-	}
 }

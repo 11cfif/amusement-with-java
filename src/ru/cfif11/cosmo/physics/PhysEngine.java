@@ -1,45 +1,36 @@
 package ru.cfif11.cosmo.physics;
 
-import java.util.*;
-
-import ru.cfif11.cosmo.scene.Location;
+import com.threed.jpct.SimpleVector;
 import ru.cfif11.cosmo.object.physobject.PhysObject3D;
+import ru.cfif11.cosmo.physics.interaction.InteractionType;
+import ru.cfif11.cosmo.physics.interaction.InteractionWithObject;
+import ru.cfif11.cosmo.scene.Location;
 
 public class PhysEngine {
 
-	private EnumMap<InteractionType, Set<PhysObject3D>> typesSetsPhysObject = new EnumMap<>(InteractionType.class);
+	private final Location location;
 
 	public PhysEngine(Location location) {
-		init(location);
-	}
-
-
-	public void init(Location location) {
-		for (PhysObject3D physObject : location.getObjects()) {
-			for (PhysObject3D.AppliedInteraction appliedType : physObject.getInteractionTypes()) {
-				if(typesSetsPhysObject.containsKey(appliedType.getType()))
-					typesSetsPhysObject.get(appliedType.getType()).add(physObject);
-				else
-					typesSetsPhysObject.put(appliedType.getType(), new HashSet<>(Collections.singleton(physObject)));
-			}
-		}
-	}
-
-	public void addPhysObject(PhysObject3D physObject) {
-		for (PhysObject3D.AppliedInteraction appliedType : physObject.getInteractionTypes()) {
-			if(typesSetsPhysObject.containsKey(appliedType.getType()))
-				typesSetsPhysObject.get(appliedType.getType()).add(physObject);
-			else
-				typesSetsPhysObject.put(appliedType.getType(), new HashSet<>(Collections.singleton(physObject)));
-		}
+		this.location = location;
 	}
 
 	public void calculate(float dT) {
-		for (Map.Entry<InteractionType, Set<PhysObject3D>> typeSetsEntry : typesSetsPhysObject.entrySet()) {
-			for (PhysObject3D mainObj : typeSetsEntry.getValue()) {
-				mainObj.calculate(typeSetsEntry, dT);
+		System.out.println("----------- START -----------");
+		for (PhysObject3D mainObj : location.getObjects()) {
+			mainObj.setAcceleration(SimpleVector.ORIGIN);
+			for (InteractionType interactionType : mainObj.getInteractionTypes()) {
+				for (PhysObject3D minorObj : location.getInteractingObjects(mainObj, interactionType)) {
+					for (InteractionWithObject interactionWithObject : mainObj.getInteraction(interactionType)) {
+						System.out.println("MainObj = " + mainObj + ", minorObj = " + minorObj);
+
+						System.out.println("interactionWithObject = " + interactionWithObject);
+						interactionWithObject.interactWithObject(mainObj, minorObj);
+					}
+				}
 			}
+			mainObj.calcLocation(dT);
 		}
+		System.out.println("----------- END -----------");
 	}
 
 }

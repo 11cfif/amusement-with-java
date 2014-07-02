@@ -1,11 +1,9 @@
-package ru.cfif11.cosmo.scene;
+package ru.cfif11.cosmo.scene.forms;
 
 import java.util.HashMap;
 
 import com.threed.jpct.FrameBuffer;
 import ru.cfif11.cosmo.object.Camera;
-import ru.cfif11.cosmo.scene.forms.GraphAbstract;
-import ru.cfif11.cosmo.scene.forms.GraphPrimitive;
 
 /**
  * Created with IntelliJ IDEA.

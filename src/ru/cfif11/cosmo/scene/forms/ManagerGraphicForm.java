@@ -1,4 +1,4 @@
-package ru.cfif11.cosmo.scene;
+package ru.cfif11.cosmo.scene.forms;
 
 import java.util.ArrayList;
 

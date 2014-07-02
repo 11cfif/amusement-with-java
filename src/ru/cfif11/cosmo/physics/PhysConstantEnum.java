@@ -5,7 +5,7 @@ package ru.cfif11.cosmo.physics;
  * Enumeration of the basic physical constants
  */
 public enum PhysConstantEnum {
-	gravitationalConstant(6.67300E-11);
+	gravitationalConstant(6.67400E-11);
 
 	private double value;
 

@@ -6,7 +6,7 @@ import java.util.List;
 import com.threed.jpct.*;
 import ru.cfif11.cosmo.control.KeyboardListener;
 import ru.cfif11.cosmo.object.physobject.PhysObject3D;
-import ru.cfif11.cosmo.physics.InteractionType;
+import ru.cfif11.cosmo.physics.interaction.*;
 import ru.cfif11.cosmo.scene.*;
 
 /**
@@ -26,32 +26,34 @@ public class Main {
 
 
 	//счетчик времени
-	public static int rate = 15;
-	private Ticker ticker = new Ticker(rate);
+	public static int timestamp = 15;
+	private Ticker ticker = new Ticker(timestamp, timestamp, 2000);
 	private int fps = 0;
 	private long time = System.currentTimeMillis();
 
 
 	static {
 		PhysObject3D.Builder builder =
-			PhysObject3D.newBuilder(Primitives.getSphere(1),"Earth",
-			new PhysObject3D.AppliedInteraction(InteractionType.GRAVITATIONAL, false));
-		builder.withMass(9.44e+11);
+			PhysObject3D.newBuilder(Primitives.getSphere(1),"Earth", InteractionType.GRAVITATIONAL);
+		builder.withMass(5.973e+24);
 		objects.add(builder.build());
 
 		builder =
-			PhysObject3D.newBuilder(Primitives.getSphere(1),"boll",
-				new PhysObject3D.AppliedInteraction(InteractionType.GRAVITATIONAL, true))
+			PhysObject3D.newBuilder(Primitives.getSphere(1),"boll 1", InteractionType.GRAVITATIONAL)
 			.withMass(1)
-			.withInitialPos(new SimpleVector(new SimpleVector(2e+7 + 100, 0,0)));
+			.withInitialPos(new SimpleVector(new SimpleVector(6.371e+6 + 100, 0,0)));
 		objects.add(builder.build());
 
 		builder =
-			PhysObject3D.newBuilder(Primitives.getSphere(1),"boll",
-				new PhysObject3D.AppliedInteraction(InteractionType.GRAVITATIONAL, true))
+			PhysObject3D.newBuilder(Primitives.getSphere(1),"boll 2", InteractionType.GRAVITATIONAL)
 				.withMass(4)
-				.withInitialPos(new SimpleVector(new SimpleVector(2e+7 + 57, 0,0)));
+				.withInitialPos(new SimpleVector(new SimpleVector(6.371e+6 + 57, 0,0)));
 		objects.add(builder.build());
+
+		for (PhysObject3D object : objects) {
+			object.addInteraction(InteractionWithObject.valueOf("gravity", InteractionType.GRAVITATIONAL,
+				DescriberInteraction.GRAVITY_INTERACTION));
+		}
 
 		KEYBOARD_LISTENER = new KeyboardListener();
 		/*TEX_MAN = TextureManager.getInstance();
@@ -100,12 +102,13 @@ public class Main {
 		//создаем мир
 		GameWorld startWorld = locMan.getGameWorld(0);
 		scene = new Scene(ticker, startWorld);*/
-		scene = new Scene(ticker, new ConsoleGameWorld(ticker, new Location(objects, null)));
+		scene = new Scene(ticker, new ConsoleGameWorld(ticker, new Location(objects)));
 	}
 
 
 	//основной цикл программы
 	private void loop() {
+		long time = System.currentTimeMillis();
 		while (scene.run()) {
 			scene.bufferReset(false);
 		}

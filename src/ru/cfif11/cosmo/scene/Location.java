@@ -1,38 +1,34 @@
 package ru.cfif11.cosmo.scene;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import ru.cfif11.cosmo.object.physobject.Medium;
 import ru.cfif11.cosmo.object.physobject.PhysObject3D;
+import ru.cfif11.cosmo.physics.interaction.InteractionMap;
+import ru.cfif11.cosmo.physics.interaction.InteractionType;
 
 public class Location {
 
 	private final List<PhysObject3D> objects = new ArrayList<>();
-	private final List<Medium> mediums = new ArrayList<>();
 	private PhysObject3D selectObject = null;
+	private InteractionMap interactionMap;
 
 
-	public Location(List<PhysObject3D> objects, List<Medium> mediums) {
+	public Location(List<PhysObject3D> objects) {
 		this.objects.addAll(objects);
-		//this.mediums.addAll(mediums);
-		init();
+		interactionMap = new InteractionMap(objects);
 	}
 
 	public List<PhysObject3D> getObjects() {
 		return objects;
 	}
 
-	public List<Medium> getMediums() {
-		return mediums;
-	}
-
 	public void addPhysObject(PhysObject3D physObject3D) {
 		objects.add(physObject3D);
+		interactionMap.addPhysObject(physObject3D);
 	}
 
-	public void init() {
-
+	public Set<PhysObject3D> getInteractingObjects(PhysObject3D mainObject, InteractionType type) {
+		return interactionMap.getInteractingObjects(mainObject, type);
 	}
 
 	public PhysObject3D getSelectObject() {

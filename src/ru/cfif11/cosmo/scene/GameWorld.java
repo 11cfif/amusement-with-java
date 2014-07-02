@@ -20,7 +20,6 @@ public abstract class GameWorld implements ControllableMKInterface {
 	protected World world;
 	protected Ticker ticker;
 	protected PhysEngine engine;
-	protected ManagerGraphicForm manGraphForm;
 
 	public static final String[] KEYS = new String[] {"W", "Q", "Escape"};
 	private boolean[] keyStates = new boolean[KEYS.length];
@@ -36,7 +35,6 @@ public abstract class GameWorld implements ControllableMKInterface {
 	public boolean pollControls() {
 		Main.KEYBOARD_LISTENER.recordPollСontrols(KEYS, keyStates);
 		return !keyStates[keyStates.length - 1] && !Display.isCloseRequested();
-
 	}
 
 	@Override
@@ -46,16 +44,16 @@ public abstract class GameWorld implements ControllableMKInterface {
 		}
 
 		if (keyStates[0]) {
-			if (Main.rate > 2) {
-				Main.rate--;
-				ticker.setRate(Main.rate);
+			if (Main.timestamp > 2) {
+				Main.timestamp--;
+				ticker.setTimestamp(Main.timestamp);
 			}
 		}
 
 		if (keyStates[1]) {
-			if (Main.rate < 30) {
-				Main.rate++;
-				ticker.setRate(Main.rate);
+			if (Main.timestamp < 30) {
+				Main.timestamp++;
+				ticker.setTimestamp(Main.timestamp);
 			}
 		}
 
@@ -67,16 +65,11 @@ public abstract class GameWorld implements ControllableMKInterface {
 
 	public void addPhysObject(PhysObject3D physObject3D) {
 		location.addPhysObject(physObject3D);
-		engine.addPhysObject(physObject3D);
 	}
 
 	public void setLocation(Location location) {
 		this.location = location;
-		location.init();
-		if(engine == null)
-			engine = new PhysEngine(location);
-		else
-			engine.init(location);
+		engine = new PhysEngine(location);
 	}
 
 	public World getWorld() {
@@ -101,12 +94,7 @@ public abstract class GameWorld implements ControllableMKInterface {
 
 	public abstract boolean run(Camera camera, FrameBuffer buffer);
 
-	public abstract void drawGraphForm(FrameBuffer buffer, Camera camera);
-
 	public abstract void tunePositionCamera(Camera camera);
 
 	protected abstract void initializationLocation();
-
-	protected abstract void initializationManagerGraphForm();
-
 }

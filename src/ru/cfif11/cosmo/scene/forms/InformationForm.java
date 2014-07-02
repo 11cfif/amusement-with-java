@@ -3,7 +3,6 @@ package ru.cfif11.cosmo.scene.forms;
 import com.threed.jpct.FrameBuffer;
 import ru.cfif11.cosmo.object.Camera;
 import ru.cfif11.cosmo.scene.GameWorld;
-import ru.cfif11.cosmo.scene.GraphicForm;
 
 /**
  * Created with IntelliJ IDEA.

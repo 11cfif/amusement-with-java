@@ -5,46 +5,179 @@ package ru.cfif11.cosmo;
  */
 public class Ticker {
 
+	//============ private fields ============
 
-    private int rate;
-    private long s2;
+	private long physTimestamp;
+	private long timestamp;
+	private long start = 0;
+	private long finish = 0;
+	private long lastTime;
+	private boolean notOver;
 
-    /**
-     * Returns the current time in milliseconds
-     * @return the current time
-     */
-    private static long getTime() {
-        return System.currentTimeMillis();
-    }
+	//============ private static implementation ============
 
-    /**
-     * Creates a time counter based on the time interval in milliseconds.
-     * @param tickRateMS the time interval in milliseconds
-     */
-    public Ticker(int tickRateMS) {
-        rate = tickRateMS;
-        s2 = Ticker.getTime();
-    }
+	private static long getTime() {
+		return System.currentTimeMillis();
+	}
 
-    /**
-     * Sets the time interval in milliseconds
-     * @param rate the time interval in milliseconds
-     */
-    public void setRate(int rate) {
-        this.rate = rate;
-    }
+	//============ public methods ============
 
-    /**
-     * cCalculates the time elapsed since the last access
-     * @return the time elapsed since the last treatment, if it is longer than the rate or 0
-     */
-    public int getTicks() {
-        long i = Ticker.getTime();
-        if (i - s2 > rate) {
-            int ticks = (int) ((i - s2) / (long) rate);
-            s2 += (long) rate * ticks;
-            return ticks;
-        }
-        return 0;
-    }
+	/**
+	 * Create a time counter. During the time {@code timestamp} physical system live time {@code physTimestamp}
+	 *
+	 * <p> This time counter does not stop. It switched by calling {@link #start()}.
+	 *
+	 * @param timestamp the step for read the mouse and buttons event, as well as for reset buffer
+	 * @param physTimestamp the step for physical engine.
+	 */
+	public Ticker(long timestamp, long physTimestamp) {
+		this(timestamp, physTimestamp, 0);
+	}
+
+	/**
+	 * Create a time counter. During the time {@code timestamp} physical system live time {@code physTimestamp}
+	 *
+	 * <p> This time counter will stop after a time {@code delta} after switching on.
+	 * It switched by calling {@link #start()}
+	 *
+	 * @param timestamp the step for read the mouse and buttons event, as well as for reset buffer
+	 * @param physTimestamp the step for physical engine.
+	 * @param delta the period of time after which the counter is switched off after it is switched.
+	 */
+	public Ticker(long timestamp, long physTimestamp, long delta) {
+		this.timestamp = timestamp;
+		this.physTimestamp = physTimestamp;
+		this.finish = delta;
+	}
+
+	/**
+	 * Starts this time counter to the time {@code delta}
+	 *
+	 * @param delta time during which the time counter will work
+	 * @return {@code true} if the counter works
+	 */
+	public boolean start(long delta) {
+		this.start = getTime();
+		finish = start + delta;
+		return isNotOver();
+	}
+
+	/**
+	 * Starts this time counter. If the operating time counter has not been established,
+	 * then it will work until it is set during time for work({@link #setDeltaTime(long)} or {@link #setFinish(long)})
+	 * or {@link #stop()} the timer.
+	 *
+	 * @return {@code true} if the counter works
+	 */
+	public boolean start() {
+		this.start = getTime();
+		if(finish != 0)
+			this.finish = start + finish;
+		setNotOver();
+		return isNotOver();
+	}
+
+	/**
+	 * Stops the timer.
+	 */
+	public void stop() {
+		finish = 1;
+		setNotOver();
+	}
+
+	/**
+	 * The timer counter waiting time which is equal to the timestamp.
+	 */
+	public void waitTimestamp() {
+		if(!isNotOver())
+			return;
+		long delta = getTime() - lastTime;
+		if(delta < timestamp)
+			try {
+				Thread.sleep(timestamp - delta);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		setNotOver();
+	}
+
+	/**
+	 * Returns the timestamp.
+	 *
+	 * @return the timestamp
+	 */
+	public long getTimestamp() {
+		return timestamp;
+	}
+
+	/**
+	 * Returns the step for physical engine.
+	 *
+	 * @return the step for physical engine.
+	 */
+	public float getPhysTimestamp() {
+		return physTimestamp * 0.001f;
+	}
+
+	/**
+	 * Sets the timestamp
+	 *
+	 * @param timestamp the period of time that the timer counts
+	 */
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	/**
+	 * Set the time during which the timer will run.
+	 *
+	 * @param delta the time during which the timer will run
+	 * @return {@code true} if the counter works
+	 */
+	public boolean setDeltaTime(long delta) {
+		if(isNotOver()) {
+			if (start != 0)
+				this.finish = lastTime + delta;
+			else
+				this.finish = delta;
+		}
+		return isNotOver();
+	}
+
+	/**
+	 * Sets the stop counter.
+	 *
+	 * @param finish stop time
+	 * @return {@code true} if the counter works
+	 */
+	public boolean setFinish(long finish) {
+		this.finish = finish;
+		return isNotOver();
+	}
+
+	/**
+	 * Returns {@code true} if the counter starts.
+	 *
+	 * @return {@code true} if the counter starts
+	 */
+	public boolean isStarted() {
+		return start != 0;
+	}
+
+	/**
+	 * Returns {@code false} if the counter is stopped.
+	 *
+	 * @return {@code false} if the counter is stopped
+	 */
+	public boolean isNotOver() {
+		setNotOver();
+		return notOver;
+	}
+
+	//============ private implementation ============
+
+	private void setNotOver() {
+		this.lastTime = getTime();
+		notOver = finish == 0 || finish > lastTime;
+	}
 }
