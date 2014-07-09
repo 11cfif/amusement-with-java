@@ -1,12 +1,15 @@
 package ru.cfif11.cosmo.physics.interaction;
 
 import ru.cfif11.cosmo.object.physobject.PhysObject3D;
+import ru.cfif11.cosmo.physics.Field;
 
 public abstract class DescriberInteraction {
 
 	public static final DescriberInteraction GRAVITY_INTERACTION = GravityInteraction.INSTANCE;
 
 	public abstract void describe(PhysObject3D mainObject, PhysObject3D minorObject);
+
+	public abstract void describe(Field field, PhysObject3D minorObject);
 
 	/**
 	 * Indicates whether some other object is "equal to" this one.

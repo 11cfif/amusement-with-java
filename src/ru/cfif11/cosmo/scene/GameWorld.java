@@ -24,7 +24,6 @@ public abstract class GameWorld implements ControllableMKInterface {
 	public static final String[] KEYS = new String[] {"W", "Q", "Escape"};
 	private boolean[] keyStates = new boolean[KEYS.length];
 
-	private Location location;
 
 	protected GameWorld(Ticker ticker) {
 		world = new World();
@@ -60,15 +59,14 @@ public abstract class GameWorld implements ControllableMKInterface {
 	}
 
 	public Location getLocation() {
-		return location;
+		return engine.getLocation();
 	}
 
 	public void addPhysObject(PhysObject3D physObject3D) {
-		location.addPhysObject(physObject3D);
+		engine.getLocation().addPhysObject(physObject3D);
 	}
 
 	public void setLocation(Location location) {
-		this.location = location;
 		engine = new PhysEngine(location);
 	}
 
@@ -85,11 +83,11 @@ public abstract class GameWorld implements ControllableMKInterface {
 	}
 
 	public PhysObject3D getSelectObject() {
-		return location.getSelectObject();
+		return engine.getLocation().getSelectObject();
 	}
 
 	public void setSelectObject(PhysObject3D selectObject) {
-		location.setSelectObject(selectObject);
+		engine.getLocation().setSelectObject(selectObject);
 	}
 
 	public abstract boolean run(Camera camera, FrameBuffer buffer);

@@ -4,7 +4,7 @@ import java.util.*;
 
 import ru.cfif11.cosmo.object.physobject.PhysObject3D;
 
-public class InteractionWithObject {
+public class Interaction {
 
 	private final List<InteractionType> types = new ArrayList<>();
 	private final List<ConditionInteraction> conditions = new ArrayList<>();
@@ -12,10 +12,10 @@ public class InteractionWithObject {
 	private final String key;
 	private final DescriberInteraction describerInteraction;
 
-	private static final Map<String, InteractionWithObject> cache =
-		Collections.synchronizedMap(new HashMap<String, InteractionWithObject>());
+	private static final Map<String, Interaction> cache =
+		Collections.synchronizedMap(new HashMap<String, Interaction>());
 
-	public static InteractionWithObject valueOf(String name, InteractionType type,
+	public static Interaction valueOf(String name, InteractionType type,
 		DescriberInteraction describerInteraction, ConditionInteraction... conditions)
 	{
 		if(type == null)
@@ -23,7 +23,7 @@ public class InteractionWithObject {
 		return valueOf(name, Arrays.asList(type), describerInteraction, conditions);
 	}
 
-	public static InteractionWithObject valueOf(String name, InteractionType[] types,
+	public static Interaction valueOf(String name, InteractionType[] types,
 		DescriberInteraction describerInteraction, ConditionInteraction... conditions)
 	{
 		if(types == null)
@@ -31,7 +31,7 @@ public class InteractionWithObject {
 		return valueOf(name, Arrays.asList(types), describerInteraction, conditions);
 	}
 
-	public static InteractionWithObject valueOf(String name, List<InteractionType> types,
+	public static Interaction valueOf(String name, List<InteractionType> types,
 		DescriberInteraction describerInteraction, ConditionInteraction... conditions)
 	{
 		if(name == null)
@@ -45,7 +45,7 @@ public class InteractionWithObject {
 		String key = generatedKey(name, types, describerInteraction.toString(), conditions);
 		if(cache.containsKey(key))
 			return cache.get(key);
-		return new InteractionWithObject(name, types, describerInteraction, key, conditions);
+		return new Interaction(name, types, describerInteraction, key, conditions);
 	}
 
 	private static String generatedKey(String name, List<InteractionType> types, String describer,
@@ -64,7 +64,7 @@ public class InteractionWithObject {
 		return result;
 	}
 
-	private InteractionWithObject(String name, List<InteractionType> types, DescriberInteraction describerInteraction,
+	private Interaction(String name, List<InteractionType> types, DescriberInteraction describerInteraction,
 		String key, ConditionInteraction... conditions)
 	{
 		if (cache.containsKey(name))
@@ -105,7 +105,7 @@ public class InteractionWithObject {
 
 	@Override
 	public boolean equals(Object obj) {
-		return (obj instanceof InteractionWithObject) && obj.toString().equals(key);
+		return (obj instanceof Interaction) && obj.toString().equals(key);
 	}
 
 	@Override

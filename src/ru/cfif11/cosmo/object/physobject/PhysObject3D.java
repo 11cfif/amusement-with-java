@@ -5,8 +5,8 @@ import java.util.*;
 import com.threed.jpct.Object3D;
 import com.threed.jpct.SimpleVector;
 import ru.cfif11.cosmo.object.SelectableInterface;
+import ru.cfif11.cosmo.physics.interaction.Interaction;
 import ru.cfif11.cosmo.physics.interaction.InteractionType;
-import ru.cfif11.cosmo.physics.interaction.InteractionWithObject;
 
 /**
  * Abstract class PhysObject3D extends Object3D(jpct.lib).
@@ -27,7 +27,7 @@ public class PhysObject3D extends Object3D implements SelectableInterface {
 
 	private Set<InteractionType> interactionTypes;
 
-	private List<InteractionWithObject> interactions = new ArrayList<>();
+	private List<Interaction> interactions = new ArrayList<>();
 
 	//========================== static Common API ==========================
 
@@ -83,15 +83,15 @@ public class PhysObject3D extends Object3D implements SelectableInterface {
 		return temperature;
 	}
 
-	public void addInteraction(InteractionWithObject interaction) {
+	public void addInteraction(Interaction interaction) {
 		this.interactions.add(interaction);
 	}
 
-	public List<InteractionWithObject> getInteractions() {
+	public List<Interaction> getInteractions() {
 		return interactions;
 	}
 
-	public void removeInteraction(InteractionWithObject interaction) {
+	public void removeInteraction(Interaction interaction) {
 		this.interactions.remove(interaction);
 	}
 
@@ -169,9 +169,9 @@ public class PhysObject3D extends Object3D implements SelectableInterface {
 		this.velocity.add(dVelocity);
 	}
 
-	public List<InteractionWithObject> getInteraction(InteractionType key) {
-		List<InteractionWithObject> interWithObjects = new ArrayList<>();
-		for (InteractionWithObject interaction : interactions) {
+	public List<Interaction> getInteraction(InteractionType key) {
+		List<Interaction> interWithObjects = new ArrayList<>();
+		for (Interaction interaction : interactions) {
 			if( interaction.hasInteractionType(key))
 				interWithObjects.add(interaction);
 		}

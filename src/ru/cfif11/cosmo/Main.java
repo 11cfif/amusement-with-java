@@ -51,7 +51,7 @@ public class Main {
 		objects.add(builder.build());
 
 		for (PhysObject3D object : objects) {
-			object.addInteraction(InteractionWithObject.valueOf("gravity", InteractionType.GRAVITATIONAL,
+			object.addInteraction(Interaction.valueOf("gravity", InteractionType.GRAVITATIONAL,
 				DescriberInteraction.GRAVITY_INTERACTION));
 		}
 
