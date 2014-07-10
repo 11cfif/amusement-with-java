@@ -1,4 +1,4 @@
-package ru.cfif11.cosmo.physics;
+package ru.cfif11.cosmo.object.physobject;
 
 import java.util.HashMap;
 import java.util.Map;

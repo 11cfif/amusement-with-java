@@ -2,12 +2,13 @@ package ru.cfif11.cosmo.physics.interaction;
 
 import java.util.*;
 
+import ru.cfif11.cosmo.object.physobject.Field;
 import ru.cfif11.cosmo.object.physobject.PhysObject3D;
 
 public class Interaction {
 
 	private final List<InteractionType> types = new ArrayList<>();
-	private final List<ConditionInteraction> conditions = new ArrayList<>();
+	private final Set<ConditionInteraction> conditions = new HashSet<>();
 	private final String name;
 	private final String key;
 	private final DescriberInteraction describerInteraction;
@@ -87,15 +88,14 @@ public class Interaction {
 		return types.contains(key);
 	}
 
-	public void interactWithObject(PhysObject3D mainObject, PhysObject3D minorObject) {
-		if(!conditions.isEmpty()) {
-			for (ConditionInteraction condition : conditions) {
-				if (condition != null && condition.isConsiderInteraction(mainObject, minorObject))
-					describerInteraction.describe(mainObject, minorObject);
-			}
-		} else {
-			describerInteraction.describe(mainObject, minorObject);
-		}
+	public void interactWithObject(PhysObject3D mainObj, PhysObject3D minorObj) {
+		if(ConditionInteraction.interactIsConsidered(conditions, mainObj, minorObj))
+			describerInteraction.describe(mainObj, minorObj);
+	}
+
+	public void interactWithField(Field field, PhysObject3D minorObj) {
+		if(ConditionInteraction.interactIsConsidered(conditions, field, minorObj))
+			describerInteraction.describe(field, minorObj);
 	}
 
 	@Override

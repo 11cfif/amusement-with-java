@@ -1,11 +1,11 @@
 package ru.cfif11.cosmo.physics.interaction;
 
 import ru.cfif11.cosmo.object.physobject.PhysObject3D;
-import ru.cfif11.cosmo.physics.Field;
+import ru.cfif11.cosmo.object.physobject.Field;
 
 public abstract class DescriberInteraction {
 
-	public static final DescriberInteraction GRAVITY_INTERACTION = GravityInteraction.INSTANCE;
+	public static final DescriberInteraction GRAVITY_INTERACTION = DescriberGravity.INSTANCE;
 
 	public abstract void describe(PhysObject3D mainObject, PhysObject3D minorObject);
 

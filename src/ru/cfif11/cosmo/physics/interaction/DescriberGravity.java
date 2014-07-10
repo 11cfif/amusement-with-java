@@ -1,14 +1,14 @@
 package ru.cfif11.cosmo.physics.interaction;
 
 import com.threed.jpct.SimpleVector;
-import ru.cfif11.cosmo.object.physobject.PhysObject3D;
+import ru.cfif11.cosmo.object.physobject.*;
 import ru.cfif11.cosmo.physics.*;
 
-class GravityInteraction extends DescriberInteraction {
+class DescriberGravity extends DescriberInteraction {
 
-	static final GravityInteraction INSTANCE = new GravityInteraction();
+	static final DescriberGravity INSTANCE = new DescriberGravity();
 
-	private GravityInteraction() {	}
+	private DescriberGravity() {	}
 
 	@Override
 	public void describe(PhysObject3D mainObject, PhysObject3D minorObject) {

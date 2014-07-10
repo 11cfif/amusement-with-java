@@ -1,6 +1,7 @@
-package ru.cfif11.cosmo.physics;
+package ru.cfif11.cosmo.object.physobject;
 
 import com.threed.jpct.SimpleVector;
+import ru.cfif11.cosmo.physics.PhysConstantEnum;
 import ru.cfif11.cosmo.physics.interaction.InteractionType;
 
 public class GravitationalFieldOfEarth extends Field {
