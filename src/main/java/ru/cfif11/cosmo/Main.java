@@ -51,8 +51,7 @@ public class Main {
 		objects.add(builder.build());
 
 		for (PhysObject3D object : objects) {
-			object.addInteraction(Interaction.valueOf("gravity", InteractionType.GRAVITATIONAL,
-				DescriberInteraction.GRAVITY_INTERACTION));
+			object.addInteraction(Interaction.getInteraction("gravity", null));
 		}
 
 		KEYBOARD_LISTENER = new KeyboardListener();

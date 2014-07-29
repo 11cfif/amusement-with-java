@@ -17,7 +17,7 @@ public abstract class ConditionInteraction {
 	public static boolean interactIsConsidered(
 		Set<ConditionInteraction> conditions, PhysObject3D mainObj, PhysObject3D minorObj)
 	{
-		boolean result = false;
+		boolean result = true;
 		for (ConditionInteraction condition : conditions) {
 			result = condition.isConsiderInteraction(mainObj, minorObj);
 			if(!result)
