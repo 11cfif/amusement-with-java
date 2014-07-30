@@ -31,10 +31,6 @@ public class PhysObject3D extends Object3D implements SelectableInterface {
 
 	//========================== static Common API ==========================
 
-	public static Builder newBuilder(Object3D object3D, String name) {
-		return new Builder(object3D, name);
-	}
-
 	public static Builder newBuilder(Object3D object3D, String name, InteractionType... types) {
 		return new Builder(object3D, name, types);
 	}
@@ -124,7 +120,7 @@ public class PhysObject3D extends Object3D implements SelectableInterface {
 	 * @param vz the Z component of the velocity
 	 */
 	public void setVelocity(float vx, float vy, float vz) {
-		this.acceleration.set(vx, vy, vz);
+		this.velocity.set(vx, vy, vz);
 	}
 
 	public void setAcceleration(SimpleVector acceleration) {

@@ -13,7 +13,7 @@ public abstract class Interaction {
 	private static final Map<String, Interaction> cache = Collections.synchronizedMap(new HashMap<String, Interaction>());
 
 	static {
-		interactionClasses.put(DescriberGravity.NAME, DescriberGravity.class);
+		interactionClasses.put(GravitationalInteraction.NAME, GravitationalInteraction.class);
 	}
 
 	private final List<InteractionType> types = new ArrayList<>();
@@ -40,14 +40,15 @@ public abstract class Interaction {
 		return result;
 	}
 
-	private static String generatedKey(String name, List<ConditionInteraction> conditionsNames) {
-		String result = "Interaction " + name;
-		if(conditionsNames != null) {
-			result += "conditionsName: ";
-			for (ConditionInteraction condition : conditionsNames)
-				result += condition.getName() + ", ";
+	private static String generatedKey(String name, List<ConditionInteraction> conditions) {
+		String result = "Interaction = { name: " + name;
+		if(!conditions.isEmpty()) {
+			result += ", conditionsName: ";
+			for (ConditionInteraction condition : conditions)
+				result += condition.getName() + ", " + condition.getDescription() + "; ";
 			result = result.substring(0, result.length() - 2);
 		}
+		result += " }";
 		return result;
 	}
 

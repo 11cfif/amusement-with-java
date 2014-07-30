@@ -37,4 +37,11 @@ public class Field {
 		return interactionType;
 	}
 
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + ": { interactionType = " + interactionType +
+			", characteristics: " + characteristics +
+			" }";
+	}
+
 }

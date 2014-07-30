@@ -101,7 +101,7 @@ public class Main {
 		//создаем мир
 		GameWorld startWorld = locMan.getGameWorld(0);
 		scene = new Scene(ticker, startWorld);*/
-		scene = new Scene(ticker, new ConsoleGameWorld(ticker, new Location(objects)));
+		scene = new Scene(ticker, new ConsoleGameWorld(ticker, new Location(objects, null)));
 	}
 
 

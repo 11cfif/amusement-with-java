@@ -7,13 +7,6 @@ import ru.cfif11.cosmo.object.physobject.PhysObject3D;
 
 public abstract class ConditionInteraction {
 
-	private static final Map<String, ConditionInteraction> cache =
-		Collections.synchronizedMap(new HashMap<String, ConditionInteraction>());
-
-	public static ConditionInteraction getConditionInteraction(String name) {
-		return cache.get(name);
-	}
-
 	public static boolean interactIsConsidered(
 		Set<ConditionInteraction> conditions, PhysObject3D mainObj, PhysObject3D minorObj)
 	{
@@ -28,7 +21,7 @@ public abstract class ConditionInteraction {
 
 	public static boolean interactIsConsidered(Set<ConditionInteraction> conditions, Field field, PhysObject3D minorObj)
 	{
-		boolean result = false;
+		boolean result = true;
 		for (ConditionInteraction condition : conditions) {
 			result = condition.isConsiderInteraction(field, minorObj);
 			if(!result)
@@ -41,13 +34,10 @@ public abstract class ConditionInteraction {
 	private final String description;
 
 	protected ConditionInteraction(String name, String description) {
-		if (cache.containsKey(name))
-			throw new IllegalStateException("ConditionInteraction with this name already exists.");
 		if (name == null)
 			throw new IllegalStateException("name can never be null.");
 		this.name = name;
 		this.description = description;
-		cache.put(name, this);
 	}
 
 	public abstract boolean isConsiderInteraction(PhysObject3D mainObject, PhysObject3D minorObject);
@@ -56,6 +46,10 @@ public abstract class ConditionInteraction {
 
 	public String getName() {
 		return name;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 
 	@Override
